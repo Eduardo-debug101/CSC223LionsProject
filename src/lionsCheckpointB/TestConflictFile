@@ -1,3 +1,0 @@
-TestConflictFile - Initial Conflict Test to see how Eclipse will handle out of sync files
-
-What will this do with conflicts? It safely rejected pushing the 'out-of-sync' version to the main branch
