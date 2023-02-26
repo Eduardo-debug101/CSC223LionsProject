@@ -1,6 +1,7 @@
 package lionsCheckpointB;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StoreDriver {
@@ -40,8 +41,18 @@ public class StoreDriver {
 		int maxService = parseInt("Enter maximum service time: ");
 		int numCustomers = parseInt("Number of customers to serve: ");
 		
-		int randomNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
-		int randomNum2 = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
+		ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
+		ArrayList<Integer> serviceNums = new ArrayList<Integer>();
+		int startValue = 0;
+		for (int i = 0; i < numCustomers; i++) {
+			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
+			int randomServiceNum = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
+			startValue += randomArrivalNum;
+			arrivalNums.add(startValue);
+			serviceNums.add(randomServiceNum);
+		}
+		
+	
 		
 		
 		

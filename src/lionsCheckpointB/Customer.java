@@ -4,21 +4,24 @@ import java.time.LocalTime;
 
 public class Customer extends CustomerCreator {
 	private LocalTime arrivalTime;
+	private LocalTime serviceStart;
 	private LocalTime waitTime;
 	private LocalTime leaveTime;
 	
 	public Customer(){	
 	}
 	
-	public Customer(LocalTime a, LocalTime w, LocalTime l){	
+	public Customer(LocalTime a, LocalTime s, LocalTime w, LocalTime l){	
 		arrivalTime = a;
+		serviceStart = s;
 		waitTime = w;
 		leaveTime = l;
 	}
 	
-	@Override
+
 	public String toString() {
-		return "Customer [arrivalTime=" + arrivalTime + ", waitTime=" + waitTime + ", leaveTime=" + leaveTime + "]";
+		return "Customer [arrivalTime=" + arrivalTime + ", serviceStart=" + serviceStart + ", waitTime=" + waitTime
+				+ ", leaveTime=" + leaveTime + "]";
 	}
 
 	public LocalTime getArrivalTime() {
@@ -27,6 +30,15 @@ public class Customer extends CustomerCreator {
 
 	public void setArrivalTime(LocalTime arrivalTime) {
 		this.arrivalTime = arrivalTime;
+	}
+	
+
+	public LocalTime getServiceStart() {
+		return serviceStart;
+	}
+
+	public void setServiceStart(LocalTime serviceStart) {
+		this.serviceStart = serviceStart;
 	}
 
 	public LocalTime getWaitTime() {
