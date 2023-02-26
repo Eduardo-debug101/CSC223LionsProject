@@ -4,20 +4,41 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Scanner;
 
 public class StoreDriver {
+	static Scanner scan = new Scanner(System.in);
+	
+	
+	/*
+	 * A method to safely parse Ints while catching errors
+	 * 	It will print whatever is fed/prompted and return the int
+	 */
+	public static int parseInt(String x) {
+		System.out.println(x);
+		
+		int var = 0;
+		
+		boolean momo = true;
+		do {
+			try {
+				String tempAns = scan.next();
+				
+				var = Integer.parseInt(tempAns);
+				momo = false;
+			} catch (NumberFormatException e) {
+				System.out.println("Wrong input try again.");
+			}
+		} while (momo);
+		
+		return var;
+	}
+	
+	
 
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
-		
-		System.out.println("Enter minimum arrival time between customers:");
-		int minArrival = scan.nextInt();
-		System.out.println("Enter maximum arrival time between customers:");
-		int maxArrival = scan.nextInt();
-		System.out.println("Enter minimum service time:");
-		int minService = scan.nextInt();
-		System.out.println("Enter maximum service time:");
-		int maxService = scan.nextInt();
-		System.out.println("Number of customers to serve:");
-		int numCustomers = scan.nextInt();
+		int minArrival = parseInt("Enter minimum arrival time between customers: ");
+		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
+		int minService = parseInt("Enter minimum service time: ");
+		int maxService = parseInt("Enter maximum service time: ");
+		int numCustomers = parseInt("Number of customers to serve: ");
 		
 		int randomNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
 		int randomNum2 = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
