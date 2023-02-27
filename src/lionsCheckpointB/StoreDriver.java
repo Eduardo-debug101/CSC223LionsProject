@@ -2,14 +2,15 @@ package lionsCheckpointB;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class StoreDriver {
 	static Scanner scan = new Scanner(System.in);
 	
-//	ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
-//	ArrayList<Integer> serviceNums = new ArrayList<Integer>();
+	//	ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
+	//	ArrayList<Integer> serviceNums = new ArrayList<Integer>();
 	
 	/*
 	 * A method to safely parse Ints while catching errors
@@ -40,6 +41,7 @@ public class StoreDriver {
 		LinkedListStore B = new LinkedListStore();
 		LinkedListStore C = new LinkedListStore();
 		
+		
 		/*
 		int minArrival = parseInt("Enter minimum arrival time between customers: ");
 		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
@@ -64,14 +66,21 @@ public class StoreDriver {
 //			serviceNums.add(randomServiceNum);
 //		}
 		
+		
+		List<List<String>> arrivalNums = new ArrayList<List<String>>(numCustomers); 
+		List<List<String>> serviceNums = new ArrayList<List<String>>(numCustomers); 
+		
 		// CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
 		for (int i = 0; i <= numCustomers; i++) {
+			arrivalNums.add(new ArrayList<String>());
+			serviceNums.add(new ArrayList<String>());
+			
 			
 			int QueueASize = A.size();
 			int QueueBSize = B.size();
 			int QueueCSize = C.size();
 			
-			System.out.println(QueueASize + " - " + QueueBSize + " - " + QueueCSize);
+			// System.out.println(QueueASize + " - " + QueueBSize + " - " + QueueCSize);
 			
 			if ((QueueASize == QueueBSize) && (QueueASize == QueueCSize)) {
 				System.out.println("Adding to A");
@@ -93,9 +102,23 @@ public class StoreDriver {
 				C.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
 			}
 			
+			
+			ArrayList CurrentBlock = A.getLatest().value.getAllInfo();
+			
+			System.out.println(CurrentBlock);
+			
 			// cc.create();
 			//System.out.println(cc.getCurrent().toString());
 		}
+		
+		/*
+		for (int i = 0; i < numCustomers; i++) {
+			System.out.println(arrivalNums.get(i));
+		}
+		*/
+		
+		System.out.println(arrivalNums.size() + "\n\n\n" + serviceNums.size());
+		
 		
 		testClock();
 			

@@ -13,7 +13,7 @@ class LinkedListStore
 	       The Node class stores a list element
 	       and a reference to the next node.
 	    */
-	    private class Node
+	    class Node
 	    {
 	        CustomerCreator value;   // Value of a list element
 	        Node next;      // Next node in the list
@@ -98,12 +98,14 @@ class LinkedListStore
 	      {
 	          last = new Node(customerCreator);
 	          first = last;
+	          first.value.create();
 	      }
 	      else
 	      {
 	          // Add to end of existing list
 	          last.next = new Node(customerCreator, null, last);
-	          last = last.next;         
+	          last = last.next;   
+	          last.value.create();
 	      }      
 	    }
 	    
@@ -111,9 +113,28 @@ class LinkedListStore
 	       This add method adds an element at an index.
 	       @param e The element to add to the list.
 	       @param index The index at which to add.
+	     * @return 
 	       @exception IndexOutOfBoundsException 
 			 When the index is out of bounds.
 	    */
+	    
+	    public Node getLatest()
+	    {
+	    	
+	    	int c = 0;
+			
+		    Node p = first;
+		    while (p != null) {
+		    	p = p.next;
+		    	c++;
+		    }
+		    
+		    if (c != 1) {
+		    	return last.prev;
+		    } else {
+		    	return first;
+		    }
+	    }
 	    
 	    public void add(int index, Customer e)
 	    {
