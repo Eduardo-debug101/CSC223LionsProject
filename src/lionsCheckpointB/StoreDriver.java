@@ -7,7 +7,10 @@ import java.util.Scanner;
 
 public class StoreDriver {
 	static Scanner scan = new Scanner(System.in);
-
+	
+//	ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
+//	ArrayList<Integer> serviceNums = new ArrayList<Integer>();
+	
 	/*
 	 * A method to safely parse Ints while catching errors
 	 * 	It will print whatever is fed/prompted and return the int
@@ -33,14 +36,25 @@ public class StoreDriver {
 	}
 	
 	public static void main(String[] args) {
+		LinkedListStore A = new LinkedListStore();
+		LinkedListStore B = new LinkedListStore();
+		LinkedListStore C = new LinkedListStore();
+		
+		/*
 		int minArrival = parseInt("Enter minimum arrival time between customers: ");
 		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
 		int minService = parseInt("Enter minimum service time: ");
 		int maxService = parseInt("Enter maximum service time: ");
 		int numCustomers = parseInt("Number of customers to serve: ");
+		*/
 		
-//		ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
-//		ArrayList<Integer> serviceNums = new ArrayList<Integer>();
+		int minArrival = 0;
+		int maxArrival = 10;
+		int minService = 1;
+		int maxService = 9;
+		int numCustomers = 50;
+		
+
 //		int startValue = 0;
 //		for (int i = 0; i < numCustomers; i++) {
 //			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
@@ -50,10 +64,37 @@ public class StoreDriver {
 //			serviceNums.add(randomServiceNum);
 //		}
 		
-		CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
-		for (int i = 0; i < numCustomers; i++) {
-			cc.create();
-			System.out.println(cc.getCurrent().toString());
+		// CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
+		for (int i = 0; i <= numCustomers; i++) {
+			
+			int QueueASize = A.size();
+			int QueueBSize = B.size();
+			int QueueCSize = C.size();
+			
+			System.out.println(QueueASize + " - " + QueueBSize + " - " + QueueCSize);
+			
+			if ((QueueASize == QueueBSize) && (QueueASize == QueueCSize)) {
+				System.out.println("Adding to A");
+				A.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			} else if ((QueueBSize	==	QueueCSize) && (QueueBSize	<=	QueueCSize)) {
+				System.out.println("Adding to B");
+				B.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			} else if ((QueueASize	<	QueueBSize) && (QueueASize	<	QueueCSize)) {
+				System.out.println("Adding to A");
+				A.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			} else if ((QueueBSize	<	QueueCSize) && (QueueBSize	<	QueueASize)) {
+				System.out.println("Adding to B");
+				B.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			} else if ((QueueCSize	<	QueueASize) && (QueueCSize	<	QueueBSize)) {
+				System.out.println("Adding to C");
+				C.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			} else {
+				System.out.println("Adding to C");
+				C.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+			}
+			
+			// cc.create();
+			//System.out.println(cc.getCurrent().toString());
 		}
 		
 		testClock();

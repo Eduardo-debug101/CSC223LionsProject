@@ -12,6 +12,10 @@ public class CustomerCreator {
 	private Customer current;
 	
 	public CustomerCreator() {
+		int randomArrivalNum = ThreadLocalRandom.current().nextInt(minimumTime, maximumTime + 1);
+		int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
+		startValue += randomArrivalNum;
+		current = new Customer(startValue, randomServiceNum);
 	}
 	
 	public CustomerCreator(int m, int n, int s, int t) {
