@@ -1,17 +1,20 @@
 package lionsCheckpointB;
 
-import java.time.LocalTime;
-
 public class Customer extends CustomerCreator {
-	private LocalTime arrivalTime;
-	private LocalTime serviceStart;
-	private LocalTime waitTime;
-	private LocalTime leaveTime;
+	private int arrivalTime;
+	private int serviceStart;
+	private int waitTime;
+	private int leaveTime;
 	
 	public Customer(){	
 	}
 	
-	public Customer(LocalTime a, LocalTime s, LocalTime w, LocalTime l){	
+	public Customer(int a, int s) {
+		arrivalTime = a;
+		serviceStart = s;	
+	}
+	
+	public Customer(int a, int s, int w, int l){	
 		arrivalTime = a;
 		serviceStart = s;
 		waitTime = w;
@@ -24,36 +27,36 @@ public class Customer extends CustomerCreator {
 				+ ", leaveTime=" + leaveTime + "]";
 	}
 
-	public LocalTime getArrivalTime() {
+	public int getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(LocalTime arrivalTime) {
+	public void setArrivalTime(int arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 	
 
-	public LocalTime getServiceStart() {
+	public int getServiceStart() {
 		return serviceStart;
 	}
 
-	public void setServiceStart(LocalTime serviceStart) {
+	public void setServiceStart(int serviceStart) {
 		this.serviceStart = serviceStart;
 	}
 
-	public LocalTime getWaitTime() {
+	public int getWaitTime() {
 		return waitTime;
 	}
 
-	public void setWaitTime(LocalTime waitTime) {
+	public void setWaitTime(int waitTime) {
 		this.waitTime = waitTime;
 	}
 
-	public LocalTime getLeaveTime() {
+	public int getLeaveTime() {
 		return leaveTime;
 	}
 
-	public void setLeaveTime(LocalTime leaveTime) {
+	public void setLeaveTime(int leaveTime) {
 		this.leaveTime = leaveTime;
 	}
 	

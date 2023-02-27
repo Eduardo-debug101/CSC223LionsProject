@@ -39,15 +39,20 @@ public class StoreDriver {
 		int maxService = parseInt("Enter maximum service time: ");
 		int numCustomers = parseInt("Number of customers to serve: ");
 		
-		ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
-		ArrayList<Integer> serviceNums = new ArrayList<Integer>();
-		int startValue = 0;
+//		ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
+//		ArrayList<Integer> serviceNums = new ArrayList<Integer>();
+//		int startValue = 0;
+//		for (int i = 0; i < numCustomers; i++) {
+//			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
+//			int randomServiceNum = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
+//			startValue += randomArrivalNum;
+//			arrivalNums.add(startValue);
+//			serviceNums.add(randomServiceNum);
+//		}
+		
+		CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
 		for (int i = 0; i < numCustomers; i++) {
-			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
-			int randomServiceNum = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
-			startValue += randomArrivalNum;
-			arrivalNums.add(startValue);
-			serviceNums.add(randomServiceNum);
+			cc.create();
 		}
 		
 		testClock();
