@@ -53,6 +53,7 @@ public class StoreDriver {
 		CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
 		for (int i = 0; i < numCustomers; i++) {
 			cc.create();
+			System.out.println(cc.getCurrent().toString());
 		}
 		
 		testClock();
@@ -74,7 +75,7 @@ public class StoreDriver {
 	    c.stop();
 	     	
 		System.out.println("The time is " + c.getCurrentTime() + "s");
-		
 	}
+	
 
 }

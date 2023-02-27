@@ -9,6 +9,7 @@ public class CustomerCreator {
 	private int serviceMinTime;
 	private int serviceMaxTime;
 	private int startValue = 0;
+	private Customer current;
 	
 	public CustomerCreator() {
 	}
@@ -26,12 +27,22 @@ public class CustomerCreator {
 				+ serviceMinTime + ", serviceMaxTime=" + serviceMaxTime + "]";
 	}
 	
+	// Creates a customer - Eduardo 2/27
 	public void create() {
 		int randomArrivalNum = ThreadLocalRandom.current().nextInt(minimumTime, maximumTime + 1);
 		int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
 		startValue += randomArrivalNum;
-		Customer c = new Customer(startValue, randomServiceNum);
+		current = new Customer(startValue, randomServiceNum);
 		}
+	
+
+	public Customer getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(Customer c) {
+		this.current = c;
+	}
 
 	public int getMinimumTime() {
 		return minimumTime;
