@@ -10,7 +10,7 @@ public class CustomerCreator {
 	private int serviceMinTime;
 	private int serviceMaxTime;
 	private int waitTime;
-	private int startValue = 0;
+	private static int startValue = 0;
 	private Customer current;
 	
 	public CustomerCreator() {
@@ -36,7 +36,7 @@ public class CustomerCreator {
 		int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
 		startValue += randomArrivalNum;
 		current = new Customer(startValue, randomServiceNum, waitTime);
-		System.out.println(current + " HHHEEERRREEE");
+		System.out.println(current);
 		}
 	
 

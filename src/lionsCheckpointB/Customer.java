@@ -2,7 +2,7 @@ package lionsCheckpointB;
 
 public class Customer extends CustomerCreator {
 	private int arrivalTime;
-	private int serviceStart;
+	private int serviceTime;
 	private int waitTime;
 	private int leaveTime;
 	
@@ -11,20 +11,20 @@ public class Customer extends CustomerCreator {
 	
 	public Customer(int a, int s, int w) {
 		arrivalTime = a;
-		serviceStart = s;	
+		serviceTime = s;	
 		waitTime = w;
 	}
 	
 	public Customer(int a, int s, int w, int l){	
 		arrivalTime = a;
-		serviceStart = s;
+		serviceTime = s;
 		waitTime = w;
 		leaveTime = l;
 	}
 	
 
 	public String toString() {
-		return "Customer [arrivalTime=" + arrivalTime + ", serviceStart=" + serviceStart + ", waitTime=" + waitTime
+		return "Customer [arrivalTime=" + arrivalTime + ", serviceTime=" + serviceTime + ", waitTime=" + waitTime
 				+ ", leaveTime=" + leaveTime + "]";
 	}
 
@@ -38,11 +38,11 @@ public class Customer extends CustomerCreator {
 	
 
 	public int getServiceStart() {
-		return serviceStart;
+		return serviceTime;
 	}
 
 	public void setServiceStart(int serviceStart) {
-		this.serviceStart = serviceStart;
+		this.serviceTime = serviceStart;
 	}
 
 	public int getWaitTime() {

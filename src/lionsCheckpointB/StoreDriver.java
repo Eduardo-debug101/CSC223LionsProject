@@ -38,31 +38,12 @@ public class StoreDriver {
 		LinkedListStore B = new LinkedListStore();
 		LinkedListStore C = new LinkedListStore();
 		
-//		ArrayList<Integer> arrivalNums = new ArrayList<Integer>();
-//		ArrayList<Integer> serviceNums = new ArrayList<Integer>();
-
-		/*
-		 * int minArrival = parseInt("Enter minimum arrival time between customers: ");
-		 * int maxArrival = parseInt("Enter maximum arrival time between customers: ");
-		 * int minService = parseInt("Enter minimum service time: "); int maxService =
-		 * parseInt("Enter maximum service time: "); int numCustomers =
-		 * parseInt("Number of customers to serve: ");
-		 */
-
 		int minArrival = 0;
-		int maxArrival = 10;
-		int minService = 1;
-		int maxService = 9;
-		int numCustomers = 50;
+		int maxArrival = 5;
+		int minService = 5;
+		int maxService = 15;
+		int numCustomers = 10;
 
-//		int startValue = 0;
-//		for (int i = 0; i < numCustomers; i++) {
-//			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
-//			int randomServiceNum = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
-//			startValue += randomArrivalNum;
-//			arrivalNums.add(startValue);
-//			serviceNums.add(randomServiceNum);
-//		}
 		Clock c = new Clock();
 		c.start();
 		int waitA = 0;
@@ -74,13 +55,13 @@ public class StoreDriver {
 			int queueCSize = C.size();
 			
 			if (!A.isEmpty()) {
-			waitA =+ A.getLatest().value.getWaitTime();
+			waitA =+ A.getLatest().value.getCurrent().getServiceStart();
 			}
 			if (!B.isEmpty()) {
-			waitB =+ B.getLatest().value.getWaitTime();
+			waitB =+ B.getLatest().value.getCurrent().getServiceStart();
 			}
 			if (!C.isEmpty()) {
-			waitC =+ C.getLatest().value.getWaitTime();
+			waitC =+ C.getLatest().value.getCurrent().getServiceStart();
 			}
 			
 			if (waitA != 0 && waitB != 0 && waitC != 0) {
@@ -91,37 +72,38 @@ public class StoreDriver {
 						e.printStackTrace();
 					}
 				 if (lowestWait == waitA) {
-					System.out.println("Lowest wait time is " + lowestWait + " mins.Adding to A");
+					System.out.println("Lowest wait time is " + lowestWait + " mins. Adding to A");
 					
-					A.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+					CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+					A.add(cust);
 				 }
 				 if (lowestWait == waitB) {
-					System.out.println("Lowest wait time is " + lowestWait + " mins.Adding to B");
-					B.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+					System.out.println("Lowest wait time is " + lowestWait + " mins. Adding to B");
+					CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+					B.add(cust);
 				 }
 				 if (lowestWait == waitC) {
-					System.out.println("Lowest wait time is " + lowestWait + " mins.Adding to C");
-					C.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+					System.out.println("Lowest wait time is " + lowestWait + " mins. Adding to C");
+					CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+					C.add(cust);
 				 }
 			}
 			else {
 			
 			if (queueASize <= queueBSize && queueASize <= queueCSize) {
 				System.out.println("Adding to A");
-				A.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+				CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+				A.add(cust);
 			} else if (queueBSize <= queueASize && queueBSize <= queueCSize) {
 				System.out.println("Adding to B");
-				B.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+				CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+				B.add(cust);
 			} else {
 				System.out.println("Adding to C");
-				C.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime()));
+				CustomerCreator cust = new CustomerCreator(minArrival, maxArrival, minService, maxService, c.getCurrentTime());
+				C.add(cust);
 			}
 			}
-
-			//ArrayList CurrentBlock = A.getLatest().value.getAllInfo();
-
-			//System.out.println(CurrentBlock);
-
 		}
 		c.stop();
 		System.out.println("Total wait time of line A: " + waitA + " mins");
