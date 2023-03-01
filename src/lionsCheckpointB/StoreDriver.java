@@ -63,17 +63,23 @@ public class StoreDriver {
                 case 2 -> selectedQueue = B;
                 case 3 -> selectedQueue = C;
             }
+           
             if (!selectedQueue.isEmpty()) {
+            int startValue = selectedQueue.getLatest().value.getStartValue();
             int holdTime = selectedQueue.getLatest().value.getCurrent().getServiceStart();
             System.out.println("Waiting for person in front of me to leave...");
-            try {
-				Thread.sleep(holdTime * 1000); 
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				}
+//            try {
+//				Thread.sleep(holdTime * 1000); 
+//				selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, startValue));
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//				}
+//            }
+            selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, startValue));
             }
-            
+            else {
             selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
+            }
 
             ArrayList CurrentBlock = selectedQueue.getLatest().value.getAllInfo();
             System.out.println(selectedQueue.getLatest().value.toString());

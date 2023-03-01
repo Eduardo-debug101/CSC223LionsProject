@@ -9,7 +9,7 @@ public class CustomerCreator {
     private int maximumTime;
     private int serviceMinTime;
     private int serviceMaxTime;
-    private static int startValue = 0;
+    private int startValue;
     private Customer current;
 
     public CustomerCreator() {
@@ -20,6 +20,15 @@ public class CustomerCreator {
         maximumTime = n;
         serviceMinTime = s;
         serviceMaxTime = t;
+        startValue = 0;
+    }
+    
+    public CustomerCreator(int m, int n, int s, int t, int z) {
+        minimumTime = m;
+        maximumTime = n;
+        serviceMinTime = s;
+        serviceMaxTime = t;
+        startValue = z;
     }
 
     public String toString() {
@@ -75,7 +84,15 @@ public class CustomerCreator {
         this.serviceMaxTime = serviceMaxTime;
     }
 
-    public ArrayList getAllInfo() {
+	public int getStartValue() {
+		return startValue;
+	}
+
+	public void setStartValue(int startValue) {
+		this.startValue = startValue;
+	}
+
+	public ArrayList getAllInfo() {
         ArrayList x = new ArrayList<>(Arrays.asList(
                 Integer.toString(minimumTime),
                 Integer.toString(maximumTime),
