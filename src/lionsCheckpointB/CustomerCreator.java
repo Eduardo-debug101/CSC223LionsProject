@@ -9,17 +9,19 @@ public class CustomerCreator {
 	private int maximumTime;
 	private int serviceMinTime;
 	private int serviceMaxTime;
+	private int waitTime;
 	private int startValue = 0;
 	private Customer current;
 	
 	public CustomerCreator() {
 	}
 	
-	public CustomerCreator(int m, int n, int s, int t) {
+	public CustomerCreator(int m, int n, int s, int t, int w) {
 		minimumTime = m;
 		maximumTime = n;
 		serviceMinTime = s;
 		serviceMaxTime = t;
+		waitTime = w;
 	}
 	
 	@Override
@@ -33,7 +35,7 @@ public class CustomerCreator {
 		int randomArrivalNum = ThreadLocalRandom.current().nextInt(minimumTime, maximumTime + 1);
 		int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
 		startValue += randomArrivalNum;
-		current = new Customer(startValue, randomServiceNum);
+		current = new Customer(startValue, randomServiceNum, waitTime);
 		System.out.println(current + " HHHEEERRREEE");
 		}
 	
@@ -78,11 +80,17 @@ public class CustomerCreator {
 		this.serviceMaxTime = serviceMaxTime;
 	}
 	
-	public ArrayList getAllInfo() {
-		
-		
-		
-		ArrayList x = new ArrayList<>(Arrays.asList(Integer.toString(minimumTime)
+	
+	public int getWaitTime() {
+		return waitTime;
+	}
+
+	public void setWaitTime(int waitTime) {
+		this.waitTime = waitTime;
+	}
+
+	public ArrayList<String> getAllInfo() {
+		ArrayList<String> x = new ArrayList<>(Arrays.asList(Integer.toString(minimumTime)
 		, Integer.toString(maximumTime)
 		, Integer.toString(serviceMinTime)
 		, Integer.toString(serviceMaxTime)

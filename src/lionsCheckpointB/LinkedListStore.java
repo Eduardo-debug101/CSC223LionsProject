@@ -120,6 +120,9 @@ class LinkedListStore
 	    
 	    public Node getLatest()
 	    {
+	    	if (first == null) {
+	            return null;
+	        }
 	    	
 	    	int c = 0;
 			

@@ -9,9 +9,10 @@ public class Customer extends CustomerCreator {
 	public Customer(){	
 	}
 	
-	public Customer(int a, int s) {
+	public Customer(int a, int s, int w) {
 		arrivalTime = a;
 		serviceStart = s;	
+		waitTime = w;
 	}
 	
 	public Customer(int a, int s, int w, int l){	
