@@ -27,8 +27,8 @@ public class StoreDriver {
         int minArrival = 0;
         int maxArrival = 10;
         int minService = 1;
-        int maxService = 9;
-        int numCustomers = 15;
+        int maxService = 5;
+        int numCustomers = 10;
 
 
 //		int startValue = 0;
@@ -45,7 +45,9 @@ public class StoreDriver {
         List<List<String>> serviceNums = new ArrayList<List<String>>(numCustomers);
 
         // CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
-        for (int i = 0; i <= numCustomers; i++) {
+        Clock c = new Clock();
+        c.start();
+        for (int i = 0; i < numCustomers; i++) {
             arrivalNums.add(new ArrayList<String>());
             serviceNums.add(new ArrayList<String>());
 
@@ -61,7 +63,16 @@ public class StoreDriver {
                 case 2 -> selectedQueue = B;
                 case 3 -> selectedQueue = C;
             }
-
+            if (!selectedQueue.isEmpty()) {
+            int holdTime = selectedQueue.getLatest().value.getCurrent().getServiceStart();
+            System.out.println("Waiting for person in front of me to leave...");
+            try {
+				Thread.sleep(holdTime * 1000); 
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				}
+            }
+            
             selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
 
             ArrayList CurrentBlock = selectedQueue.getLatest().value.getAllInfo();
@@ -78,28 +89,39 @@ public class StoreDriver {
 		*/
 
         System.out.println(arrivalNums.size() + "\n\n\n" + serviceNums.size());
-        testClock();
+        //testClock();
 
     }
 
     public static int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
         int finalQueue = 0;
 
-        if ((queueSizeA == queueSizeB) && (queueSizeA == queueSizeC)) {
+//        if ((queueSizeA == queueSizeB) && (queueSizeA == queueSizeC)) {
+//            System.out.println("Adding to queueA");
+//            finalQueue = 1;
+//        } else if ((queueSizeB == queueSizeC) && (queueSizeB <= queueSizeC)) {
+//            System.out.println("Adding to queueB");
+//            finalQueue = 2;
+//        } else if ((queueSizeA < queueSizeB) && (queueSizeA < queueSizeC)) {
+//            System.out.println("Adding to queueA");
+//            finalQueue = 1;
+//        } else if ((queueSizeB < queueSizeC) && (queueSizeB < queueSizeA)) {
+//            System.out.println("Adding to queueB");
+//            finalQueue = 2;
+//        } else if ((queueSizeC < queueSizeA) && (queueSizeC < queueSizeB)) {
+//            System.out.println("Adding to queueC");
+//            finalQueue = 3;
+//        } else {
+//            System.out.println("Adding to queueC");
+//            finalQueue = 3;
+//        }
+        
+        if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
             System.out.println("Adding to queueA");
             finalQueue = 1;
-        } else if ((queueSizeB == queueSizeC) && (queueSizeB <= queueSizeC)) {
+        } else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
             System.out.println("Adding to queueB");
             finalQueue = 2;
-        } else if ((queueSizeA < queueSizeB) && (queueSizeA < queueSizeC)) {
-            System.out.println("Adding to queueA");
-            finalQueue = 1;
-        } else if ((queueSizeB < queueSizeC) && (queueSizeB < queueSizeA)) {
-            System.out.println("Adding to queueB");
-            finalQueue = 2;
-        } else if ((queueSizeC < queueSizeA) && (queueSizeC < queueSizeB)) {
-            System.out.println("Adding to queueC");
-            finalQueue = 3;
         } else {
             System.out.println("Adding to queueC");
             finalQueue = 3;
@@ -148,4 +170,15 @@ public class StoreDriver {
 
         return var;
     }
+    
+    public static int findLowestWait(int a, int b, int c) {
+	    int min = a;
+	    if (b < min) {
+	        min = b;
+	    }
+	    if (c < min) {
+	        min = c;
+	    }
+	    return min;
+	}
 }

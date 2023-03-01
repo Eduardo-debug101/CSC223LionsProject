@@ -9,7 +9,7 @@ public class CustomerCreator {
     private int maximumTime;
     private int serviceMinTime;
     private int serviceMaxTime;
-    private int startValue = 0;
+    private static int startValue = 0;
     private Customer current;
 
     public CustomerCreator() {
