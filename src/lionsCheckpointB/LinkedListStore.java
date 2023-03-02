@@ -109,22 +109,39 @@ class LinkedListStore {
      * @throws IndexOutOfBoundsException When the index is out of bounds.
      */
 
-    public Node getLatest() {
+	public Node getLatest() {
 
-        int c = 0;
+		int c = 0;
 
-        Node p = first;
-        while (p != null) {
-            p = p.next;
-            c++;
-        }
+		Node p = first;
+		while (p != null) {
+			p = p.next;
+			c++;
+		}
 
-        if (c != 1) {
-            return last.prev;
-        } else {
-            return first;
-        }
-    }
+		if (c != 1) {
+			return last.prev;
+		} else {
+			return first;
+		}
+	}
+    
+//    public Node getLatest() {
+//
+//        int c = 0;
+//
+//        Node p = last;
+//        while (p != null) {
+//            p = p.prev;
+//            c++;
+//        }
+//
+//        if (c != 1) {
+//            return last;
+//        } else {
+//            return first;
+//        }
+//    }
 
     public void add(int index, Customer e) {
         if (index < 0 || index > size()) {

@@ -12,91 +12,17 @@ public class StoreDriver {
     //	ArrayList<Integer> serviceNums = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        LinkedListStore A = new LinkedListStore();
-        LinkedListStore B = new LinkedListStore();
-        LinkedListStore C = new LinkedListStore();
-
-		/*
-		int minArrival = parseInt("Enter minimum arrival time between customers: ");
-		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
-		int minService = parseInt("Enter minimum service time: ");
-		int maxService = parseInt("Enter maximum service time: ");
-		int numCustomers = parseInt("Number of customers to serve: ");
-		*/
+       
 
         int minArrival = 0;
         int maxArrival = 10;
         int minService = 1;
         int maxService = 5;
         int numCustomers = 10;
-
-
-//		int startValue = 0;
-//		for (int i = 0; i < numCustomers; i++) {
-//			int randomArrivalNum = ThreadLocalRandom.current().nextInt(minArrival, maxArrival + 1);
-//			int randomServiceNum = ThreadLocalRandom.current().nextInt(minService, maxService + 1);
-//			startValue += randomArrivalNum;
-//			arrivalNums.add(startValue);
-//			serviceNums.add(randomServiceNum);
-//		}
-
-
-        List<List<String>> arrivalNums = new ArrayList<List<String>>(numCustomers);
-        List<List<String>> serviceNums = new ArrayList<List<String>>(numCustomers);
-
-        // CustomerCreator cc = new CustomerCreator(minArrival, maxArrival, minService, maxService);
-        Clock c = new Clock();
-        c.start();
-        for (int i = 0; i < numCustomers; i++) {
-            arrivalNums.add(new ArrayList<String>());
-            serviceNums.add(new ArrayList<String>());
-
-            // System.out.println(QueueASize + " - " + QueueBSize + " - " + QueueCSize);
-
-
-            // Updated this for readability and allows us to utilize the selected queue for each customer
-            int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
-            LinkedListStore selectedQueue = new LinkedListStore();
-
-            switch (lowestQueueNumber) {
-                case 1 -> selectedQueue = A;
-                case 2 -> selectedQueue = B;
-                case 3 -> selectedQueue = C;
-            }
-           
-            if (!selectedQueue.isEmpty()) {
-            int startValue = selectedQueue.getLatest().value.getStartValue();
-            int holdTime = selectedQueue.getLatest().value.getCurrent().getServiceStart();
-            System.out.println("Waiting for person in front of me to leave...");
-//            try {
-//				Thread.sleep(holdTime * 1000); 
-//				selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, startValue));
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//				}
-//            }
-            selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService, startValue));
-            }
-            else {
-            selectedQueue.add(new CustomerCreator(minArrival, maxArrival, minService, maxService));
-            }
-
-            ArrayList CurrentBlock = selectedQueue.getLatest().value.getAllInfo();
-            System.out.println(selectedQueue.getLatest().value.toString());
-
-            // cc.create();
-            //System.out.println(cc.getCurrent().toString());
-        }
-		
-		/*
-		for (int i = 0; i < numCustomers; i++) {
-			System.out.println(arrivalNums.get(i));
-		}
-		*/
-
-        System.out.println(arrivalNums.size() + "\n\n\n" + serviceNums.size());
-        //testClock();
-
+        
+        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
+        sim.start();
+       
     }
 
     public static int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {

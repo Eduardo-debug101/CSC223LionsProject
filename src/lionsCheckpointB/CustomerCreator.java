@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CustomerCreator {
+public class CustomerCreator extends Customer {
     private int minimumTime;
     private int maximumTime;
     private int serviceMinTime;
@@ -32,7 +32,7 @@ public class CustomerCreator {
     }
 
     public String toString() {
-        return "CustomerCreator --- Minimum time: " + minimumTime + ", Maximum time: " + maximumTime + ", Service min time: " + serviceMinTime + ", Service max time: " + serviceMaxTime + " Start value: " + startValue;
+        return super.toString();
     }
 
     // Creates a customer - Eduardo 2/27
@@ -41,7 +41,7 @@ public class CustomerCreator {
         int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
         startValue += randomArrivalNum;
         current = new Customer(startValue, randomServiceNum);
-        System.out.println(current + " HHHEEERRREEE");
+        //System.out.println(current + " HHHEEERRREEE");
     }
 
     public Customer getCurrent() {
