@@ -36,11 +36,12 @@ public class CustomerCreator extends Customer {
     }
 
     // Creates a customer - Eduardo 2/27
-    public void create() {
+    public Customer create() {
         int randomArrivalNum = ThreadLocalRandom.current().nextInt(minimumTime, maximumTime + 1);
         int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
         startValue += randomArrivalNum;
         current = new Customer(startValue, randomServiceNum);
+        return current;
         //System.out.println(current + " HHHEEERRREEE");
     }
 
