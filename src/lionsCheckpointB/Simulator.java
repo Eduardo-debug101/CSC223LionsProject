@@ -31,7 +31,8 @@ public class Simulator {
 
         // This is to keep the while loop running until EVERY customer has been placed into a queue, served, and left
         int customersServedAndLeft = 0;
-        int customersServed = 0;
+        // This will have to eventually equal the amount of customers that the user entered
+        int customersAddedToQueues = 0;
 
         // This Creator will create a Customer based on our user's inputted parameters as well as a start time that starts
         // at zero and continues to increase for every Customer created
@@ -41,7 +42,7 @@ public class Simulator {
 
             //**************************
             // For when there is an available Customer to be put into a queue
-            if(customersServed < numCustomers){
+            if(customersAddedToQueues < numCustomers){
                 int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
                 LinkedListQueue selectedQueue = new LinkedListQueue();
 
@@ -54,7 +55,7 @@ public class Simulator {
                 Customer newCustomerForQueue = cc.create();
 
                 selectedQueue.add(newCustomerForQueue);
-                customersServed++;
+                customersAddedToQueues++;
             }
             //**************************
         }
