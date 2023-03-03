@@ -101,15 +101,4 @@ public class CustomerCreator extends Customer {
 	public void setStartValue(int startValue) {
 		this.startValue = startValue;
 	}
-
-	public ArrayList getAllInfo() {
-        ArrayList x = new ArrayList<>(Arrays.asList(
-                Integer.toString(minimumTime),
-                Integer.toString(maximumTime),
-                Integer.toString(serviceMinTime),
-                Integer.toString(serviceMaxTime),
-                Integer.toString(startValue)
-        ));
-        return x;
-    }
 }

@@ -1,6 +1,7 @@
 package lionsCheckpointB;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Simulator {
 	private int arrivalMinTime;
@@ -32,6 +33,8 @@ public class Simulator {
 		LinkedListQueue A = new LinkedListQueue();
 		LinkedListQueue B = new LinkedListQueue();
 		LinkedListQueue C = new LinkedListQueue();
+		
+		List<List<String>> allData = new ArrayList<List<String>>(numCustomers); 
 
 		// This is to keep the while loop running until EVERY customer has been placed
 		// into a queue, served, and left
@@ -53,6 +56,8 @@ public class Simulator {
 		waitingCustomers = customerWaitList(cc);
 
 		while (customersServedAndLeft < numCustomers) {
+			//allData.add(new ArrayList<String>());
+			
 			timer++;
 			// Remember to remove this. For debug purposes.
 			customersServedAndLeft++;
@@ -73,6 +78,8 @@ public class Simulator {
 						case 3 -> selectedQueue = C;
 						}
 
+						//allData.add(new ArrayList<String>());
+						
 						
 						boolean flag = true;
 						while (flag == true) {
@@ -92,6 +99,10 @@ public class Simulator {
 							}
 							selectedQueue.add(newCustomerForQueue);
 							
+							ArrayList tmpArr = selectedQueue.getLast().getAllInfo();
+							tmpArr.add(Integer.toString(lowestQueueNumber));
+							allData.add(tmpArr);
+							
 							customersAddedToQueues++;
 							waitingCustomers.remove(0);
 						} else {
@@ -100,9 +111,15 @@ public class Simulator {
 					}
 				}
 					output(A, B, C, timer);
+					
 			}
 			// **************************
 		}
+		
+		System.out.println("\n\n\nBeginning of Stats:\n");
+		printStats(allData);
+		
+		
 
 //        for (int i = 0; i < numCustomers; i++) {
 //
@@ -137,6 +154,36 @@ public class Simulator {
 ////		            ArrayList CurrentBlock = selectedQueue.getLatest().value.getAllInfo();
 ////		            System.out.println(selectedQueue.getLatest().value.toString());
 //        }
+	}
+	
+	public static void printStats(List<List<String>> x) {
+		
+		
+		String rere = String.format("%0" + 63 + "d", 0).replace("0", "-");
+		System.out.println(rere);
+		System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ", "| Dep ", "| Notes ", "|");
+		System.out.println("\n" + rere);
+		
+		
+		for (int m = 0; m < x.size(); m++) {
+			//System.out.println(allData.get(m).toString());
+			String p = "|";
+			System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s", p, x.get(m).get(4), p, x.get(m).get(0), p, x.get(m).get(1), p, numToLet(x.get(m).get(5)), p, x.get(m).get(3), p);
+			System.out.println("\n" + rere);
+			//System.out.println("|  " + x.get(m).get(4) + "    " + x.get(m).get(0) + "   "
+			//		+ x.get(m).get(1) + "   " + x.get(m).get(5) + "    " + x.get(m).get(3));
+		}
+		
+	}
+	
+	public static String numToLet(String string) {
+		String number = "NA";
+		switch (string) {
+			case "1" -> number = "A";
+			case "2" -> number = "B";
+			case "3" -> number = "C";
+		}
+		return number;
 	}
 
 	public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {

@@ -1,5 +1,8 @@
 package lionsCheckpointB;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Customer {
     private int arrivalTime;
     private int serviceTime;
@@ -84,4 +87,15 @@ public class Customer {
 	public void setNextNum(int nextNum) {
 		this.nextNum = nextNum;
 	}
+	
+	public ArrayList getAllInfo() {
+        ArrayList x = new ArrayList<>(Arrays.asList(
+                Integer.toString(arrivalTime),
+                Integer.toString(serviceTime),
+                Integer.toString(waitTime),
+                Integer.toString(leaveTime),
+                Integer.toString(custId)
+        ));
+        return x;
+    }
 }
