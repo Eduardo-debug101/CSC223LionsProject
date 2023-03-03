@@ -135,6 +135,35 @@ class LinkedListQueue {
         // Is there a new last element ?
         if (pred.next.next == null) last = pred.next;
     }
+    
+    public Customer getLast() {
+        if (isEmpty()) {
+            // Handle empty list
+            return null;
+        } else {
+            // Traverse list to find last element
+            Node current = first;
+            while (current.next != null) {
+                current = current.next;
+            }
+            return current.value;
+        }
+    }
+    
+    public int indexOf(Customer element) {
+        int index = 0;
+        Node p = first;
+        while (p != null) {
+            if (p.value.equals(element)) {
+                return index;
+            }
+            index++;
+            p = p.next;
+        }
+        return -1;
+    }
+    
+    
 
     /**
      * The toString method computes the string
