@@ -40,9 +40,10 @@ public class Simulator {
 		// entered
 		int customersAddedToQueues = 0;
 
-		// This counts the "minutes" that has passed. This is used for the sample output.
+		// This counts the "minutes" that has passed. This is used for the sample
+		// output.
 		int timer = -1;
-		
+
 		// This Creator will create a Customer based on our user's inputted parameters
 		// as well as a start time that starts
 		// at zero and continues to increase for every Customer created
@@ -50,7 +51,7 @@ public class Simulator {
 
 		ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
 		waitingCustomers = customerWaitList(cc);
-		
+
 		while (customersServedAndLeft < numCustomers) {
 			timer++;
 			// Remember to remove this. For debug purposes.
@@ -58,35 +59,47 @@ public class Simulator {
 			System.out.println("Time: " + timer);
 			if (timer == 0) {
 				System.out.println("\tStart");
+				
 			} else {
+					// **************************
+					// For when there is an available Customer to be put into a queue
+					if (customersAddedToQueues < numCustomers) {
+						int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
+						LinkedListQueue selectedQueue = new LinkedListQueue();
 
-				// **************************
-				// For when there is an available Customer to be put into a queue
-				if (customersAddedToQueues < numCustomers) {
-					int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
-					LinkedListQueue selectedQueue = new LinkedListQueue();
+						switch (lowestQueueNumber) {
+						case 1 -> selectedQueue = A;
+						case 2 -> selectedQueue = B;
+						case 3 -> selectedQueue = C;
+						}
 
-					switch (lowestQueueNumber) {
-					case 1 -> selectedQueue = A;
-					case 2 -> selectedQueue = B;
-					case 3 -> selectedQueue = C;
+						
+						boolean flag = true;
+						while (flag == true) {
+						// Gets the first Customer object element from the arraylist
+						Customer newCustomerForQueue = waitingCustomers.get(0);
+
+						// If the arrivalTime of the customer object is the same as the current
+						// time, then it will add it to the selected queue and delete the customer
+						// object from the arraylist
+						if (newCustomerForQueue.getArrivalTime() == timer) {
+							// Calculates wait time for each customer by getting the absloute value of the leave time of the 
+							// person in front minus the arrival time of the customer.
+							if (!selectedQueue.isEmpty()) {
+								int leaveTimeOfFirst = selectedQueue.getLast().getLeaveTime();
+								int arrivalTimeOfSecond = newCustomerForQueue.getArrivalTime();
+								cc.calcWait(newCustomerForQueue, leaveTimeOfFirst, arrivalTimeOfSecond);
+							}
+							selectedQueue.add(newCustomerForQueue);
+							
+							customersAddedToQueues++;
+							waitingCustomers.remove(0);
+						} else {
+							flag = false;
+						}
 					}
-					
-					// Gets the first Customer object element from the arraylist
-					Customer newCustomerForQueue = waitingCustomers.get(0);
-					
-					// If the arrivalTime of the customer object is the same as the current
-					// time, then it will add it to the selected queue and delete the customer
-					// object from the arraylist
-					if (newCustomerForQueue.getArrivalTime() == timer) {
-					selectedQueue.add(newCustomerForQueue);
-					customersAddedToQueues++;
-					waitingCustomers.remove(0);
-					}
-					
-					output(A, B, C, timer);
-					
 				}
+					output(A, B, C, timer);
 			}
 			// **************************
 		}
@@ -129,50 +142,48 @@ public class Simulator {
 	public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
 		int finalQueue = 0;
 		if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
-			//System.out.println("Adding to queueA");
+			// System.out.println("Adding to queueA");
 			finalQueue = 1;
 		} else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
-			//System.out.println("Adding to queueB");
+			// System.out.println("Adding to queueB");
 			finalQueue = 2;
 		} else {
-			//System.out.println("Adding to queueC");
+			// System.out.println("Adding to queueC");
 			finalQueue = 3;
 		}
 
 		return finalQueue;
 	}
-	
-	// Going to eventually support most of the output. Similar to Dr. Wolff's output at the end of the document.
+
+	// Going to eventually support most of the output. Similar to Dr. Wolff's output
+	// at the end of the document.
 	public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
 		if (A.isEmpty()) {
 			System.out.println("\tCheckout A: free");
-		}
-		else {
+		} else {
 			Customer custA = A.getLast();
 			if (custA.getArrivalTime() == time) {
 				System.out.println("\tCheckout A: Customer " + custA.getCustId() + " starts service");
-			}	
+			}
 		}
 		if (B.isEmpty()) {
 			System.out.println("\tCheckout B: free");
-		}
-		else {
+		} else {
 			Customer custB = B.getLast();
 			if (custB.getArrivalTime() == time) {
 				System.out.println("\tCheckout B: Customer " + custB.getCustId() + " starts service");
-			}	
+			}
 		}
 		if (C.isEmpty()) {
 			System.out.println("\tCheckout C: free");
-		}
-		else {
+		} else {
 			Customer custC = C.getLast();
 			if (custC.getArrivalTime() == time) {
 				System.out.println("\tCheckout C: Customer " + custC.getCustId() + " starts service");
-			}	
-		}	
+			}
+		}
 	}
-	
+
 	public ArrayList<Customer> customerWaitList(CustomerCreator cc) {
 		ArrayList<Customer> wc = new ArrayList<Customer>();
 		for (int i = 0; i < numCustomers; i++) {

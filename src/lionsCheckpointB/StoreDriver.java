@@ -13,7 +13,7 @@ public class StoreDriver {
        
 
         int minArrival = 0;
-        int maxArrival = 10;
+        int maxArrival = 3;
         int minService = 1;
         int maxService = 5;
         int numCustomers = 10;

@@ -19,7 +19,8 @@ public class Customer {
 		nextNum++;
         arrivalTime = a;
         serviceTime = s;
-        leaveTime = arrivalTime + serviceTime;
+        //waitTime = arrivalTime + serviceTime;
+        //leaveTime = (waitTime - arrivalTime) + serviceTime;
     }
 
     public Customer(int a, int s, int w, int l) {

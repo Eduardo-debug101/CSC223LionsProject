@@ -142,11 +142,11 @@ class LinkedListQueue {
             return null;
         } else {
             // Traverse list to find last element
-            Node current = first;
-            while (current.next != null) {
-                current = current.next;
+            Node p = first;
+            while (p.next != null) {
+                p = p.next;
             }
-            return current.value;
+            return p.value;
         }
     }
     
@@ -161,6 +161,18 @@ class LinkedListQueue {
             p = p.next;
         }
         return -1;
+    }
+    
+    public int countNodes() {
+        int count = 0;
+        Node p = first;
+        
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        
+        return count;
     }
     
     
