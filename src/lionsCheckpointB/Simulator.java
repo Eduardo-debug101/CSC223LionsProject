@@ -71,14 +71,19 @@ public class Simulator {
 					case 2 -> selectedQueue = B;
 					case 3 -> selectedQueue = C;
 					}
-
+					
+					// Gets the first Customer object element from the arraylist
 					Customer newCustomerForQueue = waitingCustomers.get(0);
 					
+					// If the arrivalTime of the customer object is the same as the current
+					// time, then it will add it to the selected queue and delete the customer
+					// object from the arraylist
 					if (newCustomerForQueue.getArrivalTime() == timer) {
 					selectedQueue.add(newCustomerForQueue);
 					customersAddedToQueues++;
 					waitingCustomers.remove(0);
 					}
+					
 					output(A, B, C, timer);
 					
 				}
@@ -137,6 +142,7 @@ public class Simulator {
 		return finalQueue;
 	}
 	
+	// Going to eventually support most of the output. Similar to Dr. Wolff's output at the end of the document.
 	public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
 		if (A.isEmpty()) {
 			System.out.println("\tCheckout A: free");
