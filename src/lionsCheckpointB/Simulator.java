@@ -132,13 +132,13 @@ public class Simulator {
 
 				output(A, B, C, timer);
 				if (!A.isEmpty()) {
-					if (A.getRear().getFinishTime() == timer) {
-						if (A.getRear().getWaitTime() >= 5) {
+					if (A.getHead().getFinishTime() == timer) {
+						if (A.getHead().getWaitTime() >= 5) {
 							dissatisfiedCusts += 1;
 						} else {
 							satisfiedCusts += 1;
 						}
-						A.remove(A.getRear());
+						A.remove(A.getHead());
 						customersServedAndLeft++;
 					}
 				} else {
@@ -146,13 +146,13 @@ public class Simulator {
 				}
 
 				if (!B.isEmpty()) {
-					if (B.getRear().getFinishTime() == timer) {
-						if (B.getRear().getWaitTime() >= 5) {
+					if (B.getHead().getFinishTime() == timer) {
+						if (B.getHead().getWaitTime() >= 5) {
 							dissatisfiedCusts += 1;
 						} else {
 							satisfiedCusts += 1;
 						}
-						B.remove(B.getRear());
+						B.remove(B.getHead());
 						customersServedAndLeft++;
 					}
 				} else {
@@ -160,13 +160,13 @@ public class Simulator {
 				}
 
 				if (!C.isEmpty()) {
-					if (C.getRear().getFinishTime() == timer) {
-						if (C.getRear().getWaitTime() >= 5) {
+					if (C.getHead().getFinishTime() == timer) {
+						if (C.getHead().getWaitTime() >= 5) {
 							dissatisfiedCusts += 1;
 						} else {
 							satisfiedCusts += 1;
 						}
-						C.remove(C.getRear());
+						C.remove(C.getHead());
 						customersServedAndLeft++;
 					}
 				} else {
@@ -245,22 +245,20 @@ public class Simulator {
 						if (cc.getArrivalTime() == time)
 							System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " begins service");
 
-						if (cc.getFinishTime() == time)
+						if (cc.getFinishTime() == time) 
+							// We could probably add a method where it deletes the entry instead of in the start method.
 							System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " leaves");
-
 						if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
 							System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " (cont)");
 
 					} else {
-						if (cc.getArrivalTime() == time)
-							// At the end maybe write some method that prints all of these statements. Use
-							// an array of sorts.
+						if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+							System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " begins service");	
+						else if (cc.getArrivalTime() == time) 
 						customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout A queue");
-									
-
-					}
 				}
 			}
+		}
 		}
 
 		if (B.isEmpty())
@@ -280,10 +278,11 @@ public class Simulator {
 							System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " (cont)");
 
 					} else {
-						if (cc.getArrivalTime() == time)
-							// At the end maybe write some method that prints all of these statements. Use
-							// an array of sorts.
-						customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout B queue");	
+						if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+							System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " begins service");
+						else if (cc.getArrivalTime() == time)
+						customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout B queue");
+						
 					}
 				}
 			}
@@ -303,10 +302,11 @@ public class Simulator {
 						if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
 							System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " (cont)");
 					} else {
-						if (cc.getArrivalTime() == time)
-							// At the end maybe write some method that prints all of these statements. Use
-							// an array of sorts.
+						if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+							System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " begins service");
+						else if (cc.getArrivalTime() == time)
 						customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout C queue");
+						
 					}
 
 				}

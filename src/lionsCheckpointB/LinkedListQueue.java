@@ -307,5 +307,9 @@ class LinkedListQueue {
             return first.value;
         }
     }
+    
+    public boolean hasHead() {
+        return first != null;
+    }
 }
 
