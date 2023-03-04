@@ -111,7 +111,10 @@ public class Simulator {
 
 							selectedQueue.add(newCustForQueue);
 
-							ArrayList tmpArr = selectedQueue.getLast().getAllInfo();
+							ArrayList tmpArr = newCustForQueue.getAllInfo();
+							String e = String.valueOf(tmpArr.get(2));
+							int b = Integer.parseInt(e);
+							colWT.add(b);
 							
 							String LETQUEUE = numToLet(Integer.toString(lowestQueueNumber));
 							String Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + tmpArr.get(2);
