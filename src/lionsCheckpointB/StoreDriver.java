@@ -8,11 +8,11 @@ public class StoreDriver {
 
     public static void main(String[] args) {
 
-        int minArrival = 0;
-        int maxArrival = 3;
+        int minArrival = 1;
+        int maxArrival = 5;
         int minService = 1;
-        int maxService = 5;
-        int numCustomers = 50;
+        int maxService = 7;
+        int numCustomers = 25;
 
         Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
         sim.start();

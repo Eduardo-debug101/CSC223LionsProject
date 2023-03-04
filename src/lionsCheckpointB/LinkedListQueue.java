@@ -273,5 +273,16 @@ class LinkedListQueue {
 
         return true;
     }
+
+    public Customer getRear() {
+        if (isEmpty()) {
+            // Handle empty list
+            return null;
+        } else {
+            // Traverse list to find last element
+            Node p = first;
+            return p.value;
+        }
+    }
 }
 

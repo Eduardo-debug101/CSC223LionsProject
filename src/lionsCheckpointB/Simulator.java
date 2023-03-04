@@ -2,6 +2,7 @@ package lionsCheckpointB;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Simulator {
     private int arrivalMinTime;
@@ -30,6 +31,7 @@ public class Simulator {
     }
 
     public void start() {
+
         LinkedListQueue A = new LinkedListQueue();
         LinkedListQueue B = new LinkedListQueue();
         LinkedListQueue C = new LinkedListQueue();
@@ -39,77 +41,96 @@ public class Simulator {
         // This is to keep the while loop running until EVERY customer has been placed
         // into a queue, served, and left
         int customersServedAndLeft = 0;
-        // This will have to eventually equal the amount of customers that the user
-        // entered
-        int customersAddedToQueues = 0;
 
         // This counts the "minutes" that has passed. This is used for the sample
         // output.
         int timer = -1;
 
-        // This Creator will create a Customer based on our user's inputted parameters
-        // as well as a start time that starts
-        // at zero and continues to increase for every Customer created
         CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
 
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
 
-        while (customersServedAndLeft <= numCustomers) {
+        while (customersServedAndLeft < numCustomers) {
             //allData.add(new ArrayList<String>());
 
             timer++;
-            // Remember to remove this. For debug purposes.
-            customersServedAndLeft++;
             System.out.println("Time: " + timer);
+
             if (timer == 0) {
                 System.out.println("\tStart");
 
             } else {
                 // ************************** For when there is an available Customer to be put into a queue
-                if (customersAddedToQueues < numCustomers) {
-                    int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
-                    LinkedListQueue selectedQueue = new LinkedListQueue();
-
-                    switch (lowestQueueNumber) {
-                        case 1 -> selectedQueue = A;
-                        case 2 -> selectedQueue = B;
-                        case 3 -> selectedQueue = C;
-                    }
-
-                    //allData.add(new ArrayList<String>());
+                if (!waitingCustomers.isEmpty()) {
 
                     boolean flag = true;
-                    while (flag == true) {
+                    while (flag && !waitingCustomers.isEmpty()) {
+
+                        // Moved this into the while loop so that duplicate times will get to select a queue
+                        int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
+                        LinkedListQueue selectedQueue = new LinkedListQueue();
+
+                        switch (lowestQueueNumber) {
+                            case 1 -> selectedQueue = A;
+                            case 2 -> selectedQueue = B;
+                            case 3 -> selectedQueue = C;
+                        }
+
                         // Gets the first Customer object element from the arraylist
-                        Customer newCustomerForQueue = waitingCustomers.get(0);
+                        Customer newCustForQueue = waitingCustomers.get(0);
 
                         // If the arrivalTime of the customer object is the same as the current
                         // time, then it will add it to the selected queue and delete the customer
                         // object from the arraylist
-                        if (newCustomerForQueue.getArrivalTime() == timer) {
+                        if (newCustForQueue.getArrivalTime() == timer) {
                             // Calculates wait time for each customer by getting the absloute value of the leave time of the
                             // person in front minus the arrival time of the customer.
                             if (!selectedQueue.isEmpty()) {
-                                int leaveTimeOfFirst = selectedQueue.getLast().getLeaveTime();
-                                int arrivalTimeOfSecond = newCustomerForQueue.getArrivalTime();
-                                cc.calcWait(newCustomerForQueue, leaveTimeOfFirst, arrivalTimeOfSecond);
+                                int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
+                                int serviceTimeOfCust = newCustForQueue.getServiceTime();
+                                cc.calcLeave(newCustForQueue, finishTimeOfRear, serviceTimeOfCust);
+                                newCustForQueue.calcWait();
+                            } else {
+                                newCustForQueue.setFinishTime(newCustForQueue.getArrivalTime() + newCustForQueue.getServiceTime());
+                                newCustForQueue.setWaitTime(0);
                             }
-                            selectedQueue.add(newCustomerForQueue);
+
+                            selectedQueue.add(newCustForQueue);
 
                             ArrayList tmpArr = selectedQueue.getLast().getAllInfo();
                             tmpArr.add(Integer.toString(lowestQueueNumber));
                             allData.add(tmpArr);
 
-                            customersAddedToQueues++;
                             waitingCustomers.remove(0);
                         } else {
                             flag = false;
                         }
                     }
                 }// ************************** Adding Customers to queues section
-            }
 
+                output(A, B, C, timer);
+                if (!A.isEmpty()) {
+                    if (A.getRear().getFinishTime() == timer) {
+                        A.remove(A.getRear());
+                        customersServedAndLeft++;
+                    }
+                }
+
+                if (!B.isEmpty()) {
+                    if (B.getRear().getFinishTime() == timer) {
+                        B.remove(B.getRear());
+                        customersServedAndLeft++;
+                    }
+                }
+
+                if (!C.isEmpty()) {
+                    if (C.getRear().getFinishTime() == timer) {
+                        C.remove(C.getRear());
+                        customersServedAndLeft++;
+                    }
+                }
+            }
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");
@@ -169,7 +190,11 @@ public class Simulator {
         } else {
             Customer custA = A.getLast();
             if (custA.getArrivalTime() == time) {
-                System.out.println("\tCheckout A: Customer " + custA.getCustId() + " starts service");
+                System.out.println("\tCheckout A: Customer " + custA.getCustId() + " added to queue");
+            } else if (custA.getFinishTime() == time) {
+                System.out.println("\tQueue A: removed Customer #" + custA.getCustId());
+            } else {
+                System.out.println("\tQueue A: (cont)");
             }
         }
         if (B.isEmpty()) {
@@ -178,6 +203,10 @@ public class Simulator {
             Customer custB = B.getLast();
             if (custB.getArrivalTime() == time) {
                 System.out.println("\tCheckout B: Customer " + custB.getCustId() + " starts service");
+            } else if (custB.getFinishTime() == time) {
+                System.out.println("\tQueue B: removed Customer #" + custB.getCustId());
+            } else {
+                System.out.println("\tQueue B: (cont)");
             }
         }
         if (C.isEmpty()) {
@@ -186,6 +215,10 @@ public class Simulator {
             Customer custC = C.getLast();
             if (custC.getArrivalTime() == time) {
                 System.out.println("\tCheckout C: Customer " + custC.getCustId() + " starts service");
+            } else if (custC.getFinishTime() == time) {
+                System.out.println("\tQueue C: removed Customer #" + custC.getCustId());
+            } else {
+                System.out.println("\tQueue C: (cont)");
             }
         }
     }

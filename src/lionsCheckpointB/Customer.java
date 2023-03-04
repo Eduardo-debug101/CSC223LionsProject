@@ -7,7 +7,7 @@ public class Customer {
     private int arrivalTime;
     private int serviceTime;
     private int waitTime;
-    private int leaveTime;
+    private int finishTime;
     private int custId;
     private static int nextNum = 0;
 
@@ -32,12 +32,17 @@ public class Customer {
         arrivalTime = a;
         serviceTime = s;
         waitTime = w;
-        leaveTime = l;
+        finishTime = l;
+    }
+
+    public void calcWait(){
+        int wait = finishTime - arrivalTime;
+        this.setWaitTime(wait);
     }
 
 
     public String toString() {
-        return "Customer --- Arrival time: " + arrivalTime + ", Service time: " + serviceTime + ", Wait time: " + waitTime + ", Leave time: " + leaveTime;
+        return "Customer --- Arrival time: " + arrivalTime + ", Service time: " + serviceTime + ", Wait time: " + waitTime + ", Leave time: " + finishTime;
     }
 
     public int getArrivalTime() {
@@ -64,12 +69,12 @@ public class Customer {
         this.waitTime = waitTime;
     }
 
-    public int getLeaveTime() {
-        return leaveTime;
+    public int getFinishTime() {
+        return finishTime;
     }
 
-    public void setLeaveTime(int leaveTime) {
-        this.leaveTime = leaveTime;
+    public void setFinishTime(int finishTime) {
+        this.finishTime = finishTime;
     }
 
     public int getCustId() {
@@ -93,7 +98,7 @@ public class Customer {
                 Integer.toString(arrivalTime),
                 Integer.toString(serviceTime),
                 Integer.toString(waitTime),
-                Integer.toString(leaveTime),
+                Integer.toString(finishTime),
                 Integer.toString(custId)
         ));
         return x;
