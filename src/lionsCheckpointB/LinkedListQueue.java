@@ -297,5 +297,15 @@ class LinkedListQueue {
             return p.value;
         }
     }
+    
+    public Customer getHead() {
+        if (isEmpty()) {
+            // Handle empty list
+            return null;
+        } else {
+            // Return value of first node
+            return first.value;
+        }
+    }
 }
 
