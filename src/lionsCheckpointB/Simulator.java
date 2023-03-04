@@ -56,7 +56,7 @@ public class Simulator {
 		ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
 		waitingCustomers = customerWaitList(cc);
 
-		while (customersServedAndLeft < numCustomers) {
+		while (customersServedAndLeft != numCustomers) {
 			// allData.add(new ArrayList<String>());
 
 			timer++;
@@ -114,7 +114,7 @@ public class Simulator {
 							if (allData.size() >= 2) {
 								int addAdd = Math.abs((Integer.parseInt(allData.get(allData.size() - 1).get(3))
 										- Integer.parseInt((String) tmpArr.get(0))));
-								System.out.println(addAdd);
+								//System.out.println(addAdd);
 								colWT.add(addAdd);
 								Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3)
 										+ " WAIT:" + addAdd;
