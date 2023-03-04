@@ -55,11 +55,14 @@ public class Simulator {
 
 		ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
 		waitingCustomers = customerWaitList(cc);
-
+		int counter = 0; // Debug purposes
 		while (customersServedAndLeft != numCustomers) {
 			// allData.add(new ArrayList<String>());
-
+			if (counter == 1000) {
+				System.out.println("Hello future me!");
+			}		
 			timer++;
+			counter++;
 			System.out.println("Time: " + timer);
 
 			if (timer == 0) {
@@ -96,8 +99,9 @@ public class Simulator {
 							// person in front minus the arrival time of the customer.
 							if (!selectedQueue.isEmpty()) {
 								int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
-								int arrivalTimeOfCust = newCustForQueue.getArrivalTime();
-								cc.calcWait(newCustForQueue, finishTimeOfRear, arrivalTimeOfCust);
+								//int arrivalTimeOfCust = newCustForQueue.getArrivalTime();
+								//A.calcWait(newCustForQueue, finishTimeOfRear, arrivalTimeOfCust);
+								newCustForQueue.calcWait(finishTimeOfRear);
 								newCustForQueue.calcLeave();
 							} else {
 								newCustForQueue.setFinishTime(

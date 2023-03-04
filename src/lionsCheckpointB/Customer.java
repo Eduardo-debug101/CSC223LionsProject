@@ -35,11 +35,16 @@ public class Customer {
         finishTime = l;
     }
 
+    public void calcWait(int leaveFirst) {
+       	int waitTime = Math.abs(leaveFirst - arrivalTime);
+    	setWaitTime(waitTime);
+    }
+    
     public void calcLeave() {
     	int leave = arrivalTime + waitTime + serviceTime;
     	this.setFinishTime(leave);
     }
-
+    
     public String toString() {
         return "Customer --- Arrival time: " + arrivalTime + ", Service time: " + serviceTime + ", Wait time: " + waitTime + ", Leave time: " + finishTime;
     }

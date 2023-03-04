@@ -12,7 +12,7 @@ public class StoreDriver {
         int maxArrival = 3;
         int minService = 1;
         int maxService = 15;
-        int numCustomers = 15;
+        int numCustomers = 6;
 
         Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
         sim.start();

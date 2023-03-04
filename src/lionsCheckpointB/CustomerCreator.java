@@ -43,10 +43,10 @@ public class CustomerCreator extends Customer {
         //System.out.println(current + " HHHEEERRREEE");
     }
 
-    public void calcWait(Customer c, int leaveFirst, int arrivalSecond) {
-    	int waitTime = Math.abs(leaveFirst - arrivalSecond);
-    	c.setWaitTime(waitTime);
-    }
+//    public void calcWait(Customer c, int leaveFirst, int arrivalSecond) {
+//    	int waitTime = Math.abs(leaveFirst - arrivalSecond);
+//    	c.setWaitTime(waitTime);
+//    }
 
     public Customer getCurrent() {
         return current;
