@@ -38,6 +38,9 @@ public class Simulator {
 
         List<List<String>> allData = new ArrayList<List<String>>(numCustomers);
 
+        int satisfiedCusts = 0;
+        int dissatisfiedCusts = 0;
+
         // This is to keep the while loop running until EVERY customer has been placed
         // into a queue, served, and left
         int customersServedAndLeft = 0;
@@ -45,6 +48,7 @@ public class Simulator {
         // This counts the "minutes" that has passed. This is used for the sample
         // output.
         int timer = -1;
+        int timeQueueIsFree = 0;
 
         CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
 
@@ -112,33 +116,54 @@ public class Simulator {
                 output(A, B, C, timer);
                 if (!A.isEmpty()) {
                     if (A.getRear().getFinishTime() == timer) {
+                        if (A.getRear().getWaitTime() >= 5) {
+                            dissatisfiedCusts += 1;
+                        } else {
+                            satisfiedCusts += 1;
+                        }
                         A.remove(A.getRear());
                         customersServedAndLeft++;
                     }
+                } else {
+                    timeQueueIsFree++;
                 }
 
                 if (!B.isEmpty()) {
                     if (B.getRear().getFinishTime() == timer) {
+                        if (B.getRear().getWaitTime() >= 5) {
+                            dissatisfiedCusts += 1;
+                        } else {
+                            satisfiedCusts += 1;
+                        }
                         B.remove(B.getRear());
                         customersServedAndLeft++;
                     }
+                } else {
+                    timeQueueIsFree++;
                 }
 
                 if (!C.isEmpty()) {
                     if (C.getRear().getFinishTime() == timer) {
+                        if (C.getRear().getWaitTime() >= 5) {
+                            dissatisfiedCusts += 1;
+                        } else {
+                            satisfiedCusts += 1;
+                        }
                         C.remove(C.getRear());
                         customersServedAndLeft++;
                     }
+                } else {
+                    timeQueueIsFree++;
                 }
             }
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");
-        printStats(allData);
+        printStats(allData, dissatisfiedCusts, satisfiedCusts, timeQueueIsFree);
 
     }
 
-    public static void printStats(List<List<String>> x) {
+    public static void printStats(List<List<String>> x, int dsc, int sc, int timeQueueIsFree) {
 
         String rere = String.format("%0" + 63 + "d", 0).replace("0", "-");
         System.out.println(rere);
@@ -153,6 +178,10 @@ public class Simulator {
             //System.out.println("|  " + x.get(m).get(4) + "    " + x.get(m).get(0) + "   "
             //		+ x.get(m).get(1) + "   " + x.get(m).get(5) + "    " + x.get(m).get(3));
         }
+
+        System.out.println("Total time queues were free: " + timeQueueIsFree);
+        System.out.println("Satisfied customers: " + sc);
+        System.out.println("Dissatisfied customers: " + dsc);
 
     }
 
@@ -169,56 +198,74 @@ public class Simulator {
     public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
         int finalQueue = 0;
         if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
-            // System.out.println("Adding to queueA");
             finalQueue = 1;
         } else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
-            // System.out.println("Adding to queueB");
             finalQueue = 2;
         } else {
-            // System.out.println("Adding to queueC");
             finalQueue = 3;
         }
 
         return finalQueue;
     }
 
-    // Going to eventually support most of the output. Similar to Dr. Wolff's output
-    // at the end of the document.
     public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
         if (A.isEmpty()) {
             System.out.println("\tCheckout A: free");
         } else {
-            Customer custA = A.getLast();
-            if (custA.getArrivalTime() == time) {
-                System.out.println("\tCheckout A: Customer " + custA.getCustId() + " added to queue");
-            } else if (custA.getFinishTime() == time) {
-                System.out.println("\tQueue A: removed Customer #" + custA.getCustId());
-            } else {
-                System.out.println("\tQueue A: (cont)");
+
+            for (int i = 0; i < A.size(); i++) {
+                Customer cc = A.indexOf(i);
+                if (cc != null) {
+                    if (cc.getArrivalTime() == time) {
+                        System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " begins service");
+                    }
+                    if (cc.getFinishTime() == time) {
+                        System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " leaves");
+                    }
+                    if (cc.getArrivalTime() != time && cc.getFinishTime() != time) {
+                        System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " (cont)");
+                    }
+                }
             }
         }
+
         if (B.isEmpty()) {
             System.out.println("\tCheckout B: free");
         } else {
-            Customer custB = B.getLast();
-            if (custB.getArrivalTime() == time) {
-                System.out.println("\tCheckout B: Customer " + custB.getCustId() + " starts service");
-            } else if (custB.getFinishTime() == time) {
-                System.out.println("\tQueue B: removed Customer #" + custB.getCustId());
-            } else {
-                System.out.println("\tQueue B: (cont)");
+
+            for (int i = 0; i < B.size(); i++) {
+                Customer cc = B.indexOf(i);
+                if (cc != null) {
+                    if (cc.getArrivalTime() == time) {
+                        System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " begins service");
+                    }
+                    if (cc.getFinishTime() == time) {
+                        System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " leaves");
+                    }
+                    if (cc.getArrivalTime() != time && cc.getFinishTime() != time) {
+                        System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " (cont)");
+                    }
+                }
             }
         }
+
         if (C.isEmpty()) {
             System.out.println("\tCheckout C: free");
         } else {
-            Customer custC = C.getLast();
-            if (custC.getArrivalTime() == time) {
-                System.out.println("\tCheckout C: Customer " + custC.getCustId() + " starts service");
-            } else if (custC.getFinishTime() == time) {
-                System.out.println("\tQueue C: removed Customer #" + custC.getCustId());
-            } else {
-                System.out.println("\tQueue C: (cont)");
+
+            for (int i = 0; i < C.size(); i++) {
+                Customer cc = C.indexOf(i);
+                if (cc != null) {
+                    if (cc.getArrivalTime() == time) {
+                        System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " begins service");
+                    }
+                    if (cc.getFinishTime() == time) {
+                        System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " leaves");
+                    }
+                    if (cc.getArrivalTime() != time && cc.getFinishTime() != time) {
+                        System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " (cont)");
+                    }
+                }
             }
         }
     }

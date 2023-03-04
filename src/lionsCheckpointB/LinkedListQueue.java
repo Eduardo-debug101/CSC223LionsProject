@@ -163,6 +163,19 @@ class LinkedListQueue {
         return -1;
     }
 
+    public Customer indexOf(int index){
+        Node p = first;
+        int trueIndex = 0;
+        while (p != null){
+            if(trueIndex == index){
+                return p.value;
+            }
+            p = p.next;
+            trueIndex++;
+        }
+        return null;
+    }
+
     public int countNodes() {
         int count = 0;
         Node p = first;

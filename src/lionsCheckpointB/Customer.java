@@ -36,7 +36,7 @@ public class Customer {
     }
 
     public void calcWait(){
-        int wait = finishTime - arrivalTime;
+        int wait = Math.abs(finishTime - arrivalTime);
         this.setWaitTime(wait);
     }
 
