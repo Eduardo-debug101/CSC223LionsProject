@@ -92,10 +92,10 @@ public class Simulator {
                             // Calculates wait time for each customer by getting the absloute value of the leave time of the
                             // person in front minus the arrival time of the customer.
                             if (!selectedQueue.isEmpty()) {
-                                int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
-                                int serviceTimeOfCust = newCustForQueue.getServiceTime();
-                                cc.calcLeave(newCustForQueue, finishTimeOfRear, serviceTimeOfCust);
-                                newCustForQueue.calcWait();
+                            	 int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
+                                 int arrivalTimeOfCust = newCustForQueue.getArrivalTime();
+                                 cc.calcWait(newCustForQueue, finishTimeOfRear, arrivalTimeOfCust);
+                                 newCustForQueue.calcLeave();
                             } else {
                                 newCustForQueue.setFinishTime(newCustForQueue.getArrivalTime() + newCustForQueue.getServiceTime());
                                 newCustForQueue.setWaitTime(0);
