@@ -9,12 +9,20 @@ public class StoreDriver {
 	static Scanner scan = new Scanner(System.in);
 
 
+<<<<<<< Updated upstream
 	/*
 	 * A method to safely parse Ints while catching errors It will print whatever is
 	 * fed/prompted and return the int
 	 */
 	public static int parseInt(String x) {
 		System.out.println(x);
+=======
+        int minArrival = 0;
+        int maxArrival = 3;
+        int minService = 1;
+        int maxService = 15;
+        int numCustomers = 20;
+>>>>>>> Stashed changes
 
 		int var = 0;
 

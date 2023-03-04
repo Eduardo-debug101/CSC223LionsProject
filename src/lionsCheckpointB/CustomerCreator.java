@@ -64,9 +64,21 @@ public class CustomerCreator {
 		this.maximumTime = maximumTime;
 	}
 
+<<<<<<< Updated upstream
 	public int getServiceMinTime() {
 		return serviceMinTime;
 	}
+=======
+//    public void calcLeave(Customer c, int last, int first) {
+//        int leaveTime = last + first;
+//        c.setFinishTime(leaveTime);
+//    }
+    
+    public void calcWait(Customer c, int leaveFirst, int arrivalSecond) {
+    	int waitTime = Math.abs(leaveFirst - arrivalSecond);
+    	c.setWaitTime(waitTime);
+    }
+>>>>>>> Stashed changes
 
 	public void setServiceMinTime(int serviceMinTime) {
 		this.serviceMinTime = serviceMinTime;

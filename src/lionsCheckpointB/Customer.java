@@ -45,9 +45,21 @@ public class Customer extends CustomerCreator {
 		this.serviceTime = serviceStart;
 	}
 
+<<<<<<< Updated upstream
 	public int getWaitTime() {
 		return waitTime;
 	}
+=======
+//    public void calcWait(){
+//        int wait = Math.abs(finishTime - arrivalTime);
+//        this.setWaitTime(wait);
+//    }
+    
+    public void calcLeave() {
+    	int leave = arrivalTime + waitTime + serviceTime;
+    	this.setFinishTime(leave);
+    }
+>>>>>>> Stashed changes
 
 	public void setWaitTime(int waitTime) {
 		this.waitTime = waitTime;
