@@ -135,7 +135,7 @@ class LinkedListQueue {
         // Is there a new last element ?
         if (pred.next.next == null) last = pred.next;
     }
-    
+
     public Customer getLast() {
         if (isEmpty()) {
             // Handle empty list
@@ -149,7 +149,7 @@ class LinkedListQueue {
             return p.value;
         }
     }
-    
+
     public int indexOf(Customer element) {
         int index = 0;
         Node p = first;
@@ -162,20 +162,19 @@ class LinkedListQueue {
         }
         return -1;
     }
-    
+
     public int countNodes() {
         int count = 0;
         Node p = first;
-        
+
         while (p != null) {
             count++;
             p = p.next;
         }
-        
+
         return count;
     }
-    
-    
+
 
     /**
      * The toString method computes the string

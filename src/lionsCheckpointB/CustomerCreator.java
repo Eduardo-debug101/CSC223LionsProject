@@ -1,7 +1,5 @@
 package lionsCheckpointB;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CustomerCreator extends Customer {
@@ -22,7 +20,7 @@ public class CustomerCreator extends Customer {
         serviceMaxTime = t;
         startValue = 0;
     }
-    
+
     public CustomerCreator(int m, int n, int s, int t, int z) {
         minimumTime = m;
         maximumTime = n;
@@ -44,16 +42,16 @@ public class CustomerCreator extends Customer {
         return current;
         //System.out.println(current + " HHHEEERRREEE");
     }
-    
+
 //   public void calcWait(Customer c) {
 //		   c.setWaitTime(0); 
 //   }
-   
-   public void calcWait(Customer c, int last, int first) {
-	   int waitTime = Math.abs(last - first);
-	   c.setWaitTime(waitTime);
-   }
-    
+
+    public void calcWait(Customer c, int last, int first) {
+        int waitTime = Math.abs(last - first);
+        c.setWaitTime(waitTime);
+    }
+
     public Customer getCurrent() {
         return current;
     }
@@ -94,11 +92,11 @@ public class CustomerCreator extends Customer {
         this.serviceMaxTime = serviceMaxTime;
     }
 
-	public int getStartValue() {
-		return startValue;
-	}
+    public int getStartValue() {
+        return startValue;
+    }
 
-	public void setStartValue(int startValue) {
-		this.startValue = startValue;
-	}
+    public void setStartValue(int startValue) {
+        this.startValue = startValue;
+    }
 }
