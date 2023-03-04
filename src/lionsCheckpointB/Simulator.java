@@ -112,17 +112,10 @@ public class Simulator {
 							selectedQueue.add(newCustForQueue);
 
 							ArrayList tmpArr = selectedQueue.getLast().getAllInfo();
+							
 							String LETQUEUE = numToLet(Integer.toString(lowestQueueNumber));
-							String Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3)
-									+ " WAIT:0";
-							if (allData.size() >= 2) {
-								int addAdd = Math.abs((Integer.parseInt(allData.get(allData.size() - 1).get(3))
-										- Integer.parseInt((String) tmpArr.get(0))));
-								//System.out.println(addAdd);
-								colWT.add(addAdd);
-								Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3)
-										+ " WAIT:" + addAdd;
-							}
+							String Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + tmpArr.get(2);
+							//System.out.println("------> " + tmpArr.get(2) + "<-------");
 							tmpArr.add(LETQUEUE);
 							tmpArr.add(Notes);
 							allData.add(tmpArr);
