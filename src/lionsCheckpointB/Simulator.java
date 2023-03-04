@@ -10,6 +10,7 @@ public class Simulator {
     private int serviceMinTime;
     private int serviceMaxTime;
     private int numCustomers;
+    static ArrayList<Integer> colWT = new ArrayList<>();
 
     public Simulator() {
 
@@ -108,6 +109,7 @@ public class Simulator {
                             if (allData.size() >= 2) {
                             	int addAdd = Math.abs((Integer.parseInt(allData.get(allData.size()-1).get(3)) - Integer.parseInt((String) tmpArr.get(0))));
                             	System.out.println(addAdd);
+                            	colWT.add(addAdd);
                             	Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + addAdd;
                             }
                             tmpArr.add(LETQUEUE);
@@ -186,7 +188,13 @@ public class Simulator {
             //System.out.println("|  " + x.get(m).get(4) + "    " + x.get(m).get(0) + "   "
             //		+ x.get(m).get(1) + "   " + x.get(m).get(5) + "    " + x.get(m).get(3));
         }
-
+        
+        Double BeepBeep = 0.0;
+        for (int a = 0; a < colWT.size(); a++) {
+        	BeepBeep = BeepBeep+colWT.get(a);
+        }
+        
+        System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep/BeepBeep.SIZE), " min\n");
         System.out.println("Total time queues were free: " + timeQueueIsFree);
         System.out.println("Satisfied customers: " + sc);
         System.out.println("Dissatisfied customers: " + dsc);
