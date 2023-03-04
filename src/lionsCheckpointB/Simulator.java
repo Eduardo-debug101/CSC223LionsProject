@@ -103,9 +103,12 @@ public class Simulator {
                             selectedQueue.add(newCustForQueue);
 
                             ArrayList tmpArr = selectedQueue.getLast().getAllInfo();
-                            tmpArr.add(Integer.toString(lowestQueueNumber));
+                            String LETQUEUE = numToLet(Integer.toString(lowestQueueNumber));
+                            String Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3);
+                            tmpArr.add(LETQUEUE);
+                            tmpArr.add(Notes);
                             allData.add(tmpArr);
-
+                            
                             waitingCustomers.remove(0);
                         } else {
                             flag = false;
@@ -173,7 +176,7 @@ public class Simulator {
         for (int m = 0; m < x.size(); m++) {
             //System.out.println(allData.get(m).toString());
             String p = "|";
-            System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s", p, x.get(m).get(4), p, x.get(m).get(0), p, x.get(m).get(1), p, numToLet(x.get(m).get(5)), p, x.get(m).get(3), p);
+            System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s", p, x.get(m).get(4), p, x.get(m).get(0), p, x.get(m).get(1), p, x.get(m).get(5), p, x.get(m).get(3), p, x.get(m).get(6));
             System.out.println("\n" + rere);
             //System.out.println("|  " + x.get(m).get(4) + "    " + x.get(m).get(0) + "   "
             //		+ x.get(m).get(1) + "   " + x.get(m).get(5) + "    " + x.get(m).get(3));
