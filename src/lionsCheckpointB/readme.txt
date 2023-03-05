@@ -32,6 +32,17 @@ The program also calculates the following:
 Sample data:
 Here is some sample data for a simulation run:
 
+Enter minimum arrival time between customers: 
+1
+Enter maximum arrival time between customers: 
+5
+Enter minimum service time: 
+10
+Enter maximum service time: 
+20
+Number of customers to serve: 
+10
+
 ---------------------------------------------------------------
 | Cust # | Arrival Time | Service Time    | LOC | Dep | Notes |
 ---------------------------------------------------------------
