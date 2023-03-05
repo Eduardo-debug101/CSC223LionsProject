@@ -48,8 +48,6 @@ public class Simulator {
         // This counts the "minutes" that has passed. This is used for the sample
         // output.
         int timer = -1;
-        Clock c = new Clock();
-        c.start();
         int timeQueueIsFree = 0;
 
         CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
@@ -57,8 +55,13 @@ public class Simulator {
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
 
+        int counter = 0;
         // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
+        	counter++;
+        	if(counter == 500) {
+        		System.out.println("The Future.");
+        	}
 
             timer++;
             System.out.println("Time: " + timer);
@@ -91,7 +94,6 @@ public class Simulator {
                         // person in front minus the arrival time of the customer.
                         if (!selectedQueue.isEmpty()) {
                             int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
-
                             newCustForQueue.calcWait(finishTimeOfRear);
                             newCustForQueue.calcLeave();
                         } else {

@@ -287,6 +287,17 @@ class LinkedListQueue {
         return true;
     }
 
+//    public Customer getRear() {
+//        if (isEmpty()) {
+//            // Handle empty list
+//            return null;
+//        } else {
+//            // Traverse list to find last element
+//            Node p = first;
+//            return p.value;
+//        }
+//    }
+    
     public Customer getRear() {
         if (isEmpty()) {
             // Handle empty list
@@ -294,6 +305,9 @@ class LinkedListQueue {
         } else {
             // Traverse list to find last element
             Node p = first;
+            while (p.next != null) {
+                p = p.next;
+            }
             return p.value;
         }
     }
