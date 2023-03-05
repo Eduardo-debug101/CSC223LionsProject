@@ -55,14 +55,8 @@ public class Simulator {
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
 
-        int counter = 0;
         // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
-        	counter++;
-        	if(counter == 500) {
-        		System.out.println("The Future.");
-        	}
-
             timer++;
             System.out.println("Time: " + timer);
 
@@ -80,6 +74,7 @@ public class Simulator {
 
                     // Finds the smallest queue to add customers into
                     LinkedListQueue selectedQueue = findLowestQueue(A, B, C);
+                    String QueueLetter = findLowestQueueNum(A, B, C);
 
                     // Gets the first Customer object element from the arraylist
                     Customer newCustForQueue = waitingCustomers.get(0);
@@ -108,7 +103,6 @@ public class Simulator {
                         int b = Integer.parseInt(e);
                         colWT.add(b);
 
-                        String QueueLetter = findLowestQueueNum(A, B, C);
                         String Notes = " Goes to " + QueueLetter + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + tmpArr.get(2);
 
                         tmpArr.add(QueueLetter);
@@ -188,13 +182,10 @@ public class Simulator {
         System.out.println("\n" + rere);
 
         for (int m = 0; m < x.size(); m++) {
-            // System.out.println(allData.get(m).toString());
             String p = "|";
             System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s", p, x.get(m).get(4), p, x.get(m).get(0), p,
                     x.get(m).get(1), p, x.get(m).get(5), p, x.get(m).get(3), p, x.get(m).get(6));
             System.out.println("\n" + rere);
-            // System.out.println("| " + x.get(m).get(4) + " " + x.get(m).get(0) + " "
-            // + x.get(m).get(1) + " " + x.get(m).get(5) + " " + x.get(m).get(3));
         }
 
         Double BeepBeep = 0.0;
