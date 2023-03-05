@@ -8,10 +8,10 @@ public class StoreDriver {
 
     public static void main(String[] args) {
 
-        int minArrival = 1; // Fix the problem with customer not showing up to queue when set to zero
-        int maxArrival = 3;
-        int minService = 1;
-        int maxService = 15;
+        int minArrival = 0; // Fix the problem with customer not showing up to queue when set to zero
+        int maxArrival = 0;
+        int minService = 15;
+        int maxService = 5;
         int numCustomers = 6;
 
         Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);

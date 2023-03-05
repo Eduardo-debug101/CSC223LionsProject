@@ -65,7 +65,7 @@ public class Simulator {
 			if (timer == 0) {
 				System.out.println("\tStart");
 
-			} else {
+			} 
 				// ************************** For when there is an available Customer to be put
 				// into a queue
 				if (!waitingCustomers.isEmpty()) {
@@ -169,7 +169,7 @@ public class Simulator {
 				} else {
 					timeQueueIsFree++;
 				}
-			}
+			
 		}
 
 		System.out.println("\n\n\nBeginning of Stats:\n");
