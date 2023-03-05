@@ -24,7 +24,6 @@ public class Simulator {
         numCustomers = n;
     }
 
-    @Override
     public String toString() {
         return "Simulator [arrivalMinTime=" + arrivalMinTime + ", arrivalMaxTime=" + arrivalMaxTime
                 + ", serviceMinTime=" + serviceMinTime + ", serviceMaxTime=" + serviceMaxTime + ", numCustomers="
@@ -58,9 +57,9 @@ public class Simulator {
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
 
+        // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
 
-            // allData.add(new ArrayList<String>());
             timer++;
             System.out.println("Time: " + timer);
 
@@ -69,23 +68,15 @@ public class Simulator {
 
             }
 
-            // ************************** For when there is an available Customer to be put
-            // into a queue
+            // ************************** START For when there is an available Customer to be put into a queue
             if (!waitingCustomers.isEmpty()) {
 
+                // While loop is used to keep adding Customers that have the same arrivalTime as the current Timer
                 boolean flag = true;
                 while (flag && !waitingCustomers.isEmpty()) {
 
-                    // Moved this into the while loop so that duplicate times will get to select a
-                    // queue
-                    int lowestQueueNumber = findLowestQueueSize(A.size(), B.size(), C.size());
-                    LinkedListQueue selectedQueue = new LinkedListQueue();
-
-                    switch (lowestQueueNumber) {
-                        case 1 -> selectedQueue = A;
-                        case 2 -> selectedQueue = B;
-                        case 3 -> selectedQueue = C;
-                    }
+                    // Finds the smallest queue to add customers into
+                    LinkedListQueue selectedQueue = findLowestQueue(A, B, C);
 
                     // Gets the first Customer object element from the arraylist
                     Customer newCustForQueue = waitingCustomers.get(0);
@@ -115,10 +106,10 @@ public class Simulator {
                         int b = Integer.parseInt(e);
                         colWT.add(b);
 
-                        String LETQUEUE = numToLet(Integer.toString(lowestQueueNumber));
-                        String Notes = " Goes to " + LETQUEUE + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + tmpArr.get(2);
+                        String QueueLetter = findLowestQueueNum(A, B, C);
+                        String Notes = " Goes to " + QueueLetter + "@" + tmpArr.get(0) + ";leaves@" + tmpArr.get(3) + " WAIT:" + tmpArr.get(2);
 
-                        tmpArr.add(LETQUEUE);
+                        tmpArr.add(QueueLetter);
                         tmpArr.add(Notes);
                         allData.add(tmpArr);
 
@@ -127,10 +118,11 @@ public class Simulator {
                         flag = false;
                     }
                 }
-            } // ************************** Adding Customers to queues section
+            } // ************************** END Adding Customers to queues section
 
             output(A, B, C, timer);
 
+            // ************************** START Removing Customers from queues section
             if (!A.isEmpty()) {
                 if (A.getHead().getFinishTime() == timer) {
                     if (A.getHead().getWaitTime() >= 5) {
@@ -172,11 +164,16 @@ public class Simulator {
             } else {
                 timeQueueIsFree++;
             }
+            // ************************** END Removing Customers from queues section
 
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");
         printStats(allData, dissatisfiedCusts, satisfiedCusts, timeQueueIsFree);
+
+    }
+
+    public void handleQueueRemovals(LinkedListQueue queue){
 
     }
 
@@ -233,6 +230,26 @@ public class Simulator {
         }
 
         return finalQueue;
+    }
+
+    public LinkedListQueue findLowestQueue(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C){
+        if (A.size() <= B.size() && A.size() <= C.size()) {
+            return A;
+        } else if (B.size() <= C.size() && B.size() <= A.size()) {
+            return B;
+        } else {
+            return C;
+        }
+    }
+
+    public String findLowestQueueNum(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C){
+        if (A.size() <= B.size() && A.size() <= C.size()) {
+            return "A";
+        } else if (B.size() <= C.size() && B.size() <= A.size()) {
+            return "B";
+        } else {
+            return "C";
+        }
     }
 
     public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
