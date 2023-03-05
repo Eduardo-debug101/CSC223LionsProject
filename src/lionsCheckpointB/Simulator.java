@@ -130,6 +130,7 @@ public class Simulator {
             } // ************************** Adding Customers to queues section
 
             output(A, B, C, timer);
+
             if (!A.isEmpty()) {
                 if (A.getHead().getFinishTime() == timer) {
                     if (A.getHead().getWaitTime() >= 5) {
@@ -236,86 +237,42 @@ public class Simulator {
 
     public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
-        if (A.isEmpty())
-            System.out.println("\tCheckout A: free");
-        else {
-            for (int i = 0; i < A.size(); i++) {
-                Customer cc = A.indexOf(i);
-                if (cc != null) {
-                    if (cc == A.getHead()) {
-                        if (cc.getArrivalTime() == time)
-                            System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " begins service");
 
-                        if (cc.getFinishTime() == time)
-                            // We could probably add a method where it deletes the entry instead of in the start method.
-                            System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " leaves");
-                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-                            System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " (cont)");
+        handleQueueOutput(A, 'A', time, customersWaitingInQueue);
+        handleQueueOutput(B, 'B', time, customersWaitingInQueue);
+        handleQueueOutput(C, 'C', time, customersWaitingInQueue);
 
-                    } else {
-                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-                            System.out.println("\tCheckout A: Customer #" + cc.getCustId() + " begins service");
-                        else if (cc.getArrivalTime() == time)
-                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout A queue");
-                    }
-                }
-            }
-        }
-
-        if (B.isEmpty())
-            System.out.println("\tCheckout B: free");
-        else {
-            for (int i = 0; i < B.size(); i++) {
-                Customer cc = B.indexOf(i);
-                if (cc != null) {
-                    if (cc == B.getHead()) {
-                        if (cc.getArrivalTime() == time)
-                            System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " begins service");
-
-                        if (cc.getFinishTime() == time)
-                            System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " leaves");
-
-                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-                            System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " (cont)");
-
-                    } else {
-                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-                            System.out.println("\tCheckout B: Customer #" + cc.getCustId() + " begins service");
-                        else if (cc.getArrivalTime() == time)
-                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout B queue");
-
-                    }
-                }
-            }
-        }
-
-        if (C.isEmpty())
-            System.out.println("\tCheckout C: free");
-        else {
-            for (int i = 0; i < C.size(); i++) {
-                Customer cc = C.indexOf(i);
-                if (cc != null) {
-                    if (cc == C.getHead()) {
-                        if (cc.getArrivalTime() == time)
-                            System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " begins service");
-                        if (cc.getFinishTime() == time)
-                            System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " leaves");
-                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-                            System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " (cont)");
-                    } else {
-                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-                            System.out.println("\tCheckout C: Customer #" + cc.getCustId() + " begins service");
-                        else if (cc.getArrivalTime() == time)
-                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout C queue");
-
-                    }
-
-                }
-            }
-        }
         if (!customersWaitingInQueue.isEmpty()) {
             for (String s : customersWaitingInQueue) {
                 System.out.println(s);
+            }
+        }
+    }
+
+    public void handleQueueOutput(LinkedListQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue){
+        if (queue.isEmpty())
+            System.out.println("\tCheckout " + queueLetter + ": free");
+        else {
+            for (int i = 0; i < queue.size(); i++) {
+                Customer cc = queue.indexOf(i);
+                if (cc != null) {
+                    if (cc == queue.getHead()) {
+                        if (cc.getArrivalTime() == time)
+                            System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+
+                        if (cc.getFinishTime() == time)
+                            // We could probably add a method where it deletes the entry instead of in the start method.
+                            System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
+                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
+                            System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
+
+                    } else {
+                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+                            System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+                        else if (cc.getArrivalTime() == time)
+                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout " + queueLetter + " queue");
+                    }
+                }
             }
         }
     }
