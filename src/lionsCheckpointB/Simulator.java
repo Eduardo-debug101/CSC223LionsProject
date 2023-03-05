@@ -199,11 +199,13 @@ public class Simulator {
 		}
 
 		Double BeepBeep = 0.0;
+		int counter = 0;
 		for (int a = 0; a < colWT.size(); a++) {
 			BeepBeep = BeepBeep + colWT.get(a);
+			counter++;
 		}
 
-		System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep / BeepBeep.SIZE), " min\n");
+		System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep / counter), " min\n");
 		System.out.println("Total time queues were free: " + timeQueueIsFree);
 		System.out.println("Satisfied customers: " + sc);
 		System.out.println("Dissatisfied customers: " + dsc);
