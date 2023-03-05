@@ -49,20 +49,17 @@ public class Simulator {
 		// This counts the "minutes" that has passed. This is used for the sample
 		// output.
 		int timer = -1;
+		Clock c = new Clock();
+		c.start();
 		int timeQueueIsFree = 0;
 
 		CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
 
 		ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
 		waitingCustomers = customerWaitList(cc);
-		int counter = 0; // Debug purposes
 		while (customersServedAndLeft != numCustomers) {
 			// allData.add(new ArrayList<String>());
-			if (counter == 1000) {
-				System.out.println("Hello future me!");
-			}		
 			timer++;
-			counter++;
 			System.out.println("Time: " + timer);
 
 			if (timer == 0) {
@@ -206,7 +203,7 @@ public class Simulator {
 		}
 
 		System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep / counter), " min\n");
-		System.out.println("Total time queues were free: " + timeQueueIsFree);
+		System.out.println("Total time checkouts were not in use: " + timeQueueIsFree + " min");
 		System.out.println("Satisfied customers: " + sc);
 		System.out.println("Dissatisfied customers: " + dsc);
 
