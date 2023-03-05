@@ -196,7 +196,7 @@ public class Simulator {
         }
 
         System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep / counter), " min\n");
-        System.out.println("Total time checkouts were not in use: " + timeQueueIsFree + " min");
+        System.out.println("Total time checkouts were not in use: " + timeQueueIsFree  + " min");
         System.out.println("Satisfied customers: " + sc);
         System.out.println("Dissatisfied customers: " + dsc);
 
