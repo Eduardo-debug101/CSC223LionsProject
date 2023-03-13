@@ -1,0 +1,44 @@
+﻿Project Outline
+Directions from Canvas: 
+Start Project. Design classes.  Need document explaining how the team will work.  Set up weekly meetings.  See main project document for details.
+
+
+Introduction:
+This document outlines the structure and processes of Team Lions, which is responsible for developing a Java-based project that will simulate a grocery store. The purpose of this document is to provide a clear understanding of how the team will function, communicate, and collaborate to achieve its goals.
+
+
+Team Structure:
+Project Manager and Lead Developer - Eduardo Argueta-Pineda: responsible for overall project planning, execution, and delivery
+Developers - Benjamin Wheatley and Damian Rebollar-Reyes: responsible for writing and testing code
+QA Tester - Andrew Dupree: accountable for testing and ensuring the project meets the requirements
+
+
+Communications:
+The team will have weekly meetings on Wednesdays. There will be no set meeting time unless otherwise. All team members are expected to provide updates on their progress. Additionally, team members will use Discord for real-time communication and to share documents and updates.
+
+
+Participation and Attendance:
+All team members are expected to attend all team meetings and actively participate in the project. Any absences or delays in completing tasks must be communicated to the Project Manager in advance. Failure to attend these meetings will result in being reported to the professor.
+
+
+Resources:
+The team will use GitHub for code sharing and collaboration. Additionally, Discord will be used to share small snippets of code. 
+
+
+Conclusion:
+By following the structure outlined in this document, Team Lions will be able to collaborate and deliver a high-quality project effectively. If you have any questions, please contact the Project Manager through Discord.
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+UML diagram is subject to change.
