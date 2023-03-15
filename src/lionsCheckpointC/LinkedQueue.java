@@ -9,9 +9,9 @@ public class LinkedQueue
 {
     private class Node
     {
-        String value;
+        Customer value;
         Node next;
-        Node(String val, Node n)
+        Node(Customer val, Node n)
         {
             value = val; 
             next = n;
@@ -28,7 +28,7 @@ public class LinkedQueue
 		 to the queue.
     */
     
-    public void enqueue(String s)
+    public void enqueue(Customer s)
     {
         if (rear != null)
         {
@@ -62,12 +62,25 @@ public class LinkedQueue
 		 queue is empty.
     */
     
-    public String peek()
+    public Customer peek()
     {
         if (empty())
             throw new EmptyQueueException();
         else
             return front.value;        
+    }
+    
+    /**
+     * Returns the last element in the queue.
+     *
+     * @return the last element in the queue.
+     * @throws EmptyQueueException if the queue is empty.
+     */
+    public Customer getRear() {
+        if (empty()) {
+            throw new EmptyQueueException();
+        }
+        return rear.value;
     }
     
     /**
@@ -78,19 +91,47 @@ public class LinkedQueue
 		 the queue is empty.
     */
     
-    public String dequeue()
+    public Customer dequeue()
     {
        if (empty()) 
            throw new EmptyQueueException();
        else
        {
-           String value = front.value;
+           Customer value = front.value;
            front = front.next;
            if (front == null) rear = null;    
            return value;
        }
     }
     
+    /**
+     * Returns the number of elements in the queue.
+     *
+     * @return the number of elements in the queue.
+     */
+    public int size() {
+        int count = 0;
+        Node p = front;
+        while (p != null) {
+            count++;
+            p = p.next;
+        }
+        return count;
+    }
+    
+    public Customer indexOf(int index) {
+        Node p = front;
+        int trueIndex = 0;
+        while (p != null) {
+            if (trueIndex == index) {
+                return p.value;
+            }
+            p = p.next;
+            trueIndex++;
+        }
+        return null;
+    }
+  
     /**
        The toString method concatenates all strings
        in the queue to give a string representation 

@@ -32,9 +32,9 @@ public class Simulator {
 
     public void start() {
 
-        LinkedListQueue A = new LinkedListQueue();
-        LinkedListQueue B = new LinkedListQueue();
-        LinkedListQueue C = new LinkedListQueue();
+        LinkedQueue A = new LinkedQueue();
+        LinkedQueue B = new LinkedQueue();
+        LinkedQueue C = new LinkedQueue();
 
         List<List<String>> allData = new ArrayList<List<String>>(numCustomers);
 
@@ -73,7 +73,7 @@ public class Simulator {
                 while (flag && !waitingCustomers.isEmpty()) {
 
                     // Finds the smallest queue to add customers into
-                    LinkedListQueue selectedQueue = findLowestQueue(A, B, C);
+                    LinkedQueue selectedQueue = findLowestQueue(A, B, C);
                     String QueueLetter = findLowestQueueNum(A, B, C);
 
                     // Gets the first Customer object element from the arraylist
@@ -87,7 +87,7 @@ public class Simulator {
                         // Calculates wait time for each customer by getting the absloute value of the
                         // leave time of the
                         // person in front minus the arrival time of the customer.
-                        if (!selectedQueue.isEmpty()) {
+                        if (!selectedQueue.empty()) {
                             int finishTimeOfRear = selectedQueue.getRear().getFinishTime();
                             newCustForQueue.calcWait(finishTimeOfRear);
                             newCustForQueue.calcLeave();
@@ -96,7 +96,7 @@ public class Simulator {
                             newCustForQueue.setWaitTime(0);
                         }
 
-                        selectedQueue.add(newCustForQueue);
+                        selectedQueue.enqueue(newCustForQueue);
 
                         ArrayList tmpArr = newCustForQueue.getAllInfo();
                         String e = String.valueOf(tmpArr.get(2));
@@ -119,42 +119,42 @@ public class Simulator {
             output(A, B, C, timer);
 
             // ************************** START Removing Customers from queues section
-            if (!A.isEmpty()) {
-                if (A.getHead().getFinishTime() == timer) {
-                    if (A.getHead().getWaitTime() >= 5) {
+            if (!A.empty()) {
+                if (A.peek().getFinishTime() == timer) {
+                    if (A.peek().getWaitTime() >= 5) {
                         dissatisfiedCusts += 1;
                     } else {
                         satisfiedCusts += 1;
                     }
-                    A.remove(A.getHead());
+                    A.dequeue();
                     customersServedAndLeft++;
                 }
             } else {
                 timeQueueIsFree++;
             }
 
-            if (!B.isEmpty()) {
-                if (B.getHead().getFinishTime() == timer) {
-                    if (B.getHead().getWaitTime() >= 5) {
+            if (!B.empty()) {
+                if (B.peek().getFinishTime() == timer) {
+                    if (B.peek().getWaitTime() >= 5) {
                         dissatisfiedCusts += 1;
                     } else {
                         satisfiedCusts += 1;
                     }
-                    B.remove(B.getHead());
+                    B.dequeue();
                     customersServedAndLeft++;
                 }
             } else {
                 timeQueueIsFree++;
             }
 
-            if (!C.isEmpty()) {
-                if (C.getHead().getFinishTime() == timer) {
-                    if (C.getHead().getWaitTime() >= 5) {
+            if (!C.empty()) {
+                if (C.peek().getFinishTime() == timer) {
+                    if (C.peek().getWaitTime() >= 5) {
                         dissatisfiedCusts += 1;
                     } else {
                         satisfiedCusts += 1;
                     }
-                    C.remove(C.getHead());
+                    C.dequeue();
                     customersServedAndLeft++;
                 }
             } else {
@@ -169,7 +169,7 @@ public class Simulator {
 
     }
 
-    public void handleQueueRemovals(LinkedListQueue queue){
+    public void handleQueueRemovals(LinkedQueue queue){
 
     }
 
@@ -225,7 +225,7 @@ public class Simulator {
         return finalQueue;
     }
 
-    public LinkedListQueue findLowestQueue(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C){
+    public LinkedQueue findLowestQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C){
         if (A.size() <= B.size() && A.size() <= C.size()) {
             return A;
         } else if (B.size() <= C.size() && B.size() <= A.size()) {
@@ -235,7 +235,7 @@ public class Simulator {
         }
     }
 
-    public String findLowestQueueNum(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C){
+    public String findLowestQueueNum(LinkedQueue A, LinkedQueue B, LinkedQueue C){
         if (A.size() <= B.size() && A.size() <= C.size()) {
             return "A";
         } else if (B.size() <= C.size() && B.size() <= A.size()) {
@@ -245,7 +245,7 @@ public class Simulator {
         }
     }
 
-    public void output(LinkedListQueue A, LinkedListQueue B, LinkedListQueue C, int time) {
+    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
         handleQueueOutput(A, 'A', time, customersWaitingInQueue);
@@ -259,14 +259,14 @@ public class Simulator {
         }
     }
 
-    public void handleQueueOutput(LinkedListQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue){
-        if (queue.isEmpty())
+    public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue){
+        if (queue.empty())
             System.out.println("\tCheckout " + queueLetter + ": free");
         else {
             for (int i = 0; i < queue.size(); i++) {
                 Customer cc = queue.indexOf(i);
                 if (cc != null) {
-                    if (cc == queue.getHead()) {
+                    if (cc == queue.peek()) {
                         if (cc.getArrivalTime() == time)
                             System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
 

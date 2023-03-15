@@ -4,7 +4,7 @@ package lionsCheckpointC;
  * The LinkedList1 class implements a Linked list.
  */
 
-class LinkedListQueue {
+class OLDLinkedListQueue {
     /**
      * The Node class stores a list element
      * and a reference to the next node.
@@ -45,7 +45,7 @@ class LinkedListQueue {
      * Constructor.
      */
 
-    public LinkedListQueue() {
+    public OLDLinkedListQueue() {
         first = null;
         last = null;
     }
