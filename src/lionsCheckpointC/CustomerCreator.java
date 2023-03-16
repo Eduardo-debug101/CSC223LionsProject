@@ -21,12 +21,12 @@ public class CustomerCreator extends Customer {
         startValue = 0;
     }
 
-    public CustomerCreator(int m, int n, int s, int t, int z) {
+    public CustomerCreator(int m, int n, int s, int t, int startTime) {
         minimumTime = m;
         maximumTime = n;
         serviceMinTime = s;
         serviceMaxTime = t;
-        startValue = z;
+        startValue = startTime;
     }
 
     public String toString() {
@@ -40,7 +40,6 @@ public class CustomerCreator extends Customer {
         startValue += randomArrivalNum;
         current = new Customer(startValue, randomServiceNum);
         return current;
-        //System.out.println(current + " HHHEEERRREEE");
     }
 
 //    public void calcWait(Customer c, int leaveFirst, int arrivalSecond) {

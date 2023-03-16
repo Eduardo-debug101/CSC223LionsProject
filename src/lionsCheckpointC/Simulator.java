@@ -2,7 +2,7 @@ package lionsCheckpointC;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Simulator {
     private int arrivalMinTime;
@@ -11,6 +11,11 @@ public class Simulator {
     private int serviceMaxTime;
     private int numCustomers;
     static ArrayList<Integer> colWT = new ArrayList<>();
+    private static int satisfiedCusts = 0;
+    private static int dissatisfiedCusts = 0;
+    // This is to keep the start() while loop running until EVERY customer has been placed into a queue, served, and left
+    private static int customersServedAndLeft = 0;
+    private static int timeQueuesAreFree = 0;
 
     public Simulator() {
 
@@ -36,27 +41,21 @@ public class Simulator {
         LinkedQueue B = new LinkedQueue();
         LinkedQueue C = new LinkedQueue();
 
+        LinkedQueue D = new LinkedQueue();
+
         List<List<String>> allData = new ArrayList<List<String>>(numCustomers);
-
-        int satisfiedCusts = 0;
-        int dissatisfiedCusts = 0;
-
-        // This is to keep the while loop running until EVERY customer has been placed
-        // into a queue, served, and left
-        int customersServedAndLeft = 0;
-
-        // This counts the "minutes" that has passed. This is used for the sample
-        // output.
-        int timer = -1;
-        int timeQueueIsFree = 0;
 
         CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
 
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
 
+        // This counts the "minutes" that has passed. This is used for the sample output.
+        int timer = -1;
+
         // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
+
             timer++;
             System.out.println("Time: " + timer);
 
@@ -73,7 +72,7 @@ public class Simulator {
                 while (flag && !waitingCustomers.isEmpty()) {
 
                     // Finds the smallest queue to add customers into
-                    LinkedQueue selectedQueue = findLowestQueue(A, B, C);
+                    LinkedQueue selectedQueue = selectAQueue(A, B, C, D);
                     String QueueLetter = findLowestQueueNum(A, B, C);
 
                     // Gets the first Customer object element from the arraylist
@@ -116,64 +115,40 @@ public class Simulator {
                 }
             } // ************************** END Adding Customers to queues section
 
-            output(A, B, C, timer);
+            output(A, B, C, D, timer);
 
             // ************************** START Removing Customers from queues section
-            if (!A.empty()) {
-                if (A.peek().getFinishTime() == timer) {
-                    if (A.peek().getWaitTime() >= 5) {
-                        dissatisfiedCusts += 1;
-                    } else {
-                        satisfiedCusts += 1;
-                    }
-                    A.dequeue();
-                    customersServedAndLeft++;
-                }
-            } else {
-                timeQueueIsFree++;
-            }
-
-            if (!B.empty()) {
-                if (B.peek().getFinishTime() == timer) {
-                    if (B.peek().getWaitTime() >= 5) {
-                        dissatisfiedCusts += 1;
-                    } else {
-                        satisfiedCusts += 1;
-                    }
-                    B.dequeue();
-                    customersServedAndLeft++;
-                }
-            } else {
-                timeQueueIsFree++;
-            }
-
-            if (!C.empty()) {
-                if (C.peek().getFinishTime() == timer) {
-                    if (C.peek().getWaitTime() >= 5) {
-                        dissatisfiedCusts += 1;
-                    } else {
-                        satisfiedCusts += 1;
-                    }
-                    C.dequeue();
-                    customersServedAndLeft++;
-                }
-            } else {
-                timeQueueIsFree++;
-            }
+            handleQueueRemoval(A, timer);
+            handleQueueRemoval(B, timer);
+            handleQueueRemoval(C, timer);
+            handleQueueRemoval(D, timer);
             // ************************** END Removing Customers from queues section
 
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");
-        printStats(allData, dissatisfiedCusts, satisfiedCusts, timeQueueIsFree);
+        printStats(allData);
 
     }
 
-    public void handleQueueRemovals(LinkedQueue queue){
-
+    public void handleQueueRemoval(LinkedQueue queue, int time) {
+        if (!queue.empty()) {
+            if (queue.peek().getFinishTime() == time) {
+                if (queue.peek().getWaitTime() >= 5) {
+                    dissatisfiedCusts += 1;
+                } else {
+                    satisfiedCusts += 1;
+                }
+                queue.dequeue();
+                customersServedAndLeft++;
+            }
+        } else {
+            timeQueuesAreFree++;
+        }
     }
 
-    public static void printStats(List<List<String>> x, int dsc, int sc, int timeQueueIsFree) {
+
+    public static void printStats(List<List<String>> x) {
 
         String rere = String.format("%0" + 63 + "d", 0).replace("0", "-");
         System.out.println(rere);
@@ -196,46 +171,29 @@ public class Simulator {
         }
 
         System.out.format("%1s%.2f%1s", "Average wait: ", (BeepBeep / counter), " min\n");
-        System.out.println("Total time checkouts were not in use: " + timeQueueIsFree  + " min");
-        System.out.println("Satisfied customers: " + sc);
-        System.out.println("Dissatisfied customers: " + dsc);
+        System.out.println("Total time checkouts were not in use: " + timeQueuesAreFree + " min");
+        System.out.println("Satisfied customers: " + satisfiedCusts);
+        System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
 
     }
 
-    public static String numToLet(String string) {
-        String number = "NA";
-        switch (string) {
-            case "1" -> number = "A";
-            case "2" -> number = "B";
-            case "3" -> number = "C";
-        }
-        return number;
-    }
 
-    public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
-        int finalQueue = 0;
-        if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
-            finalQueue = 1;
-        } else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
-            finalQueue = 2;
+    public LinkedQueue selectAQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue D) {
+        int coinflip = ThreadLocalRandom.current().nextInt(0, 1 + 1);
+        if (coinflip == 1) {
+            if (A.size() <= B.size() && A.size() <= C.size()) {
+                return A;
+            } else if (B.size() <= C.size() && B.size() <= A.size()) {
+                return B;
+            } else {
+                return C;
+            }
         } else {
-            finalQueue = 3;
-        }
-
-        return finalQueue;
-    }
-
-    public LinkedQueue findLowestQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C){
-        if (A.size() <= B.size() && A.size() <= C.size()) {
-            return A;
-        } else if (B.size() <= C.size() && B.size() <= A.size()) {
-            return B;
-        } else {
-            return C;
+            return D;
         }
     }
 
-    public String findLowestQueueNum(LinkedQueue A, LinkedQueue B, LinkedQueue C){
+    public String findLowestQueueNum(LinkedQueue A, LinkedQueue B, LinkedQueue C) {
         if (A.size() <= B.size() && A.size() <= C.size()) {
             return "A";
         } else if (B.size() <= C.size() && B.size() <= A.size()) {
@@ -245,12 +203,13 @@ public class Simulator {
         }
     }
 
-    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, int time) {
+    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue D, int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
         handleQueueOutput(A, 'A', time, customersWaitingInQueue);
         handleQueueOutput(B, 'B', time, customersWaitingInQueue);
         handleQueueOutput(C, 'C', time, customersWaitingInQueue);
+        handleQueueOutput(D, 'D', time, customersWaitingInQueue);
 
         if (!customersWaitingInQueue.isEmpty()) {
             for (String s : customersWaitingInQueue) {
@@ -259,7 +218,7 @@ public class Simulator {
         }
     }
 
-    public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue){
+    public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
         if (queue.empty())
             System.out.println("\tCheckout " + queueLetter + ": free");
         else {
@@ -334,5 +293,28 @@ public class Simulator {
     public void setNumCustomers(int numCustomers) {
         this.numCustomers = numCustomers;
     }
+
+//    public static String numToLet(String string) {
+//        String number = "NA";
+//        switch (string) {
+//            case "1" -> number = "A";
+//            case "2" -> number = "B";
+//            case "3" -> number = "C";
+//        }
+//        return number;
+//    }
+//
+//    public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
+//        int finalQueue = 0;
+//        if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
+//            finalQueue = 1;
+//        } else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
+//            finalQueue = 2;
+//        } else {
+//            finalQueue = 3;
+//        }
+//
+//        return finalQueue;
+//    }
 
 }
