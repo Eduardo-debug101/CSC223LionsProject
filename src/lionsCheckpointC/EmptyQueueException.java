@@ -1,13 +1,8 @@
 package lionsCheckpointC;
 
 
-class EmptyQueueException extends RuntimeException
-{   
-
-	public EmptyQueueException()
-	   {
-	      super("Error: The queue is empty");
-	   }
-
-	   
+class EmptyQueueException extends RuntimeException {
+    public EmptyQueueException() {
+        super("Error: The queue is empty");
+    }
 }
