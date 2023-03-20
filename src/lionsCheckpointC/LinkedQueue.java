@@ -5,71 +5,66 @@ package lionsCheckpointC;
 	on linked lists.
 */
 
-public class LinkedQueue
-{
-    private class Node
-    {
+public class LinkedQueue {
+    private class Node {
         Customer value;
         Node next;
-        Node(Customer val, Node n)
-        {
-            value = val; 
+
+        Node(Customer val, Node n) {
+            value = val;
             next = n;
-        }       
+        }
     }
 
-    private Node front = null; 
-    private Node rear = null;                                     
-    
+    private Node front = null;
+    private Node rear = null;
+
     /**
-       The method enqueue adds a value
-		 to the queue.
-       @param s The value to be added
-		 to the queue.
-    */
-    
-    public void enqueue(Customer s)
-    {
-        if (rear != null)
-        {
-           rear.next = new Node(s, null);
-           rear = rear.next;
-        }
-        else
-        {
+     * The method enqueue adds a value
+     * to the queue.
+     *
+     * @param s The value to be added
+     *          to the queue.
+     */
+
+    public void enqueue(Customer s) {
+        if (rear != null) {
+            rear.next = new Node(s, null);
+            rear = rear.next;
+        } else {
             rear = new Node(s, null);
             front = rear;
         }
     }
-    
-    /**
-       The empty method checks to see if 
-		 the queue is empty.
-       @return true if and only if queue
-		 is empty.
-    */
 
-    public boolean empty()
-    {
+    /**
+     * The empty method checks to see if
+     * the queue is empty.
+     *
+     * @return true if and only if queue
+     * is empty.
+     */
+
+    public boolean empty() {
         return front == null;
     }
-    
+
     /**
-       The method peek returns value at the
-       front of the queue.
-       @return item at front of queue.
-		 @excepton EmptyQueueException When the
-		 queue is empty.
-    */
-    
-    public Customer peek()
-    {
+     * The method peek returns value at the
+     * front of the queue.
+     *
+     * @return item at front of queue.
+     * @excepton EmptyQueueException When the
+     * queue is empty.
+     */
+
+    public Customer peek() {
         if (empty())
             throw new EmptyQueueException();
         else
-            return front.value;        
+            return front.value;
     }
-    
+
     /**
      * Returns the last element in the queue.
      *
@@ -82,28 +77,27 @@ public class LinkedQueue
         }
         return rear.value;
     }
-    
+
     /**
-       The dequeue method removes and returns 
-       the item at the front of the queue.
-       @return item at front of queue.
-		 @exception EmptyQueueException When
-		 the queue is empty.
-    */
-    
-    public Customer dequeue()
-    {
-       if (empty()) 
-           throw new EmptyQueueException();
-       else
-       {
-           Customer value = front.value;
-           front = front.next;
-           if (front == null) rear = null;    
-           return value;
-       }
+     * The dequeue method removes and returns
+     * the item at the front of the queue.
+     *
+     * @return item at front of queue.
+     * @throws EmptyQueueException When
+     *                             the queue is empty.
+     */
+
+    public Customer dequeue() {
+        if (empty())
+            throw new EmptyQueueException();
+        else {
+            Customer value = front.value;
+            front = front.next;
+            if (front == null) rear = null;
+            return value;
+        }
     }
-    
+
     /**
      * Returns the number of elements in the queue.
      *
@@ -118,7 +112,7 @@ public class LinkedQueue
         }
         return count;
     }
-    
+
     public Customer indexOf(int index) {
         Node p = front;
         int trueIndex = 0;
@@ -131,25 +125,24 @@ public class LinkedQueue
         }
         return null;
     }
-  
+
     /**
-       The toString method concatenates all strings
-       in the queue to give a string representation 
-       of the contents of the queue.        
-       @return string representation of this queue.
-    */
-    
-    public String toString()
-    {
-       StringBuilder sBuilder = new StringBuilder();
-       
-       // Walk down the list and append all values
-       Node p = front;
-       while (p != null)
-       {
-           sBuilder.append(p.value + " ");
-           p = p.next;
-       }
-       return sBuilder.toString();        
+     * The toString method concatenates all strings
+     * in the queue to give a string representation
+     * of the contents of the queue.
+     *
+     * @return string representation of this queue.
+     */
+
+    public String toString() {
+        StringBuilder sBuilder = new StringBuilder();
+
+        // Walk down the list and append all values
+        Node p = front;
+        while (p != null) {
+            sBuilder.append(p.value + " ");
+            p = p.next;
+        }
+        return sBuilder.toString();
     }
 }
