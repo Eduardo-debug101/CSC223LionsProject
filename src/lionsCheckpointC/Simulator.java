@@ -43,8 +43,10 @@ public class Simulator {
 		LinkedQueue C = new LinkedQueue();
 
 		LinkedQueue self = new LinkedQueue();
-		LinkedQueue D = new LinkedQueue();
-		LinkedQueue E = new LinkedQueue();
+		Customer[] D = new Customer[1];
+		Customer[] E = new Customer[1];
+		// LinkedQueue D = new LinkedQueue();
+		// LinkedQueue E = new LinkedQueue();
 
 		List<List<String>> allData = new ArrayList<List<String>>(numCustomers);
 
@@ -77,7 +79,7 @@ public class Simulator {
 				boolean flag = true;
 				while (flag && !waitingCustomers.isEmpty()) {
 					int coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
-					if (coinFlip == 1) {
+					if (coinFlip == 1) { // FULL
 						// Finds the smallest queue to add customers into
 						LinkedQueue selectedQueue = selectAQueue(A, B, C);
 						String QueueLetter = findLowestQueueNum(A, B, C);
@@ -121,28 +123,52 @@ public class Simulator {
 						} else {
 							flag = false;
 						}
-					} else {
-						self.enqueue(waitingCustomers.get(0));
-						if (A.empty() || B.empty()) {
-							
+					} else if (coinFlip == 0) { // SELF
+						Customer payingCustomer = waitingCustomers.get(0);
+						if (payingCustomer.getArrivalTime() == timer) {
+						self.enqueue(payingCustomer);
+							if (D[0] == null || E[0] == null) { // Service begin immediately
+								self.dequeue();
+								payingCustomer.setFinishTime(
+										payingCustomer.getArrivalTime() + payingCustomer.getServiceTime());
+								payingCustomer.setWaitTime(0);
+								if (D[0] == null) {
+									D[0] = payingCustomer;
+								} else if (E[0] == null) {
+									E[0] = payingCustomer;
+								} else {
+									System.out.println("ERROR ERROR ERROR");
+								}
+							} else {// Wait time begins
+								if (D[0].getFinishTime() >= E[0].getFinishTime()) {
+									int finishTimeOfRear = D[0].getFinishTime();
+									payingCustomer.calcWait(finishTimeOfRear);
+									payingCustomer.calcLeave();
+								} else if (D[0].getFinishTime() < E[0].getFinishTime()) {
+									int finishTimeOfRear = E[0].getFinishTime();
+									payingCustomer.calcWait(finishTimeOfRear);
+									payingCustomer.calcLeave();
+								}
+							}
+							waitingCustomers.remove(0);
+						} else {
+							flag = false;
 						}
-						else {
-							
-						}
-
 					}
 				}
-			} // ************************** END Adding Customers to queues section
 
-			output(A, B, C, D, timer);
+					// ************************** END Adding Customers to queues section
 
-			// ************************** START Removing Customers from queues section
-			handleQueueRemoval(A, timer);
-			handleQueueRemoval(B, timer);
-			handleQueueRemoval(C, timer);
-			handleQueueRemoval(D, timer);
-			// ************************** END Removing Customers from queues section
+					output(A, B, C, self, D, E, timer);
 
+					// ************************** START Removing Customers from queues section
+					// Need to add logic to "remove" an element from the array: make the first element = null
+					handleQueueRemoval(A, timer);
+					handleQueueRemoval(B, timer);
+					handleQueueRemoval(C, timer);
+					// handleQueueRemoval(D, timer);
+					// ************************** END Removing Customers from queues section
+				}
 		}
 
 		System.out.println("\n\n\nBeginning of Stats:\n");
@@ -215,13 +241,15 @@ public class Simulator {
 		}
 	}
 
-	public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue D, int time) {
+	public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, Customer[] D, Customer[] E,
+			int time) {
 		ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
 		handleQueueOutput(A, 'A', time, customersWaitingInQueue);
 		handleQueueOutput(B, 'B', time, customersWaitingInQueue);
 		handleQueueOutput(C, 'C', time, customersWaitingInQueue);
-		handleQueueOutput(D, 'D', time, customersWaitingInQueue);
+		handleQueueOutput(self, D, 'D', time, customersWaitingInQueue);
+		handleQueueOutput(self, E, 'E', time, customersWaitingInQueue);
 
 		if (!customersWaitingInQueue.isEmpty()) {
 			for (String s : customersWaitingInQueue) {
@@ -237,6 +265,46 @@ public class Simulator {
 		else {
 			for (int i = 0; i < queue.size(); i++) {
 				Customer cc = queue.indexOf(i);
+				if (cc != null) {
+					if (cc == queue.peek()) {
+						if (cc.getArrivalTime() == time)
+							System.out.println(
+									"\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+
+						if (cc.getFinishTime() == time)
+							// We could probably add a method where it deletes the entry instead of in the
+							// start method.
+							System.out
+									.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
+						if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
+							System.out
+									.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
+
+					} else {
+						if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+							System.out.println(
+									"\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+						else if (cc.getArrivalTime() == time)
+							customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
+									+ " arrives and goes into Checkout " + queueLetter + " queue");
+					}
+				}
+			}
+		}
+	}
+	// Still need to work on this
+	public void handleQueueOutput(LinkedQueue queue, Customer[] servicePoint, char queueLetter, int time,
+			ArrayList<String> customersWaitingInQueue) {
+		if (servicePoint[0] == null)
+			System.out.println("\tCheckout " + queueLetter + ": free");
+		else {
+			Customer cc = null;
+			for (int i = 0; i < queue.size(); i++) {
+				if (i == 1) {
+					cc = servicePoint[0];
+				} else {
+					cc = queue.indexOf(i);
+				}
 				if (cc != null) {
 					if (cc == queue.peek()) {
 						if (cc.getArrivalTime() == time)
