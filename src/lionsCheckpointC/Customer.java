@@ -1,8 +1,5 @@
 package lionsCheckpointC;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Customer {
     private int arrivalTime;
     private int serviceTime;
@@ -10,6 +7,8 @@ public class Customer {
     private int finishTime;
     private int custId;
     private static int nextNum = 0;
+    private String assignedQueueLetter;
+    private String customerNotes;
 
 
     public Customer() {
@@ -97,14 +96,31 @@ public class Customer {
         this.nextNum = nextNum;
     }
 
-    public ArrayList getAllInfo() {
-        ArrayList x = new ArrayList<>(Arrays.asList(
-                Integer.toString(arrivalTime),
-                Integer.toString(serviceTime),
-                Integer.toString(waitTime),
-                Integer.toString(finishTime),
-                Integer.toString(custId)
-        ));
-        return x;
+    public String getAssignedQueueLetter() {
+        return assignedQueueLetter;
     }
+
+    public void setAssignedQueueLetter(String assignedQueueLetter) {
+        this.assignedQueueLetter = assignedQueueLetter;
+    }
+
+    public String getCustomerNotes() {
+        return customerNotes;
+    }
+
+    public void setCustomerNotes() {
+        String notes = " Goes to " + assignedQueueLetter + " @ " + serviceTime + "; leaves @ " + finishTime + "; WAIT: " + waitTime;
+        this.customerNotes = notes;
+    }
+
+    // public ArrayList getAllInfo() {
+    //     ArrayList x = new ArrayList<>(Arrays.asList(
+    //             Integer.toString(arrivalTime),
+    //             Integer.toString(serviceTime),
+    //             Integer.toString(waitTime),
+    //             Integer.toString(finishTime),
+    //             Integer.toString(custId)
+    //     ));
+    //     return x;
+    // }
 }

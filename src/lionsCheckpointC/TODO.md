@@ -1,6 +1,7 @@
 # A TODO File
 
 ## Check Point:  B
+
 	- [ ] Three 'Full-Service' queues ("A", "B", "C")
 		- Auto-switching (pick the lowest queue)
 	
@@ -19,8 +20,8 @@
 		- 'Satisfied' (<5 minutes)
 		- 'Dissatisfied' (>5 minutes)
 
-
 ## Check Point:  C
+
 	- [ ] One Queue. Two 'Self-checkout' lanes ("D", "E")
 		- 'Coin-Toss' (50/50 if they will be 'Self-Checkout' or 'Full-Service')
 	

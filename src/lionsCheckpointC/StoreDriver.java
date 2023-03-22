@@ -5,29 +5,30 @@ import java.util.Scanner;
 
 public class StoreDriver {
     static Scanner scan = new Scanner(System.in);
+
     public static int parseInt(String x) {
-		System.out.println(x);
-		
-		int var = 0;
-		
-		boolean momo = true;
-		do {
-			try {
-				String tempAns = scan.next();
-				
-				var = Integer.parseInt(tempAns);
-				momo = false;
-			} catch (NumberFormatException e) {
-				System.out.println("Wrong input try again.");
-			}
-		} while (momo);
-		
-		return var;
-	}
+        System.out.println(x);
+
+        int var = 0;
+
+        boolean momo = true;
+        do {
+            try {
+                String tempAns = scan.next();
+
+                var = Integer.parseInt(tempAns);
+                momo = false;
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong input try again.");
+            }
+        } while (momo);
+
+        return var;
+    }
 
     public static void main(String[] args) {
 
-        int minArrival = 1; 
+        int minArrival = 1;
         int maxArrival = 5;
         int minService = 1;
         int maxService = 20;
