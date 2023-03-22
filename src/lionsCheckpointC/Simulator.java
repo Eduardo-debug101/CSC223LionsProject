@@ -47,6 +47,10 @@ public class Simulator {
         LinkedQueue self = new LinkedQueue();
         Customer[] D = new Customer[1];
         Customer[] E = new Customer[1];
+
+        CheckoutLane laneD = new CheckoutLane();
+        CheckoutLane laneE = new CheckoutLane();
+
         // LinkedQueue D = new LinkedQueue();
         // LinkedQueue E = new LinkedQueue();
 
@@ -136,6 +140,7 @@ public class Simulator {
                             flag = false;
                         }
                     } else if (coinFlip == 0) { // SELF
+
                         Customer payingCustomer = waitingCustomers.get(0);
                         if (payingCustomer.getArrivalTime() == timer) {
                             self.enqueue(payingCustomer);
@@ -148,29 +153,35 @@ public class Simulator {
                             averages += payingCustomer.getWaitTime();
 
 
-                            if (D[0] == null || E[0] == null) { // Service begin immediately
+                            if (!laneD.isInUse() || !laneE.isInUse()) { // Service begin immediately
                                 self.dequeue();
                                 payingCustomer.setFinishTime(
                                         payingCustomer.getArrivalTime() + payingCustomer.getServiceTime());
                                 payingCustomer.setWaitTime(0);
-                                if (D[0] == null) {
-                                    D[0] = payingCustomer;
-                                } else if (E[0] == null) {
-                                    E[0] = payingCustomer;
+
+                                if (!laneD.isInUse()) {
+                                    laneD.setCheckoutCustomer(payingCustomer);
+                                } else if (!laneE.isInUse()) {
+                                    laneE.setCheckoutCustomer(payingCustomer);
                                 } else {
                                     System.out.println("ERROR ERROR ERROR");
                                 }
+
                             } else {// Wait time begins
-                                if (D[0].getFinishTime() >= E[0].getFinishTime()) {
-                                    int finishTimeOfRear = D[0].getFinishTime();
+                                if (laneD.getCheckoutCustomer().getFinishTime() >= laneE.getCheckoutCustomer().getFinishTime()) {
+
+                                    int finishTimeOfRear = laneD.getCheckoutCustomer().getFinishTime();
                                     payingCustomer.calcWait(finishTimeOfRear);
                                     payingCustomer.calcLeave();
-                                } else if (D[0].getFinishTime() < E[0].getFinishTime()) {
-                                    int finishTimeOfRear = E[0].getFinishTime();
+
+                                } else if (laneD.getCheckoutCustomer().getFinishTime() < laneE.getCheckoutCustomer().getFinishTime()) {
+
+                                    int finishTimeOfRear = laneE.getCheckoutCustomer().getFinishTime();
                                     payingCustomer.calcWait(finishTimeOfRear);
                                     payingCustomer.calcLeave();
                                 }
                             }
+
                             waitingCustomers.remove(0);
                         } else {
                             flag = false;
@@ -187,6 +198,8 @@ public class Simulator {
                 handleQueueRemoval(A, timer);
                 handleQueueRemoval(B, timer);
                 handleQueueRemoval(C, timer);
+                handleLaneRemoval(laneD, timer);
+                handleLaneRemoval(laneE, timer);
                 // handleQueueRemoval(D, timer);
                 // ************************** END Removing Customers from queues section
             }
@@ -206,6 +219,22 @@ public class Simulator {
                     satisfiedCusts += 1;
                 }
                 queue.dequeue();
+                customersServedAndLeft++;
+            }
+        } else {
+            timeQueuesAreFree++;
+        }
+    }
+
+    public void handleLaneRemoval(CheckoutLane lane, int time) {
+        if (lane.isInUse()) {
+            if (lane.getCheckoutCustomer().getFinishTime() == time) {
+                if (lane.getCheckoutCustomer().getWaitTime() >= 5) {
+                    dissatisfiedCusts += 1;
+                } else {
+                    satisfiedCusts += 1;
+                }
+                lane.setCheckoutCustomer(null);
                 customersServedAndLeft++;
             }
         } else {
