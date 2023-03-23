@@ -45,8 +45,8 @@ public class Simulator {
         LinkedQueue C = new LinkedQueue();
 
         LinkedQueue self = new LinkedQueue();
-        Customer[] D = new Customer[1];
-        Customer[] E = new Customer[1];
+//        Customer[] D = new Customer[1];
+//        Customer[] E = new Customer[1];
 
         CheckoutLane laneD = new CheckoutLane();
         CheckoutLane laneE = new CheckoutLane();
@@ -154,7 +154,7 @@ public class Simulator {
 
 
                             if (!laneD.isInUse() || !laneE.isInUse()) { // Service begin immediately
-                                self.dequeue();
+                               //self.dequeue();
                                 payingCustomer.setFinishTime(
                                         payingCustomer.getArrivalTime() + payingCustomer.getServiceTime());
                                 payingCustomer.setWaitTime(0);
@@ -191,15 +191,14 @@ public class Simulator {
 
                 // ************************** END Adding Customers to queues section
 
-                output(A, B, C, self, D, E, timer);
+                output(A, B, C, self, laneD, laneE, timer);
 
                 // ************************** START Removing Customers from queues section
-                // Need to add logic to "remove" an element from the array: make the first element = null
                 handleQueueRemoval(A, timer);
                 handleQueueRemoval(B, timer);
                 handleQueueRemoval(C, timer);
-                handleLaneRemoval(laneD, timer);
-                handleLaneRemoval(laneE, timer);
+                handleLaneRemoval(laneD, self, timer);
+                handleLaneRemoval(laneE, self, timer);
                 // handleQueueRemoval(D, timer);
                 // ************************** END Removing Customers from queues section
             }
@@ -226,7 +225,7 @@ public class Simulator {
         }
     }
 
-    public void handleLaneRemoval(CheckoutLane lane, int time) {
+    public void handleLaneRemoval(CheckoutLane lane, LinkedQueue self, int time) {
         if (lane.isInUse()) {
             if (lane.getCheckoutCustomer().getFinishTime() == time) {
                 if (lane.getCheckoutCustomer().getWaitTime() >= 5) {
@@ -235,6 +234,7 @@ public class Simulator {
                     satisfiedCusts += 1;
                 }
                 lane.setCheckoutCustomer(null);
+                self.dequeue();
                 customersServedAndLeft++;
             }
         } else {
@@ -290,7 +290,7 @@ public class Simulator {
         }
     }
 
-    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, Customer[] D, Customer[] E,
+    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, CheckoutLane D, CheckoutLane E,
                        int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
@@ -321,8 +321,6 @@ public class Simulator {
                                     "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
 
                         if (cc.getFinishTime() == time)
-                            // We could probably add a method where it deletes the entry instead of in the
-                            // start method.
                             System.out
                                     .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
                         if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
@@ -343,27 +341,21 @@ public class Simulator {
     }
 
     // Still need to work on this
-    public void handleQueueOutput(LinkedQueue queue, Customer[] servicePoint, char queueLetter, int time,
+    public void handleQueueOutput(LinkedQueue queue, CheckoutLane lane, char queueLetter, int time,
                                   ArrayList<String> customersWaitingInQueue) {
-        if (servicePoint[0] == null)
+        if (!lane.isInUse())
             System.out.println("\tCheckout " + queueLetter + ": free");
         else {
             Customer cc = null;
             for (int i = 0; i < queue.size(); i++) {
-                if (i == 1) {
-                    cc = servicePoint[0];
-                } else {
                     cc = queue.indexOf(i);
-                }
                 if (cc != null) {
-                    if (cc == queue.peek()) {
+                    if (cc == lane.getCheckoutCustomer()) {
                         if (cc.getArrivalTime() == time)
                             System.out.println(
                                     "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
 
                         if (cc.getFinishTime() == time)
-                            // We could probably add a method where it deletes the entry instead of in the
-                            // start method.
                             System.out
                                     .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
                         if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
@@ -371,10 +363,10 @@ public class Simulator {
                                     .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
 
                     } else {
-                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+                        if (cc.getArrivalTime() + cc.getWaitTime() == time && cc.getArrivalTime() + cc.getWaitTime() == lane.getCheckoutCustomer().getFinishTime())
                             System.out.println(
                                     "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-                        else if (cc.getArrivalTime() == time)
+                        else if (cc.getArrivalTime() == time && cc.getArrivalTime() == lane.getCheckoutCustomer().getFinishTime())
                             customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
                                     + " arrives and goes into Checkout " + queueLetter + " queue");
                     }
