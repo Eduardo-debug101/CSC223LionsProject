@@ -45,14 +45,9 @@ public class Simulator {
         LinkedQueue C = new LinkedQueue();
 
         LinkedQueue self = new LinkedQueue();
-//        Customer[] D = new Customer[1];
-//        Customer[] E = new Customer[1];
 
         CheckoutLane laneD = new CheckoutLane();
         CheckoutLane laneE = new CheckoutLane();
-
-        // LinkedQueue D = new LinkedQueue();
-        // LinkedQueue E = new LinkedQueue();
 
         //List<List<String>> allData = new ArrayList<List<String>>(numCustomers);
 
@@ -145,7 +140,6 @@ public class Simulator {
 
                         Customer payingCustomer = waitingCustomers.get(0);
                         if (payingCustomer.getArrivalTime() == timer) {
-                            self.enqueue(payingCustomer);
 
                             enqueuedCustomers.add(payingCustomer);
 
@@ -154,20 +148,29 @@ public class Simulator {
 
                             averages += payingCustomer.getWaitTime();
 
-                            if (!laneD.isInUse() || !laneE.isInUse()) { // Service begin immediately
-                               self.dequeue();
+                            if ((!laneD.isInUse() || !laneE.isInUse()) && self.size() < 2) { // Service begin immediately
+                               //self.dequeue();
                                 payingCustomer.setFinishTime(
                                         payingCustomer.getArrivalTime() + payingCustomer.getServiceTime());
                                 payingCustomer.setWaitTime(0);
 
                                 if (!laneD.isInUse()) {
                                     laneD.setCheckoutCustomer(payingCustomer);
+                                    
                                 } else if (!laneE.isInUse()) {
+                                	
                                     laneE.setCheckoutCustomer(payingCustomer);
                                 } else {
                                     System.out.println("ERROR ERROR ERROR");
-                                }
-                            } else {// Wait time begins
+                                }          
+                            }
+                            else if (laneD.getCheckoutCustomer().getFinishTime() == timer) 
+                            	//laneD.setCheckoutCustomer(payingCustomer);
+                            	laneD.setNext(payingCustomer);
+                            else if (laneE.getCheckoutCustomer().getFinishTime() == timer)
+                            	//laneE.setCheckoutCustomer(payingCustomer);
+                            	laneE.setNext(payingCustomer);
+                            else {// Wait time begins                          	
                                 if (laneD.getCheckoutCustomer().getFinishTime() >= laneE.getCheckoutCustomer().getFinishTime()) {
                           
                                     int finishTimeOfRear = laneD.getCheckoutCustomer().getFinishTime();
@@ -181,8 +184,22 @@ public class Simulator {
                                     payingCustomer.calcLeave();
                                 }
                             }
-
+                           
+                            self.enqueue(payingCustomer);
                             waitingCustomers.remove(0);
+                            if (laneD.isInUse() && laneE.isInUse()) {
+                            	Customer headCustomer = self.dequeue();
+                            	Customer secondCustomer = self.dequeue();
+                            	if (headCustomer.getFinishTime() >= secondCustomer.getFinishTime()) {
+                            		self.enqueue(headCustomer);
+                            		self.enqueue(secondCustomer);
+                            	}
+                            	else {
+                            		self.enqueue(secondCustomer);
+                            		self.enqueue(headCustomer);
+                            	}
+                            	self.reverse();
+                            }
                         } else {
                             flag = false;
                         }
@@ -237,8 +254,15 @@ public class Simulator {
                 } else {
                     satisfiedCusts += 1;
                 }
-                lane.setCheckoutCustomer(null);
-               // self.dequeue();
+                if (lane.getNext() != null) {
+                	lane.exchange();
+                	self.dequeue();
+                }
+                else {
+                	lane.setCheckoutCustomer(null);	
+                	self.dequeue();
+                	lane.setCheckoutCustomer(self.peek());
+                }
                 customersServedAndLeft++;
             }
         } else {
@@ -350,8 +374,9 @@ public class Simulator {
         if (!lane.isInUse())
             System.out.println("\tCheckout " + queueLetter + ": free");
         else {
+        	Customer cc = null;
             for (int i = 0; i < queue.size(); i++) {
-                    Customer cc = queue.indexOf(i);
+                    cc = queue.indexOf(i);
                 if (cc != null) {
                     if (cc == lane.getCheckoutCustomer()) {
                         if (cc.getArrivalTime() == time)
