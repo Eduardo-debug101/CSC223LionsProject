@@ -70,6 +70,7 @@ public class Simulator {
 
         // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
+        	
 
             timer++;
             System.out.println("Time: " + timer);
@@ -87,8 +88,9 @@ public class Simulator {
                 // the current Timer
                 boolean flag = true;
                 while (flag && !waitingCustomers.isEmpty()) {
-                    int coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
-                    if (coinFlip == 1) { // FULL
+                    //int coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
+                	int coinFlip = 0;
+                     if (coinFlip == 1) { // FULL
                         // Finds the smallest queue to add customers into
                         LinkedQueue selectedQueue = selectAQueue(A, B, C);
                         String QueueLetter = findLowestQueueNum(A, B, C);
@@ -101,7 +103,7 @@ public class Simulator {
                         // object from the arraylist
                         if (newCustForQueue.getArrivalTime() == timer) {
 
-                            // Calculates wait time for each customer by getting the absloute value of the
+                            // Calculates wait time for each customer by getting the absolute value of the
                             // leave time of the
                             // person in front minus the arrival time of the customer.
                             if (!selectedQueue.empty()) {
@@ -152,9 +154,8 @@ public class Simulator {
 
                             averages += payingCustomer.getWaitTime();
 
-
                             if (!laneD.isInUse() || !laneE.isInUse()) { // Service begin immediately
-                               //self.dequeue();
+                               self.dequeue();
                                 payingCustomer.setFinishTime(
                                         payingCustomer.getArrivalTime() + payingCustomer.getServiceTime());
                                 payingCustomer.setWaitTime(0);
@@ -166,16 +167,15 @@ public class Simulator {
                                 } else {
                                     System.out.println("ERROR ERROR ERROR");
                                 }
-
                             } else {// Wait time begins
                                 if (laneD.getCheckoutCustomer().getFinishTime() >= laneE.getCheckoutCustomer().getFinishTime()) {
-
+                          
                                     int finishTimeOfRear = laneD.getCheckoutCustomer().getFinishTime();
                                     payingCustomer.calcWait(finishTimeOfRear);
                                     payingCustomer.calcLeave();
 
                                 } else if (laneD.getCheckoutCustomer().getFinishTime() < laneE.getCheckoutCustomer().getFinishTime()) {
-
+                                	
                                     int finishTimeOfRear = laneE.getCheckoutCustomer().getFinishTime();
                                     payingCustomer.calcWait(finishTimeOfRear);
                                     payingCustomer.calcLeave();
@@ -187,7 +187,11 @@ public class Simulator {
                             flag = false;
                         }
                     }
+                     if (customersServedAndLeft + 2 == numCustomers) {
+                     	System.out.println("TESTING");
+                     }
                 }
+            }
 
                 // ************************** END Adding Customers to queues section
 
@@ -201,7 +205,7 @@ public class Simulator {
                 handleLaneRemoval(laneE, self, timer);
                 // handleQueueRemoval(D, timer);
                 // ************************** END Removing Customers from queues section
-            }
+
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");
@@ -234,7 +238,7 @@ public class Simulator {
                     satisfiedCusts += 1;
                 }
                 lane.setCheckoutCustomer(null);
-                self.dequeue();
+               // self.dequeue();
                 customersServedAndLeft++;
             }
         } else {
@@ -346,9 +350,8 @@ public class Simulator {
         if (!lane.isInUse())
             System.out.println("\tCheckout " + queueLetter + ": free");
         else {
-            Customer cc = null;
             for (int i = 0; i < queue.size(); i++) {
-                    cc = queue.indexOf(i);
+                    Customer cc = queue.indexOf(i);
                 if (cc != null) {
                     if (cc == lane.getCheckoutCustomer()) {
                         if (cc.getArrivalTime() == time)
