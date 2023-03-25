@@ -66,6 +66,7 @@ public class Simulator {
         // Main while loop continues until every Customer has been served
         while (customersServedAndLeft != numCustomers) {
         	
+        	System.out.println(customersServedAndLeft + " != " + numCustomers);
 
             timer++;
             System.out.println("Time: " + timer);
@@ -222,7 +223,10 @@ public class Simulator {
                 handleLaneRemoval(laneE, self, timer);
                 // handleQueueRemoval(D, timer);
                 // ************************** END Removing Customers from queues section
-
+                
+                
+                System.out.println("DIS END");
+                System.exit(0);
         }
 
         System.out.println("\n\n\nBeginning of Stats:\n");

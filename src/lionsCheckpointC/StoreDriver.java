@@ -31,7 +31,7 @@ public class StoreDriver {
         int minArrival = 1;
         int maxArrival = 5;
         int minService = 1;
-        int maxService = 20;
+        int maxService = 5;
         int numCustomers = 10;
 //    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
 //		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
@@ -39,8 +39,11 @@ public class StoreDriver {
 //		int maxService = parseInt("Enter maximum service time: ");
 //		int numCustomers = parseInt("Number of customers to serve: ");
 
-        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
-        sim.start();
+        //Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
+        //sim.start();
+        
+        Simulator2 sim2 = new Simulator2(minArrival, maxArrival, minService, maxService, numCustomers);
+        sim2.start();
 
     }
 
