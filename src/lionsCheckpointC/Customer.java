@@ -1,7 +1,6 @@
 package lionsCheckpointC;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Customer {
     private int arrivalTime;
@@ -10,6 +9,9 @@ public class Customer {
     private int finishTime;
     private int custId;
     private static int nextNum = 0;
+    private String assignedQueueLetter;
+    private String customerNotes;
+    private int coinFlip;
 
 
     public Customer() {
@@ -24,6 +26,7 @@ public class Customer {
         serviceTime = s;
         //waitTime = arrivalTime + serviceTime;
         //leaveTime = (waitTime - arrivalTime) + serviceTime;
+        coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
     }
 
     public Customer(int a, int s, int w, int l) {
@@ -97,14 +100,41 @@ public class Customer {
         this.nextNum = nextNum;
     }
 
-    public ArrayList getAllInfo() {
-        ArrayList x = new ArrayList<>(Arrays.asList(
-                Integer.toString(arrivalTime),
-                Integer.toString(serviceTime),
-                Integer.toString(waitTime),
-                Integer.toString(finishTime),
-                Integer.toString(custId)
-        ));
-        return x;
+    public String getAssignedQueueLetter() {
+        return assignedQueueLetter;
     }
+
+    public void setAssignedQueueLetter(String assignedQueueLetter) {
+        this.assignedQueueLetter = assignedQueueLetter;
+    }
+
+    public String getCustomerNotes() {
+        return customerNotes;
+    }
+
+    public void setCustomerNotes() {
+        String notes = " Goes to " + assignedQueueLetter + " @ " + serviceTime + "; leaves @ " + finishTime + "; WAIT: " + waitTime;
+        this.customerNotes = notes;
+    }
+
+    public int getCoinFlip() {
+        return coinFlip;
+    }
+
+    public void setCoinFlip(int coinFlip) {
+        this.coinFlip = coinFlip;
+    }
+
+
+
+    // public ArrayList getAllInfo() {
+    //     ArrayList x = new ArrayList<>(Arrays.asList(
+    //             Integer.toString(arrivalTime),
+    //             Integer.toString(serviceTime),
+    //             Integer.toString(waitTime),
+    //             Integer.toString(finishTime),
+    //             Integer.toString(custId)
+    //     ));
+    //     return x;
+    // }
 }
