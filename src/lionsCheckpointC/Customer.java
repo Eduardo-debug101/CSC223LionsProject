@@ -47,7 +47,7 @@ public class Customer {
 
     public void calcLeave() {
         int leave = 0;
-        if (coinFlip == 0) { // Self
+        if (coinFlip == 0 && selfSlowTime > 0) { // Self
             leave = arrivalTime + waitTime + serviceTime + (serviceTime / selfSlowTime);
         } else {
             leave = arrivalTime + waitTime + serviceTime;
