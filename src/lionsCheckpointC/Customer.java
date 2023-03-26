@@ -6,6 +6,7 @@ public class Customer {
     private int arrivalTime;
     private int serviceTime;
     private int waitTime;
+    private int selfSlowTime;
     private int finishTime;
     private int custId;
     private static int nextNum = 1;
@@ -19,7 +20,7 @@ public class Customer {
         nextNum++;
     }
 
-    public Customer(int a, int s) {
+    public Customer(int a, int s, int selfSlow) {
         custId = nextNum;
         nextNum++;
         arrivalTime = a;
@@ -27,6 +28,7 @@ public class Customer {
         //waitTime = arrivalTime + serviceTime;
         //leaveTime = (waitTime - arrivalTime) + serviceTime;
         coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
+        selfSlowTime = selfSlow;
     }
 
     public Customer(int a, int s, int w, int l) {
@@ -44,7 +46,12 @@ public class Customer {
     }
 
     public void calcLeave() {
-        int leave = arrivalTime + waitTime + serviceTime;
+        int leave = 0;
+        if (coinFlip == 0) { // Self
+            leave = arrivalTime + waitTime + serviceTime + (serviceTime / selfSlowTime);
+        } else {
+            leave = arrivalTime + waitTime + serviceTime;
+        }
         this.setFinishTime(leave);
     }
 

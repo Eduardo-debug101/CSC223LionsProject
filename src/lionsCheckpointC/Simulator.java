@@ -1,13 +1,17 @@
 package lionsCheckpointC;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static java.lang.Math.round;
 
 public class Simulator {
     private int arrivalMinTime;
     private int arrivalMaxTime;
     private int serviceMinTime;
     private int serviceMaxTime;
+    private int selfSlowTime;
     private int numCustomers;
     private static int satisfiedCusts = 0;
     private static int dissatisfiedCusts = 0;
@@ -22,12 +26,13 @@ public class Simulator {
 
     }
 
-    public Simulator(int a, int b, int c, int d, int n) {
+    public Simulator(int a, int b, int c, int d, int n, int selfSlow) {
         arrivalMinTime = a;
         arrivalMaxTime = b;
         serviceMinTime = c;
         serviceMaxTime = d;
         numCustomers = n;
+        selfSlowTime = selfSlow;
     }
 
     public String toString() {
@@ -47,7 +52,7 @@ public class Simulator {
         CheckoutLane laneD = new CheckoutLane();
         CheckoutLane laneE = new CheckoutLane();
 
-        CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0);
+        CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0, selfSlowTime);
 
         ArrayList<Customer> waitingCustomers = new ArrayList<Customer>();
         waitingCustomers = customerWaitList(cc);
@@ -114,7 +119,6 @@ public class Simulator {
                         queuedCustsForStats.add(newCustForQueue);
 
                         newCustForQueue.setAssignedQueueLetter(QueueLetter);
-                        newCustForQueue.setCustomerNotes();
 
                         waitingCustomers.remove(0);
                     } else {
@@ -127,13 +131,13 @@ public class Simulator {
             // Loops until both Lanes are full
             CheckoutLane bestLane = new CheckoutLane();
             boolean flag2 = true;
-            while(flag2){
+            while (flag2) {
                 bestLane = nextLane(laneD, laneE);
                 if (!bestLane.isInUse() && !self.empty()) {
                     bestLane.setCheckoutCustomer(self.peek());
                     self.dequeue();
                 }
-                if((laneD.isInUse() && laneE.isInUse()) || self.empty()){
+                if ((laneD.isInUse() && laneE.isInUse()) || self.empty()) {
                     flag2 = false;
                 }
             }
@@ -227,6 +231,9 @@ public class Simulator {
         int numOfSelfCheckOuters = 1;
 
         for (Customer cust : customers) {
+
+            cust.setCustomerNotes();
+
             String lineDivider = "|";
             System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s",
                     lineDivider, cust.getCustId(),
@@ -245,10 +252,13 @@ public class Simulator {
             }
         }
 
+        DecimalFormat f = new DecimalFormat("0.00");
+
         //System.out.format("%1s%.2f%1s", "Average wait: ", (averages / numCustomers)), " min\n");
-        System.out.println("Average wait for FULL queue: " + (average / numCustomers) + " min");
-        System.out.println("Average wait for self-checkout: " + (selfAverage / numOfSelfCheckOuters) + " min");
+        System.out.println("Average wait for FULL queue: " + f.format(average / numCustomers) + " min");
+        System.out.println("Average wait for self-checkout: " + f.format(selfAverage / numOfSelfCheckOuters) + " min");
         System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
+        System.out.println("Total time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min");
         System.out.println("Satisfied customers: " + satisfiedCusts);
         System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
 
@@ -295,10 +305,10 @@ public class Simulator {
         }
     }
 
-    public void handleSelfQueueOutput(LinkedQueue self){
-        if(self.empty()){
+    public void handleSelfQueueOutput(LinkedQueue self) {
+        if (self.empty()) {
             System.out.println("\tSelf-Queue: free");
-        }else{
+        } else {
             System.out.println("\tSelf-Queue: " + self.size() + " Customer(s) waiting in line");
         }
     }
@@ -307,7 +317,7 @@ public class Simulator {
         if (lane.isInUse()) {
             if (lane.getCheckoutCustomer().getFinishTime() == time) {
                 System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
-            }else{
+            } else {
                 System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
             }
 
@@ -468,27 +478,11 @@ public class Simulator {
         this.numCustomers = numCustomers;
     }
 
-//    public static String numToLet(String string) {
-//        String number = "NA";
-//        switch (string) {
-//            case "1" -> number = "A";
-//            case "2" -> number = "B";
-//            case "3" -> number = "C";
-//        }
-//        return number;
-//    }
-//
-//    public int findLowestQueueSize(final int queueSizeA, final int queueSizeB, final int queueSizeC) {
-//        int finalQueue = 0;
-//        if (queueSizeA <= queueSizeB && queueSizeA <= queueSizeC) {
-//            finalQueue = 1;
-//        } else if (queueSizeB <= queueSizeC && queueSizeB <= queueSizeA) {
-//            finalQueue = 2;
-//        } else {
-//            finalQueue = 3;
-//        }
-//
-//        return finalQueue;
-//    }
+    public int getSelfSlowTime() {
+        return selfSlowTime;
+    }
 
+    public void setSelfSlowTime(int selfSlowTime) {
+        this.selfSlowTime = selfSlowTime;
+    }
 }
