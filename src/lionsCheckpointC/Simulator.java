@@ -84,6 +84,7 @@ public class Simulator {
                     LinkedQueue selectedQueue;
                     if (newCustForQueue.getCoinFlip() == 0) {
                         selectedQueue = self;
+
                     } else {
                         selectedQueue = selectAQueue(A, B, C);
                     }
@@ -214,7 +215,9 @@ public class Simulator {
                 "| Dep ", "| Notes ", "|");
         System.out.println("\n" + dashedLines);
 
+        double selfAverage = 0;
         double average = 0;
+        int numOfSelfCheckOuters = 1;
 
         for (Customer cust : customers) {
             String lineDivider = "|";
@@ -226,11 +229,18 @@ public class Simulator {
                     lineDivider, cust.getFinishTime(),
                     lineDivider, cust.getCustomerNotes());
             System.out.println("\n" + dashedLines);
-            average += cust.getWaitTime();
+            if(cust.getCoinFlip() == 0){
+                selfAverage += cust.getWaitTime();
+                numOfSelfCheckOuters++;
+
+            }else{
+                average += cust.getWaitTime();
+            }
         }
 
         //System.out.format("%1s%.2f%1s", "Average wait: ", (averages / numCustomers)), " min\n");
-        System.out.println("Average wait: " + (average / numCustomers) + " min");
+        System.out.println("Average wait for FULL queue: " + (average / numCustomers) + " min");
+        System.out.println("Average wait for self-checkout: " + (selfAverage / numOfSelfCheckOuters) + " min");
         System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
         System.out.println("Satisfied customers: " + satisfiedCusts);
         System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
@@ -284,6 +294,43 @@ public class Simulator {
         }else{
             System.out.println("\tLane " + laneLetter + ": Lane is empty");
         }
+
+        //        if (servicePoint[0] == null)
+//            System.out.println("\tCheckout " + queueLetter + ": free");
+//        else {
+//            Customer cc = null;
+//            for (int i = 0; i < queue.size(); i++) {
+//                if (i == 1) {
+//                    cc = servicePoint[0];
+//                } else {
+//                    cc = queue.indexOf(i);
+//                }
+//                if (cc != null) {
+//                    if (cc == queue.peek()) {
+//                        if (cc.getArrivalTime() == time)
+//                            System.out.println(
+//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+//
+//                        if (cc.getFinishTime() == time)
+//                            // We could probably add a method where it deletes the entry instead of in the
+//                            // start method.
+//                            System.out
+//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
+//                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
+//                            System.out
+//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
+//
+//                    } else {
+//                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+//                            System.out.println(
+//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+//                        else if (cc.getArrivalTime() == time)
+//                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
+//                                    + " arrives and goes into Checkout " + queueLetter + " queue");
+//                    }
+//                }
+//            }
+//        }
     }
 
     public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
