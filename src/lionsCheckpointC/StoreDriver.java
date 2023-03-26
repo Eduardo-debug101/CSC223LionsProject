@@ -30,8 +30,8 @@ public class StoreDriver {
 
         int minArrival = 1;
         int maxArrival = 3;
-        int minService = 1;
-        int maxService = 10;
+        int minService = 10;
+        int maxService = 30;
         int numCustomers = 20;
         int selfSlow = 0;
 //    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
