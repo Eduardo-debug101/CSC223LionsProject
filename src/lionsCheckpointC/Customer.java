@@ -126,7 +126,6 @@ public class Customer {
     }
 
 
-
     // public ArrayList getAllInfo() {
     //     ArrayList x = new ArrayList<>(Arrays.asList(
     //             Integer.toString(arrivalTime),

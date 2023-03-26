@@ -4,7 +4,8 @@ public class CheckoutLane {
 
     private Customer checkoutCustomer;
 
-    public CheckoutLane(){}
+    public CheckoutLane() {
+    }
 
     public Customer getCheckoutCustomer() {
         return checkoutCustomer;
@@ -14,7 +15,7 @@ public class CheckoutLane {
         this.checkoutCustomer = checkoutCustomer;
     }
 
-    public boolean isInUse(){
+    public boolean isInUse() {
         return checkoutCustomer != null;
     }
 }

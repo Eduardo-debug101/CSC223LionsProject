@@ -124,11 +124,18 @@ public class Simulator {
             }
 
             // Handles adding to both lanes as well as dequeuing for the self queue
-            CheckoutLane bestLane = nextLane(laneD, laneE);
-            if (!bestLane.isInUse() && !self.empty()) {
-                bestLane.setCheckoutCustomer(self.peek());
-                self.dequeue();
-
+            // Loops until both Lanes are full
+            CheckoutLane bestLane = new CheckoutLane();
+            boolean flag2 = true;
+            while(flag2){
+                bestLane = nextLane(laneD, laneE);
+                if (!bestLane.isInUse() && !self.empty()) {
+                    bestLane.setCheckoutCustomer(self.peek());
+                    self.dequeue();
+                }
+                if((laneD.isInUse() && laneE.isInUse()) || self.empty()){
+                    flag2 = false;
+                }
             }
 
             // ************************** END Adding Customers to queues section
@@ -146,8 +153,8 @@ public class Simulator {
             // ************************** END Removing Customers from queues section
 
             // If someone is currently checking out then those who are still in queue must wait longer
-            if(bestLane.isInUse() && !self.empty()){
-                for (int i = 0; i < self.size(); i++){
+            if (bestLane.isInUse() && !self.empty()) {
+                for (int i = 0; i < self.size(); i++) {
                     self.indexOf(i).setFinishTime(self.indexOf(i).getFinishTime() + 1);
                 }
             }
@@ -160,15 +167,15 @@ public class Simulator {
 
     // The bestLane is either one of the Lanes if they are empty, or if they are full it will be the Lane
     // that has the lowest leave time
-    public CheckoutLane nextLane(CheckoutLane D, CheckoutLane E){
-        if(!D.isInUse()){
+    public CheckoutLane nextLane(CheckoutLane D, CheckoutLane E) {
+        if (!D.isInUse()) {
             return D;
-        }else if(!E.isInUse()){
+        } else if (!E.isInUse()) {
             return E;
         }
-        if(D.getCheckoutCustomer().getServiceTime() <= E.getCheckoutCustomer().getServiceTime()){
+        if (D.getCheckoutCustomer().getServiceTime() <= E.getCheckoutCustomer().getServiceTime()) {
             return D;
-        }else{
+        } else {
             return E;
         }
     }
@@ -229,11 +236,11 @@ public class Simulator {
                     lineDivider, cust.getFinishTime(),
                     lineDivider, cust.getCustomerNotes());
             System.out.println("\n" + dashedLines);
-            if(cust.getCoinFlip() == 0){
+            if (cust.getCoinFlip() == 0) {
                 selfAverage += cust.getWaitTime();
                 numOfSelfCheckOuters++;
 
-            }else{
+            } else {
                 average += cust.getWaitTime();
             }
         }
@@ -258,9 +265,9 @@ public class Simulator {
     }
 
     public String findLowestQueueNum(LinkedQueue A, LinkedQueue B, LinkedQueue C, int coinflip) {
-        if(coinflip == 0){
+        if (coinflip == 0) {
             return "S";
-        }else{
+        } else {
             if (A.size() <= B.size() && A.size() <= C.size()) {
                 return "A";
             } else if (B.size() <= C.size() && B.size() <= A.size()) {
@@ -277,9 +284,9 @@ public class Simulator {
         handleQueueOutput(A, 'A', time, customersWaitingInQueue);
         handleQueueOutput(B, 'B', time, customersWaitingInQueue);
         handleQueueOutput(C, 'C', time, customersWaitingInQueue);
-        handleQueueOutput(self, 'S', time, customersWaitingInQueue);
-        handleLaneOutput(laneD, 'D');
-        handleLaneOutput(laneE, 'E');
+        handleSelfQueueOutput(self);
+        handleLaneOutput(laneD, 'D', time);
+        handleLaneOutput(laneE, 'E', time);
 
         if (!customersWaitingInQueue.isEmpty()) {
             for (String s : customersWaitingInQueue) {
@@ -288,49 +295,54 @@ public class Simulator {
         }
     }
 
-    public void handleLaneOutput(CheckoutLane lane, char laneLetter){
-        if(lane.isInUse()){
-            System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
+    public void handleSelfQueueOutput(LinkedQueue self){
+        if(self.empty()){
+            System.out.println("\tSelf-Queue: free");
         }else{
-            System.out.println("\tLane " + laneLetter + ": Lane is empty");
+            System.out.println("\tSelf-Queue: " + self.size() + " Customer(s) waiting in line");
+        }
+    }
+
+    public void handleLaneOutput(CheckoutLane lane, char laneLetter, int time) {
+        if (lane.isInUse()) {
+            if (lane.getCheckoutCustomer().getFinishTime() == time) {
+                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
+            }else{
+                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
+            }
+
+
+//            if (lane.getCheckoutCustomer().getArrivalTime() == time) {
+//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " begins service");
+//            }
+//            if (lane.getCheckoutCustomer().getArrivalTime() != time && lane.getCheckoutCustomer().getFinishTime() != time) {
+//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " (cont)");
+//            }
+//            if (lane.getCheckoutCustomer().getFinishTime() == time) {
+//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
+//            }
+
+//            if (cc == queue.peek()) {
+//                if (cc.getArrivalTime() == time)
+//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+//
+//                if (cc.getFinishTime() == time)
+//                    // We could probably add a method where it deletes the entry instead of in the
+//                    // start method.
+//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
+//                if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
+//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
+//
+//            } else {
+//                if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
+//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+//                else if (cc.getArrivalTime() == time)
+//                    customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout " + queueLetter + " queue");
+//            }
+        } else {
+            System.out.println("\tLane " + laneLetter + ": free");
         }
 
-        //        if (servicePoint[0] == null)
-//            System.out.println("\tCheckout " + queueLetter + ": free");
-//        else {
-//            Customer cc = null;
-//            for (int i = 0; i < queue.size(); i++) {
-//                if (i == 1) {
-//                    cc = servicePoint[0];
-//                } else {
-//                    cc = queue.indexOf(i);
-//                }
-//                if (cc != null) {
-//                    if (cc == queue.peek()) {
-//                        if (cc.getArrivalTime() == time)
-//                            System.out.println(
-//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//
-//                        if (cc.getFinishTime() == time)
-//                            // We could probably add a method where it deletes the entry instead of in the
-//                            // start method.
-//                            System.out
-//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
-//                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-//                            System.out
-//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
-//
-//                    } else {
-//                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-//                            System.out.println(
-//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//                        else if (cc.getArrivalTime() == time)
-//                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
-//                                    + " arrives and goes into Checkout " + queueLetter + " queue");
-//                    }
-//                }
-//            }
-//        }
     }
 
     public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
@@ -366,6 +378,7 @@ public class Simulator {
             }
         }
     }
+
 
     // Still need to work on this
 //    public void handleQueueOutput(LinkedQueue queue, CheckoutLane lane, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
