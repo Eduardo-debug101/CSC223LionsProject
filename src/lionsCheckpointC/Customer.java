@@ -17,7 +17,7 @@ public class Customer {
 
 
     public Customer() {
-        custId = nextNum++;
+        //custId = nextNum++;
     }
 
     public Customer(int a, int s) {
