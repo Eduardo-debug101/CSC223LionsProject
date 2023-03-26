@@ -27,25 +27,21 @@ public class StoreDriver {
     }
 
     public static void main(String[] args) {
+//        int minArrival = 1;
+//        int maxArrival = 3;
+//        int minService = 10;
+//        int maxService = 30;
+//        int numCustomers = 20;
+//        int selfSlow = 0;
+    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
+		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
+		int minService = parseInt("Enter minimum service time: ");
+		int maxService = parseInt("Enter maximum service time: ");
+		int numCustomers = parseInt("Number of customers to serve: ");
+		int selfSlow = parseInt("Percentage of slowing for self checkouts (ex. 10 = 10%): ");
 
-        int minArrival = 1;
-        int maxArrival = 5;
-        int minService = 1;
-        int maxService = 5;
-        int numCustomers = 20;
-        int selfQueueSlower = 20;
-//    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
-//		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
-//		int minService = parseInt("Enter minimum service time: ");
-//		int maxService = parseInt("Enter maximum service time: ");
-//		int numCustomers = parseInt("Number of customers to serve: ");
-//		int numCustomers = parseInt("Enter selfQueue percentage slower: ");
-        
-        //Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
-        //sim.start();
-        
-        Simulator2 sim2 = new Simulator2(minArrival, maxArrival, minService, maxService, numCustomers, (double)selfQueueSlower);
-        sim2.start();
+        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow);
+        sim.start();
 
     }
 

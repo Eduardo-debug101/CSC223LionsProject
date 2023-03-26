@@ -2,31 +2,25 @@ package lionsCheckpointC;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CustomerCreator extends Customer {
+public class CustomerCreator {
     private int minimumTime;
     private int maximumTime;
     private int serviceMinTime;
     private int serviceMaxTime;
+    private int selfSlowTime;
     private int startValue;
     private Customer current;
 
     public CustomerCreator() {
     }
 
-    public CustomerCreator(int m, int n, int s, int t) {
-        minimumTime = m;
-        maximumTime = n;
-        serviceMinTime = s;
-        serviceMaxTime = t;
-        startValue = 0;
-    }
-
-    public CustomerCreator(int m, int n, int s, int t, int startTime) {
+    public CustomerCreator(int m, int n, int s, int t, int startTime, int selfSlow) {
         minimumTime = m;
         maximumTime = n;
         serviceMinTime = s;
         serviceMaxTime = t;
         startValue = startTime;
+        selfSlowTime = selfSlow;
     }
 
     public String toString() {
@@ -38,7 +32,7 @@ public class CustomerCreator extends Customer {
         int randomArrivalNum = ThreadLocalRandom.current().nextInt(minimumTime, maximumTime + 1);
         int randomServiceNum = ThreadLocalRandom.current().nextInt(serviceMinTime, serviceMaxTime + 1);
         startValue += randomArrivalNum;
-        current = new Customer(startValue, randomServiceNum);
+        current = new Customer(startValue, randomServiceNum, selfSlowTime);
         return current;
     }
 

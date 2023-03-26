@@ -1,7 +1,5 @@
 package lionsCheckpointC;
 
-import java.util.Stack;
-
 /* **
    This class implements a queue based 
 	on linked lists.
@@ -126,16 +124,6 @@ public class LinkedQueue {
             trueIndex++;
         }
         return null;
-    }
-       
-    public void reverse() {
-        Stack<Customer> stack = new Stack<>(); // Create a new stack
-        while (!empty()) {
-            stack.push(dequeue()); // Dequeue each element from the queue and push it onto the stack
-        }
-        while (!stack.isEmpty()) {
-            enqueue(stack.pop()); // Pop each element from the stack and enqueue it back into the queue
-        }
     }
 
     /**

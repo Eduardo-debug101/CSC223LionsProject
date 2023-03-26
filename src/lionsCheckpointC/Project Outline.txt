@@ -10,8 +10,6 @@ This document outlines the structure and processes of Team Lions, which is respo
 Team Structure:
 Project Manager and Lead Developer - Eduardo Argueta-Pineda: responsible for overall project planning, execution, and delivery
 Developers - Benjamin Wheatley and Damian Rebollar-Reyes: responsible for writing and testing code
-QA Tester - Andrew Dupree: accountable for testing and ensuring the project meets the requirements
-
 
 Communications:
 The team will have weekly meetings on Wednesdays. There will be no set meeting time unless otherwise. All team members are expected to provide updates on their progress. Additionally, team members will use Discord for real-time communication and to share documents and updates.
@@ -28,17 +26,3 @@ The team will use GitHub for code sharing and collaboration. Additionally, Disco
 Conclusion:
 By following the structure outlined in this document, Team Lions will be able to collaborate and deliver a high-quality project effectively. If you have any questions, please contact the Project Manager through Discord.
 
-
-
-
-
-
-
-
-
-
-
-
-  
-
-UML diagram is subject to change.
