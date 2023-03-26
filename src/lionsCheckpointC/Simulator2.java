@@ -1,5 +1,6 @@
 package lionsCheckpointC;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -14,8 +15,12 @@ public class Simulator2 {
     private static int dissatisfiedCusts = 0;
     private static int timeQueuesAreFree = 0;
     // Sums up all of the Customer's waitTime to get the average waitTime in printStats()
-    private static double averages;
+    private static double averagesF;
+    private static double averagesS;
+    private static int FA;
+    private static int SA;
     private String currentQueue = "";
+    private double selfQueueSlower;
     
     
 
@@ -23,12 +28,13 @@ public class Simulator2 {
 
     }
 
-    public Simulator2(int a, int b, int c, int d, int n) {
+    public Simulator2(int a, int b, int c, int d, int n, double z) {
         arrivalMinTime = a;
         arrivalMaxTime = b;
         serviceMinTime = c;
         serviceMaxTime = d;
         numCustomers = n;
+        selfQueueSlower = z;
     }
 
     public String toString() {
@@ -49,7 +55,8 @@ public class Simulator2 {
 
         LinkedQueue self = new LinkedQueue();
         
-        
+        LinkedQueue D = new LinkedQueue();
+        LinkedQueue E = new LinkedQueue();
         
         ArrayList<Customer> waitList = customerWaitList();
         ArrayList<Customer> DoneArray = new ArrayList<Customer>();
@@ -66,7 +73,17 @@ public class Simulator2 {
         while ((waitList.size() >= 1)) {
         	int coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1);
         	
-        	LinkedQueue SelectedQueue = selectAQueue(A, B, C, self, coinFlip);
+        	LinkedQueue SelectedQueue = selectAQueue(A, B, C, self, D, E, coinFlip);
+        	
+        	if (coinFlip == 0) {
+        		int oldWait = waitList.get(0).getWaitTime();
+        		int newWait = (int)(Math.round(oldWait + (oldWait * (selfQueueSlower/100))));
+        		
+        		//System.out.println(oldWait + " --- " + (oldWait + (oldWait * (selfQueueSlower/100))));
+        		//System.out.println(oldWait + " -+- " + newWait);
+        		
+        		waitList.get(0).setWaitTime(newWait);
+        	}
         	
         	waitList.get(0).setAssignedQueueLetter(currentQueue);
     		SelectedQueue.enqueue(waitList.get(0));
@@ -83,13 +100,15 @@ public class Simulator2 {
         	DoneArray = prosQueue(A, DoneArray);
         	DoneArray = prosQueue(B, DoneArray);
         	DoneArray = prosQueue(C, DoneArray);
-        	DoneArray = prosQueue(self, DoneArray);
+        	//DoneArray = prosQueue(self, DoneArray);
+        	DoneArray = prosQueue(D, DoneArray);
+        	DoneArray = prosQueue(E, DoneArray);
         	
-        	output(A, B, C, self, ticks);
+        	output(A, B, C, self, D, E, ticks);
         	
         	ticks++;
         	
-        	if (A.empty() && B.empty() && C.empty() && self.empty())
+        	if (A.empty() && B.empty() && C.empty() && self.empty() && D.empty() && E.empty())
         		ea = false;
         }
         
@@ -158,7 +177,7 @@ public class Simulator2 {
         return tmpARR;
     }
     
-    public LinkedQueue selectAQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, int EB) {
+    public LinkedQueue selectAQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, LinkedQueue D, LinkedQueue E, int EB) {
     	
     	if (EB == 1) {
     		int QueueASize = A.size();
@@ -185,8 +204,20 @@ public class Simulator2 {
                 return C;
     		}
     	} else {
-    		currentQueue = "E";
-    		return self;
+    		int QueueDSize = D.size();
+    		int QueueESize = E.size();
+    		
+    		
+    		if ((QueueDSize == QueueESize)) {
+    			currentQueue = "D";
+                return D;
+    		} else if ((QueueDSize	<=	QueueESize)) {
+            	currentQueue = "E";
+                return E;
+    		} else {
+    			currentQueue = "E";
+    			return E;
+    		}
     	}
     	
     }
@@ -211,16 +242,19 @@ public class Simulator2 {
     	}
     }
     
-    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, int time) {
+    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, LinkedQueue D, LinkedQueue E, int time) {
     	System.out.println("Time: " + time);
     	System.out.println("\tCheckout A: " + checkQueue(A, time)
     			+ "\n\tCheckout B: " + checkQueue(B, time)
     			+ "\n\tCheckout C: " + checkQueue(C, time)
-    			+ "\n\tCheckout S: " + checkQueue(self, time));
+    			+ "\n\tCheckout D: " + checkQueue(D, time)
+    			+ "\n\tCheckout E: " + checkQueue(E, time));
     }
     
     
     public void printStats(ArrayList<Customer> customers) {
+    	
+    	DecimalFormat df = new DecimalFormat("##");
 
         String dashedLines = String.format("%0" + 63 + "d", 0).replace("0", "-");
         System.out.println(dashedLines);
@@ -229,10 +263,20 @@ public class Simulator2 {
         System.out.println("\n" + dashedLines);
 
         for (Customer cust : customers) {
-        	int wt = cust.getWaitTime();
-        	averages += wt;
+        	int wtt = 0;
+        	if ((cust.getAssignedQueueLetter() != "D") && (cust.getAssignedQueueLetter() != "E")) {
+        		int wt = cust.getWaitTime();
+        		wtt = wt;
+        		averagesF += wt;
+        		FA++;
+        	} else {
+        		int wt = cust.getWaitTime();
+        		wtt = wt;
+        		averagesS += wt;
+        		SA++;
+        	}
         	
-        	if (wt <= 5) {
+        	if (wtt <= 5) {
         		satisfiedCusts++;
         	} else {
         		dissatisfiedCusts++;
@@ -250,7 +294,8 @@ public class Simulator2 {
         }
 
         //System.out.format("%1s%.2f%1s", "Average wait: ", (averages / numCustomers)), " min\n");
-        System.out.println("Average wait: " + (averages / numCustomers) + " min");
+        System.out.println("Average wait: " + df.format(averagesF / FA) + " min");
+        System.out.println("Self Checkout Average wait: " + df.format(averagesS / SA) + " min");
         System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
         System.out.println("Satisfied customers: " + satisfiedCusts);
         System.out.println("Dissatisfied customers: " + dissatisfiedCusts);

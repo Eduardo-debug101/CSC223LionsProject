@@ -33,16 +33,18 @@ public class StoreDriver {
         int minService = 1;
         int maxService = 5;
         int numCustomers = 10;
+        int selfQueueSlower = 20;
 //    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
 //		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
 //		int minService = parseInt("Enter minimum service time: ");
 //		int maxService = parseInt("Enter maximum service time: ");
 //		int numCustomers = parseInt("Number of customers to serve: ");
-
+//		int numCustomers = parseInt("Enter selfQueue percentage slower: ");
+        
         //Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers);
         //sim.start();
         
-        Simulator2 sim2 = new Simulator2(minArrival, maxArrival, minService, maxService, numCustomers);
+        Simulator2 sim2 = new Simulator2(minArrival, maxArrival, minService, maxService, numCustomers, (double)selfQueueSlower);
         sim2.start();
 
     }
