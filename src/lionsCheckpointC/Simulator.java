@@ -109,6 +109,7 @@ public class Simulator {
 
                         selectedQueue.enqueue(newCustForQueue);
 
+                        // This array is for the stats at the end of the program
                         queuedCustsForStats.add(newCustForQueue);
 
                         newCustForQueue.setAssignedQueueLetter(QueueLetter);
@@ -121,9 +122,8 @@ public class Simulator {
                 }
             }
 
+            // Handles adding to both lanes as well as dequeuing for the self queue
             CheckoutLane bestLane = nextLane(laneD, laneE);
-
-
             if (!bestLane.isInUse() && !self.empty()) {
                 bestLane.setCheckoutCustomer(self.peek());
                 self.dequeue();
@@ -132,7 +132,7 @@ public class Simulator {
 
             // ************************** END Adding Customers to queues section
 
-            output(A, B, C, self, timer);
+            output(A, B, C, self, laneD, laneE, timer);
 
             // ************************** START Removing Customers from queues section
             // Need to add logic to "remove" an element from the array: make the first element = null
@@ -155,10 +155,10 @@ public class Simulator {
         System.out.println("\n\n\nBeginning of Stats:\n");
         printStats(queuedCustsForStats);
 
-
-
     }
 
+    // The bestLane is either one of the Lanes if they are empty, or if they are full it will be the Lane
+    // that has the lowest leave time
     public CheckoutLane nextLane(CheckoutLane D, CheckoutLane E){
         if(!D.isInUse()){
             return D;
@@ -189,6 +189,7 @@ public class Simulator {
     }
 
 
+    // Removes the Customer using the checkout lane if they are ready to leave
     public void handleLaneRemoval(CheckoutLane lane, int time) {
         if (lane.isInUse()) {
             if (lane.getCheckoutCustomer().getFinishTime() == time) {
@@ -260,18 +261,28 @@ public class Simulator {
         }
     }
 
-    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, int time) {
+    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, CheckoutLane laneD, CheckoutLane laneE, int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
         handleQueueOutput(A, 'A', time, customersWaitingInQueue);
         handleQueueOutput(B, 'B', time, customersWaitingInQueue);
         handleQueueOutput(C, 'C', time, customersWaitingInQueue);
         handleQueueOutput(self, 'S', time, customersWaitingInQueue);
+        handleLaneOutput(laneD, 'D');
+        handleLaneOutput(laneE, 'E');
 
         if (!customersWaitingInQueue.isEmpty()) {
             for (String s : customersWaitingInQueue) {
                 System.out.println(s);
             }
+        }
+    }
+
+    public void handleLaneOutput(CheckoutLane lane, char laneLetter){
+        if(lane.isInUse()){
+            System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
+        }else{
+            System.out.println("\tLane " + laneLetter + ": Lane is empty");
         }
     }
 

@@ -2,7 +2,7 @@ package lionsCheckpointC;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CustomerCreator {
+public class CustomerCreator{
     private int minimumTime;
     private int maximumTime;
     private int serviceMinTime;

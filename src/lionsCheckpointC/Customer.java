@@ -8,7 +8,7 @@ public class Customer {
     private int waitTime;
     private int finishTime;
     private int custId;
-    private static int nextNum = 0;
+    private static int nextNum = 1;
     private String assignedQueueLetter;
     private String customerNotes;
     private int coinFlip;
