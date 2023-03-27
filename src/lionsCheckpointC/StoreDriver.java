@@ -27,38 +27,25 @@ public class StoreDriver {
     }
 
     public static void main(String[] args) {
-//        int minArrival = 1;
-//        int maxArrival = 3;
-//        int minService = 10;
-//        int maxService = 30;
-//        int numCustomers = 20;
-//        int selfSlow = 0;
-    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
-		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
-		int minService = parseInt("Enter minimum service time: ");
-		int maxService = parseInt("Enter maximum service time: ");
-		int numCustomers = parseInt("Number of customers to serve: ");
-		int selfSlow = parseInt("Percentage of slowing for self checkouts (ex. 10 = 10%): ");
+        int minArrival = 1;
+        int maxArrival = 5;
+        int minService = 5;
+        int maxService = 15;
+        int numCustomers = 20;
+        int selfSlow = 0;
+        int fullQueuesAmt = 3;
+        int selfQueuesAmt = 4;
+//    	int minArrival = parseInt("Enter minimum arrival time between customers: ");
+//		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
+//		int minService = parseInt("Enter minimum service time: ");
+//		int maxService = parseInt("Enter maximum service time: ");
+//		int numCustomers = parseInt("Number of customers to serve: ");
+//		int selfSlow = parseInt("Percentage of slowing for self checkouts (ex. 10 = 10%): ");
+//        int fullQueuesAmt = parseInt("Number of full queues to use: ");
+//        int selfQueuesAmt = parseInt("Number of self-checkout lanes to use: ");
 
-        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow);
+        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow, fullQueuesAmt, selfQueuesAmt);
         sim.start();
 
-    }
-
-    // Use this method to test clock functionality - Eduardo 2/26
-    public static void testClock() {
-        Clock c = new Clock();
-        c.start();
-        System.out.println("The time is " + c.getCurrentTime() + "s");
-
-        try {
-            Thread.sleep(5000); // Wait for 5 secs
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        c.stop();
-
-        System.out.println("The time is " + c.getCurrentTime() + "s");
     }
 }

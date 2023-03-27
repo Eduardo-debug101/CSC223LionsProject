@@ -56,7 +56,7 @@ public class Customer {
 
 	public String toString() {
 		return "Customer --- Arrival time: " + arrivalTime + ", Service time: " + serviceTime + ", Wait time: "
-				+ waitTime + ", Leave time: " + finishTime;
+				+ waitTime + ", Leave time: " + finishTime + ", Coin: " + coinFlip;
 	}
 
 	public int getArrivalTime() {

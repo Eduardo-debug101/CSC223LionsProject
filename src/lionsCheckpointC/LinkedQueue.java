@@ -5,7 +5,27 @@ package lionsCheckpointC;
 	on linked lists.
 */
 
-public class LinkedQueue {
+public class LinkedQueue implements Comparable<LinkedQueue>{
+
+    private int queueId;
+    private static int nextQueueNum = 1;
+
+    public int compareTo(LinkedQueue o) {
+
+        if(this.size() == o.size()){
+            return 0;
+        } else if (this.size() > o.size()) {
+            return 1;
+        }else {
+            return -1;
+        }
+    }
+
+    public LinkedQueue(){
+        queueId = nextQueueNum;
+        nextQueueNum++;
+    }
+
     private class Node {
         Customer value;
         Node next;
@@ -144,5 +164,13 @@ public class LinkedQueue {
             p = p.next;
         }
         return sBuilder.toString();
+    }
+
+    public int getQueueId() {
+        return queueId;
+    }
+
+    public void setQueueId(int queueId) {
+        this.queueId = queueId;
     }
 }

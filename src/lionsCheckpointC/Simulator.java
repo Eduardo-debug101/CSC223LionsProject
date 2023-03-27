@@ -2,9 +2,7 @@ package lionsCheckpointC;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-
-import static java.lang.Math.round;
+import java.util.Collections;
 
 public class Simulator {
     private int arrivalMinTime;
@@ -13,6 +11,8 @@ public class Simulator {
     private int serviceMaxTime;
     private int selfSlowTime;
     private int numCustomers;
+    private int fullQueuesAmt;
+    private int selfLanesAmt;
     private static int satisfiedCusts = 0;
     private static int dissatisfiedCusts = 0;
     // This is to keep the start() while loop running until EVERY customer has been
@@ -20,37 +20,51 @@ public class Simulator {
     private static int customersServedAndLeft = 0;
     private static int timeQueuesAreFree = 0;
     private static int timeLanesAreFree = 0;
+    private static ArrayList<LinkedQueue> fullQueues = new ArrayList<>();
+    private static ArrayList<CheckoutLane> selfLanes = new ArrayList<>();
 
 
     public Simulator() {
 
     }
 
-    public Simulator(int a, int b, int c, int d, int n, int selfSlow) {
+    public Simulator(int a, int b, int c, int d, int n, int selfSlow, int fullQueuesAmt, int selfLanesAmt) {
         arrivalMinTime = a;
         arrivalMaxTime = b;
         serviceMinTime = c;
         serviceMaxTime = d;
         numCustomers = n;
         selfSlowTime = selfSlow;
+        this.fullQueuesAmt = fullQueuesAmt;
+        this.selfLanesAmt = selfLanesAmt;
     }
 
     public String toString() {
-        return "Simulator [arrivalMinTime=" + arrivalMinTime + ", arrivalMaxTime=" + arrivalMaxTime
-                + ", serviceMinTime=" + serviceMinTime + ", serviceMaxTime=" + serviceMaxTime + ", numCustomers="
-                + numCustomers + "]";
+        return "Simulator [arrivalMinTime=" + arrivalMinTime + ", arrivalMaxTime=" + arrivalMaxTime + ", serviceMinTime=" + serviceMinTime + ", serviceMaxTime=" + serviceMaxTime + ", numCustomers=" + numCustomers + "]";
+    }
+
+    private void populateQueueArray(ArrayList<LinkedQueue> array, int size) {
+
+        for (int i = 0; i < size; i++) {
+            array.add(new LinkedQueue());
+        }
+
+    }
+
+    private void populateLaneArray(ArrayList<CheckoutLane> array, int size) {
+
+        for (int i = 0; i < size; i++) {
+            array.add(new CheckoutLane());
+        }
+
     }
 
     public void start() {
 
-        LinkedQueue A = new LinkedQueue();
-        LinkedQueue B = new LinkedQueue();
-        LinkedQueue C = new LinkedQueue();
+        populateQueueArray(fullQueues, this.fullQueuesAmt);
+        populateLaneArray(selfLanes, this.selfLanesAmt);
 
-        LinkedQueue self = new LinkedQueue();
-
-        CheckoutLane laneD = new CheckoutLane();
-        CheckoutLane laneE = new CheckoutLane();
+        LinkedQueue selfQueue = new LinkedQueue();
 
         CustomerCreator cc = new CustomerCreator(arrivalMinTime, arrivalMaxTime, serviceMinTime, serviceMaxTime, 0, selfSlowTime);
 
@@ -85,20 +99,19 @@ public class Simulator {
                 while (flag && !waitingCustomers.isEmpty()) {
                     Customer newCustForQueue = waitingCustomers.get(0);
 
-                    // Finds the smallest queue to add customers into
-                    LinkedQueue selectedQueue;
-                    if (newCustForQueue.getCoinFlip() == 0) {
-                        selectedQueue = self;
-
-                    } else {
-                        selectedQueue = selectAQueue(A, B, C);
-                    }
-                    String QueueLetter = findLowestQueueNum(A, B, C, newCustForQueue.getCoinFlip());
-
                     // If the arrivalTime of the customer object is the same as the current
                     // time, then it will add it to the selected queue and delete the customer
                     // object from the arraylist
                     if (newCustForQueue.getArrivalTime() == timer) {
+
+                        // Finds the smallest queue / self queue to add customers into
+                        LinkedQueue selectedQueue;
+                        if (newCustForQueue.getCoinFlip() == 0) {
+                            selectedQueue = selfQueue;
+                        } else {
+                            selectedQueue = findBestQueue(fullQueues);
+                        }
+                        String queueNum = String.valueOf(selectedQueue.getQueueId());
 
                         // Calculates wait time for each customer by getting the absloute value of the
                         // leave time of the
@@ -108,8 +121,7 @@ public class Simulator {
                             newCustForQueue.calcWait(finishTimeOfRear);
                             newCustForQueue.calcLeave();
                         } else {
-                            newCustForQueue.setFinishTime(
-                                    newCustForQueue.getArrivalTime() + newCustForQueue.getServiceTime());
+                            newCustForQueue.setFinishTime(newCustForQueue.getArrivalTime() + newCustForQueue.getServiceTime());
                             newCustForQueue.setWaitTime(0);
                         }
 
@@ -118,7 +130,7 @@ public class Simulator {
                         // This array is for the stats at the end of the program
                         queuedCustsForStats.add(newCustForQueue);
 
-                        newCustForQueue.setAssignedQueueLetter(QueueLetter);
+                        newCustForQueue.setAssignedQueueLetter(queueNum);
 
                         waitingCustomers.remove(0);
                     } else {
@@ -127,39 +139,39 @@ public class Simulator {
                 }
             }
 
-            // Handles adding to both lanes as well as dequeuing for the self queue
-            // Loops until both Lanes are full
-            CheckoutLane bestLane = new CheckoutLane();
+            // Handles adding Customer's to lanes and dequeus them from the selfQueue
+            // Loops until both Lanes are full or if the selfQueue has no more Customers
+            CheckoutLane selectedLane = new CheckoutLane();
             boolean flag2 = true;
             while (flag2) {
-                bestLane = nextLane(laneD, laneE);
-                if (!bestLane.isInUse() && !self.empty()) {
-                    bestLane.setCheckoutCustomer(self.peek());
-                    self.dequeue();
+                selectedLane = findBestLane(selfLanes);
+                if (!selectedLane.isInUse() && !selfQueue.empty()) {
+                    selectedLane.setCheckoutCustomer(selfQueue.peek());
+                    selfQueue.dequeue();
                 }
-                if ((laneD.isInUse() && laneE.isInUse()) || self.empty()) {
+                if (allLanesFull() || selfQueue.empty()) {
                     flag2 = false;
                 }
             }
 
             // ************************** END Adding Customers to queues section
 
-            output(A, B, C, self, laneD, laneE, timer);
+            output(selfQueue, timer);
 
             // ************************** START Removing Customers from queues section
-            // Need to add logic to "remove" an element from the array: make the first element = null
-            handleQueueRemoval(A, timer);
-            handleQueueRemoval(B, timer);
-            handleQueueRemoval(C, timer);
-            handleLaneRemoval(laneD, timer);
-            handleLaneRemoval(laneE, timer);
+            for (LinkedQueue queue : fullQueues) {
+                handleQueueRemoval(queue, timer);
+            }
 
+            for (CheckoutLane lane : selfLanes) {
+                handleLaneRemoval(lane, timer);
+            }
             // ************************** END Removing Customers from queues section
 
             // If someone is currently checking out then those who are still in queue must wait longer
-            if (bestLane.isInUse() && !self.empty()) {
-                for (int i = 0; i < self.size(); i++) {
-                    self.indexOf(i).setFinishTime(self.indexOf(i).getFinishTime() + 1);
+            if (selectedLane.isInUse() && !selfQueue.empty()) {
+                for (int i = 0; i < selfQueue.size(); i++) {
+                    selfQueue.indexOf(i).setFinishTime(selfQueue.indexOf(i).getFinishTime() + 1);
                 }
             }
         }
@@ -169,22 +181,9 @@ public class Simulator {
 
     }
 
-    // The bestLane is either one of the Lanes if they are empty, or if they are full it will be the Lane
-    // that has the lowest leave time
-    public CheckoutLane nextLane(CheckoutLane D, CheckoutLane E) {
-        if (!D.isInUse()) {
-            return D;
-        } else if (!E.isInUse()) {
-            return E;
-        }
-        if (D.getCheckoutCustomer().getServiceTime() <= E.getCheckoutCustomer().getServiceTime()) {
-            return D;
-        } else {
-            return E;
-        }
-    }
 
-    public void handleQueueRemoval(LinkedQueue queue, int time) {
+    // Removes the Customer using the full service queue if they are ready to leave via finishTime
+    private void handleQueueRemoval(LinkedQueue queue, int time) {
         if (!queue.empty()) {
             if (queue.peek().getFinishTime() == time) {
                 if (queue.peek().getWaitTime() >= 5) {
@@ -201,8 +200,8 @@ public class Simulator {
     }
 
 
-    // Removes the Customer using the checkout lane if they are ready to leave
-    public void handleLaneRemoval(CheckoutLane lane, int time) {
+    // Removes the Customer using the checkout lane if they are ready to leave via finishTime
+    private void handleLaneRemoval(CheckoutLane lane, int time) {
         if (lane.isInUse()) {
             if (lane.getCheckoutCustomer().getFinishTime() == time) {
                 if (lane.getCheckoutCustomer().getWaitTime() >= 5) {
@@ -218,12 +217,12 @@ public class Simulator {
         }
     }
 
-    public void printStats(ArrayList<Customer> customers) {
+
+    private void printStats(ArrayList<Customer> customers) {
 
         String dashedLines = String.format("%0" + 63 + "d", 0).replace("0", "-");
         System.out.println(dashedLines);
-        System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ",
-                "| Dep ", "| Notes ", "|");
+        System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ", "| Dep ", "| Notes ", "|");
         System.out.println("\n" + dashedLines);
 
         double selfAverage = 0;
@@ -235,14 +234,9 @@ public class Simulator {
             cust.setCustomerNotes();
 
             String lineDivider = "|";
-            System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s",
-                    lineDivider, cust.getCustId(),
-                    lineDivider, cust.getArrivalTime(),
-                    lineDivider, cust.getServiceTime(),
-                    lineDivider, cust.getAssignedQueueLetter(),
-                    lineDivider, cust.getFinishTime(),
-                    lineDivider, cust.getCustomerNotes());
+            System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s", lineDivider, cust.getCustId(), lineDivider, cust.getArrivalTime(), lineDivider, cust.getServiceTime(), lineDivider, cust.getAssignedQueueLetter(), lineDivider, cust.getFinishTime(), lineDivider, cust.getCustomerNotes());
             System.out.println("\n" + dashedLines);
+
             if (cust.getCoinFlip() == 0) {
                 selfAverage += cust.getWaitTime();
                 numOfSelfCheckOuters++;
@@ -254,7 +248,6 @@ public class Simulator {
 
         DecimalFormat f = new DecimalFormat("0.00");
 
-        //System.out.format("%1s%.2f%1s", "Average wait: ", (averages / numCustomers)), " min\n");
         System.out.println("Average wait for FULL queue: " + f.format(average / numCustomers) + " min");
         System.out.println("Average wait for self-checkout: " + f.format(selfAverage / numOfSelfCheckOuters) + " min");
         System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
@@ -264,39 +257,37 @@ public class Simulator {
 
     }
 
-    public LinkedQueue selectAQueue(LinkedQueue A, LinkedQueue B, LinkedQueue C) {
-        if (A.size() <= B.size() && A.size() <= C.size()) {
-            return A;
-        } else if (B.size() <= C.size() && B.size() <= A.size()) {
-            return B;
-        } else {
-            return C;
-        }
+
+    private LinkedQueue findBestQueue(ArrayList<LinkedQueue> queues) {
+        return Collections.min(queues);
     }
 
-    public String findLowestQueueNum(LinkedQueue A, LinkedQueue B, LinkedQueue C, int coinflip) {
-        if (coinflip == 0) {
-            return "S";
-        } else {
-            if (A.size() <= B.size() && A.size() <= C.size()) {
-                return "A";
-            } else if (B.size() <= C.size() && B.size() <= A.size()) {
-                return "B";
-            } else {
-                return "C";
+    private CheckoutLane findBestLane(ArrayList<CheckoutLane> lanes) {
+        return Collections.min(lanes);
+    }
+
+    // Used to see if all of the lanes in the array is full. This is for making sure all Customer's with the same
+    // arrival time have a chance to be added into a lane if there is an available one
+    private boolean allLanesFull() {
+        boolean flag = true;
+        for (CheckoutLane lane : selfLanes) {
+            if (!lane.isInUse()) {
+                flag = false;
             }
         }
+        return flag;
     }
 
-    public void output(LinkedQueue A, LinkedQueue B, LinkedQueue C, LinkedQueue self, CheckoutLane laneD, CheckoutLane laneE, int time) {
+    private void output(LinkedQueue self, int time) {
         ArrayList<String> customersWaitingInQueue = new ArrayList<>();
 
-        handleQueueOutput(A, 'A', time, customersWaitingInQueue);
-        handleQueueOutput(B, 'B', time, customersWaitingInQueue);
-        handleQueueOutput(C, 'C', time, customersWaitingInQueue);
+        for(LinkedQueue queue : fullQueues){
+            handleQueueOutput(queue, queue.getQueueId(), time, customersWaitingInQueue);
+        }
         handleSelfQueueOutput(self);
-        handleLaneOutput(laneD, 'D', time);
-        handleLaneOutput(laneE, 'E', time);
+        for(CheckoutLane lane : selfLanes){
+            handleLaneOutput(lane, lane.getLaneId(), time);
+        }
 
         if (!customersWaitingInQueue.isEmpty()) {
             for (String s : customersWaitingInQueue) {
@@ -305,7 +296,7 @@ public class Simulator {
         }
     }
 
-    public void handleSelfQueueOutput(LinkedQueue self) {
+    private void handleSelfQueueOutput(LinkedQueue self) {
         if (self.empty()) {
             System.out.println("\tSelf-Queue: free");
         } else {
@@ -313,124 +304,45 @@ public class Simulator {
         }
     }
 
-    public void handleLaneOutput(CheckoutLane lane, char laneLetter, int time) {
+    private void handleLaneOutput(CheckoutLane lane, int laneNum, int time) {
         if (lane.isInUse()) {
             if (lane.getCheckoutCustomer().getFinishTime() == time) {
-                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
+                System.out.println("\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
             } else {
-                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
+                System.out.println("\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
             }
-
-
-//            if (lane.getCheckoutCustomer().getArrivalTime() == time) {
-//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " begins service");
-//            }
-//            if (lane.getCheckoutCustomer().getArrivalTime() != time && lane.getCheckoutCustomer().getFinishTime() != time) {
-//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " (cont)");
-//            }
-//            if (lane.getCheckoutCustomer().getFinishTime() == time) {
-//                System.out.println("\tLane " + laneLetter + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
-//            }
-
-//            if (cc == queue.peek()) {
-//                if (cc.getArrivalTime() == time)
-//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//
-//                if (cc.getFinishTime() == time)
-//                    // We could probably add a method where it deletes the entry instead of in the
-//                    // start method.
-//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
-//                if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
-//
-//            } else {
-//                if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-//                    System.out.println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//                else if (cc.getArrivalTime() == time)
-//                    customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout " + queueLetter + " queue");
-//            }
         } else {
-            System.out.println("\tLane " + laneLetter + ": free");
+            System.out.println("\tLane " + laneNum + ": free");
         }
-
     }
 
-    public void handleQueueOutput(LinkedQueue queue, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
-        if (queue.empty())
-            System.out.println("\tCheckout " + queueLetter + ": free");
+    private void handleQueueOutput(LinkedQueue queue, int queueNum, int time, ArrayList<String> customersWaitingInQueue) {
+        if (queue.empty()) System.out.println("\tCheckout " + queueNum + ": free");
         else {
             for (int i = 0; i < queue.size(); i++) {
                 Customer cc = queue.indexOf(i);
                 if (cc != null) {
                     if (cc == queue.peek()) {
                         if (cc.getArrivalTime() == time)
-                            System.out.println(
-                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+                            System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service");
 
                         if (cc.getFinishTime() == time)
-                            // We could probably add a method where it deletes the entry instead of in the
-                            // start method.
-                            System.out
-                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
+                            System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " leaves");
                         if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-                            System.out
-                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
+                            System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " (cont)");
 
                     } else {
                         if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-                            System.out.println(
-                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
+                            System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service");
                         else if (cc.getArrivalTime() == time)
-                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
-                                    + " arrives and goes into Checkout " + queueLetter + " queue");
+                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId() + " arrives and goes into Checkout " + queueNum + " queue");
                     }
                 }
             }
         }
     }
 
-
-    // Still need to work on this
-//    public void handleQueueOutput(LinkedQueue queue, CheckoutLane lane, char queueLetter, int time, ArrayList<String> customersWaitingInQueue) {
-//        if (servicePoint[0] == null)
-//            System.out.println("\tCheckout " + queueLetter + ": free");
-//        else {
-//            Customer cc = null;
-//            for (int i = 0; i < queue.size(); i++) {
-//                if (i == 1) {
-//                    cc = servicePoint[0];
-//                } else {
-//                    cc = queue.indexOf(i);
-//                }
-//                if (cc != null) {
-//                    if (cc == queue.peek()) {
-//                        if (cc.getArrivalTime() == time)
-//                            System.out.println(
-//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//
-//                        if (cc.getFinishTime() == time)
-//                            // We could probably add a method where it deletes the entry instead of in the
-//                            // start method.
-//                            System.out
-//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " leaves");
-//                        if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-//                            System.out
-//                                    .println("\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " (cont)");
-//
-//                    } else {
-//                        if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-//                            System.out.println(
-//                                    "\tCheckout " + queueLetter + ": Customer #" + cc.getCustId() + " begins service");
-//                        else if (cc.getArrivalTime() == time)
-//                            customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
-//                                    + " arrives and goes into Checkout " + queueLetter + " queue");
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-    public ArrayList<Customer> customerWaitList(CustomerCreator cc) {
+    private ArrayList<Customer> customerWaitList(CustomerCreator cc) {
         ArrayList<Customer> wc = new ArrayList<Customer>();
         for (int i = 0; i < numCustomers; i++) {
             wc.add(cc.create());
