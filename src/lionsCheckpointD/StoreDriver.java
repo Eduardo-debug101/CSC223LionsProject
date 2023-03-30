@@ -29,8 +29,8 @@ public class StoreDriver {
     public static void main(String[] args) {
         int minArrival = 1;
         int maxArrival = 5;
-        int minService = 5;
-        int maxService = 15;
+        int minService = 20;
+        int maxService = 25;
         int numCustomers = 20;
         int selfSlow = 0;
         int fullQueuesAmt = 3;
