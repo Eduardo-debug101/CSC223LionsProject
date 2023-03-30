@@ -412,12 +412,10 @@ public class Simulator {
 		System.out.println("Total time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min");
 		System.out.println("Satisfied customers: " + satisfiedCusts);
 		System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
-		if ((timeLanesAreFree / 10) > 10) {
+		if ((selfAverage / numOfSelfCheckOuters) < 10) 
 			System.out.println("Too many self-checkout lanes. Remove one lane to reduce customer wait time.");
-		} else if ((timeLanesAreFree / 10) == 10) {
-		} else {
+		else if ((selfAverage / numOfSelfCheckOuters) > 10) 
 			System.out.println("Too few self-checkout lanes. Add one lane to reduce customer wait time.");
-		}
 
 	}
 
