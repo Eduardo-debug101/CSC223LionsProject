@@ -17,6 +17,7 @@ public class Simulator {
 
 	// Global variables used by various methods, mainly for stats collection
 	// **************************
+	private int timer = -1;
 	private static int satisfiedCusts = 0;
 	private static int dissatisfiedCusts = 0;
 	private static int customersServedAndLeft = 0;
@@ -76,10 +77,6 @@ public class Simulator {
 
 		// This array is a total of all created Customers for printStats()
 		ArrayList<Customer> queuedCustsForStats = new ArrayList<>();
-
-		// This counts the "minutes" that has passed. This is used for the sample
-		// output.
-		int timer = -1;
 
 		// Main while loop continues until every Customer has been served
 		while (customersServedAndLeft != numCustomers) {
@@ -412,11 +409,16 @@ public class Simulator {
 		System.out.println("Total time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min");
 		System.out.println("Satisfied customers: " + satisfiedCusts);
 		System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
-		if ((selfAverage / numOfSelfCheckOuters) < 10) 
-			System.out.println("Too many self-checkout lanes. Remove one lane to reduce customer wait time.");
-		else if ((selfAverage / numOfSelfCheckOuters) > 10) 
-			System.out.println("Too few self-checkout lanes. Add one lane to reduce customer wait time.");
-
+		// Calculating "percentage" of time that self-checkout lane is occupied.
+		double laneUsage = (timeQueuesAreFree / 10) / timer;
+		if ((selfAverage / numOfSelfCheckOuters) > 5 && laneUsage < 0.5) {
+			System.out.println("Suggest adding self-checkout lanes.");
+		} else if ((selfAverage / numOfSelfCheckOuters) < 2 && laneUsage > 0.8) {
+			System.out.println("Suggest removing self-checkout lanes.");
+		}
+		else {
+			System.out.println("No suggestion for self-checkout lanes.");
+		}
 	}
 
 	public int getArrivalMinTime() {
