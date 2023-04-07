@@ -411,12 +411,12 @@ public class Simulator {
 		System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
 		// Calculating "percentage" of time that self-checkout lane is occupied.
 		double laneUsage = (timeQueuesAreFree / 10) / timer;
+		// Recommendations logic for self-checkout
 		if ((selfAverage / numOfSelfCheckOuters) > 5 && laneUsage < 0.5) {
 			System.out.println("Suggest adding self-checkout lanes.");
 		} else if ((selfAverage / numOfSelfCheckOuters) < 2 && laneUsage > 0.8) {
 			System.out.println("Suggest removing self-checkout lanes.");
-		}
-		else {
+		} else {
 			System.out.println("No suggestion for self-checkout lanes.");
 		}
 	}
