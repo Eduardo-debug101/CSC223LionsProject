@@ -3,7 +3,6 @@ package lionsCheckpointE;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Queue;
 
 public class Simulator {
 	private int arrivalMinTime;
@@ -38,6 +37,11 @@ public class Simulator {
 		selfSlowTime = selfSlow;
 		this.fullQueuesAmt = fullQueuesAmt;
 		this.selfLanesAmt = selfLanesAmt;
+        satisfiedCusts = 0;
+        dissatisfiedCusts = 0;
+        customersServedAndLeft = 0;
+        timeQueuesAreFree = 0;
+        timeLanesAreFree = 0;
 	}
 
 	public String toString() {
@@ -403,12 +407,17 @@ public class Simulator {
 
 		DecimalFormat f = new DecimalFormat("0.00");
 
+		System.out.println();
+
 		System.out.println("Average wait for FULL queue: " + f.format(average / numCustomers) + " min");
 		System.out.println("Average wait for self-checkout: " + f.format(selfAverage / numOfSelfCheckOuters) + " min");
 		System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
 		System.out.println("Total time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min");
 		System.out.println("Satisfied customers: " + satisfiedCusts);
 		System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
+
+		System.out.println();
+
 		// Calculating "percentage" of time that self-checkout lane is occupied.
 		double laneUsage = (timeQueuesAreFree / 10) / timer;
 		// Recommendations logic for self-checkout

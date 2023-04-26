@@ -26,27 +26,29 @@ public class StoreDriver {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("\r\n"
-				+ "  _      _                        _                    __  __            _        _   \r\n"
-				+ " | |    (_)                      | |                  |  \\/  |          | |      | |  \r\n"
-				+ " | |     _  ___  _ __  ___       | | __ ___   ____ _  | \\  / | __ _ _ __| | _____| |_ \r\n"
-				+ " | |    | |/ _ \\| '_ \\/ __|  _   | |/ _` \\ \\ / / _` | | |\\/| |/ _` | '__| |/ / _ \\ __|\r\n"
-				+ " | |____| | (_) | | | \\__ \\ | |__| | (_| |\\ V / (_| | | |  | | (_| | |  |   <  __/ |_ \r\n"
-				+ " |______|_|\\___/|_| |_|___/  \\____/ \\__,_| \\_/ \\__,_| |_|  |_|\\__,_|_|  |_|\\_\\___|\\__|\r\n"
-				+ "                                                                                      \r\n"
-				+ "                                                                                      \r\n" + "");
-		int minArrival = parseInt("Enter minimum arrival time between customers: ");
-		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
-		int minService = parseInt("Enter minimum service time: ");
-		int maxService = parseInt("Enter maximum service time: ");
-		int numCustomers = parseInt("Number of customers to serve: ");
-		int selfSlow = parseInt("Percentage of slowing for self checkouts (ex. 10 = 10%): ");
-		int fullQueuesAmt = parseInt("Number of full queues to use: ");
-		int selfQueuesAmt = parseInt("Number of self-checkout lanes to use: ");
+//		System.out.println("\r\n"
+//				+ "  _      _                        _                    __  __            _        _   \r\n"
+//				+ " | |    (_)                      | |                  |  \\/  |          | |      | |  \r\n"
+//				+ " | |     _  ___  _ __  ___       | | __ ___   ____ _  | \\  / | __ _ _ __| | _____| |_ \r\n"
+//				+ " | |    | |/ _ \\| '_ \\/ __|  _   | |/ _` \\ \\ / / _` | | |\\/| |/ _` | '__| |/ / _ \\ __|\r\n"
+//				+ " | |____| | (_) | | | \\__ \\ | |__| | (_| |\\ V / (_| | | |  | | (_| | |  |   <  __/ |_ \r\n"
+//				+ " |______|_|\\___/|_| |_|___/  \\____/ \\__,_| \\_/ \\__,_| |_|  |_|\\__,_|_|  |_|\\_\\___|\\__|\r\n"
+//				+ "                                                                                      \r\n"
+//				+ "                                                                                      \r\n" + "");
+//		int minArrival = parseInt("Enter minimum arrival time between customers: ");
+//		int maxArrival = parseInt("Enter maximum arrival time between customers: ");
+//		int minService = parseInt("Enter minimum service time: ");
+//		int maxService = parseInt("Enter maximum service time: ");
+//		int numCustomers = parseInt("Number of customers to serve: ");
+//		int selfSlow = parseInt("Percentage of slowing for self checkouts (ex. 10 = 10%): ");
+//		int fullQueuesAmt = parseInt("Number of full queues to use: ");
+//		int selfQueuesAmt = parseInt("Number of self-checkout lanes to use: ");
 
-		Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow,
-				fullQueuesAmt, selfQueuesAmt);
-		sim.start();
+//		Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow,
+//				fullQueuesAmt, selfQueuesAmt);
+//		sim.start();
 
+        StoreGUI gui = new StoreGUI();
+        gui.display();
 	}
 }
