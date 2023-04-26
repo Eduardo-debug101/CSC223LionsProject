@@ -11,13 +11,22 @@ import java.io.PrintStream;
 // Java2s.com - http://www.java2s.com/Tutorials/Java/Swing_How_to/JFrame/Create_Console_JFrame.htm - System.out to a text area of the GUI
 
 public class StoreGUI extends JFrame {
+	
+	MyPanel panel;
+	protected static JTextArea textArea;
 
     public StoreGUI() {
+    	panel = new MyPanel();
+    	
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setTitle("Lion's Java Market");
-        this.setSize(1200, 720);
+        //this.setSize(1200, 720);
+        
+        this.add(panel);
+        this.pack();
         this.setLayout(null);
+        this.setLocationRelativeTo(null);
 
     }
 
@@ -26,7 +35,7 @@ public class StoreGUI extends JFrame {
         setupControlsSection();
         setupConsoleSection();
     }
-
+    
     private void setupControlsSection() {
 
         int minArrival = 1;
@@ -59,33 +68,47 @@ public class StoreGUI extends JFrame {
         startButton.setBackground(Color.WHITE);
         startButton.setFocusable(false);
         startButton.setBorder(BorderFactory.createBevelBorder(1));
-
+      
         this.add(startButton);
 
         this.add(controlPanel);
+        
+        int zCoordinate = 0;
+        this.setComponentZOrder(startButton, zCoordinate);
     }
 
     private void setupConsoleSection() {
         JPanel consolePanel = new JPanel();
-        consolePanel.setBackground(Color.BLACK);
+        consolePanel.setBackground(new Color(0, 0, 0, 0));
         consolePanel.setBounds(249, 0, (this.getWidth() - 250), this.getHeight());
+        
+        //JTextArea output = new JTextArea(24, 80);
+        textArea = new MyTextArea(24, 80);
+        textArea.setEditable(false);
+        textArea.setOpaque(false);
+        textArea.setBackground(new Color(1,1,1, (float) 0.01));
+        //output.setBackground(new Color(0, 0, 0, 0));
+        
+        textArea.setForeground(Color.WHITE);
 
-        JTextArea output = new JTextArea(24, 80);
-        output.setEditable(false);
-        output.setBackground(new Color(34, 32, 36));
-        output.setForeground(Color.WHITE);
 
         System.setOut(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                output.append(String.valueOf((char) b));
-                output.setCaretPosition(output.getDocument().getLength());
+            	textArea.append(String.valueOf((char) b));
+            	textArea.setCaretPosition(textArea.getDocument().getLength());
             }
         }));
 
-        JScrollPane scroll = new JScrollPane(output);
+        JScrollPane scroll = new JScrollPane(textArea);
+        scroll.setOpaque(false); // make the scroll pane transparent
+        //scroll.getViewport().setBackground(new Color(0, 0, 0, 0)); // set the viewport's background color to transparent
+        //scroll.setBackground(new Color(0, 0, 0, 0)); // set the scroll pane's background color to transparent
         scroll.setBounds(0, 0, 935, 685);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        
+        MyPanel backgroundPanel = new MyPanel();
+        this.add(backgroundPanel);
 
         consolePanel.add(scroll);
         this.add(consolePanel);
@@ -95,11 +118,17 @@ public class StoreGUI extends JFrame {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println();
         System.out.println("Ready!");
-
     }
+
 
     private void startSim(int minArrival, int maxArrival, int minService, int maxService, int numCustomers, int selfSlow, int fullQueuesAmt, int selfQueuesAmt) {
         Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow, fullQueuesAmt, selfQueuesAmt);
         sim.start();
     }
 }
+
+
+
+
+
+
