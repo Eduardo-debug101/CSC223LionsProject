@@ -20,7 +20,6 @@ public class MyTextArea extends JTextArea {
 
     @Override
     protected void paintComponent(Graphics g) {
-        //g.drawImage(img,0,0,null);
     	g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
         super.paintComponent(g);
     }
