@@ -1,5 +1,7 @@
 package lionsCheckpointE;
 
+import lionsCheckpointE.GUI.StoreGUI;
+
 import java.util.Scanner;
 
 public class StoreDriver {
@@ -49,6 +51,5 @@ public class StoreDriver {
 //		sim.start();
 
         StoreGUI gui = new StoreGUI();
-        gui.display();
 	}
 }
