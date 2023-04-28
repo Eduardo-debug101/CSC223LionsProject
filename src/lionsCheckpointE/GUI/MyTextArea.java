@@ -1,4 +1,4 @@
-package lionsCheckpointE;
+package lionsCheckpointE.GUI;
 
 import java.awt.Graphics;
 import java.awt.Image;
