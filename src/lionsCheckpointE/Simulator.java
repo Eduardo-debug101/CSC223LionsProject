@@ -380,8 +380,10 @@ public class Simulator {
 
 		String dashedLines = String.format("%0" + 63 + "d", 0).replace("0", "-");
 		TEXT = TEXT + "\n"+dashedLines;
-		System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ",
-				"| Dep ", "| Notes ", "|");
+		TEXT = TEXT + "\n"+ String.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ",
+						"| Dep ", "| Notes ", "|");
+		/* System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ",
+				"| Dep ", "| Notes ", "|");*/
 		TEXT = TEXT + "\n\n" + dashedLines;
 
 		double selfAverage = 0;
