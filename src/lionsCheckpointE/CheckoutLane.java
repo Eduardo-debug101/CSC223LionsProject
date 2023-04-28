@@ -31,6 +31,10 @@ public class CheckoutLane implements Comparable<CheckoutLane>{
         this.laneId = laneId;
     }
 
+    public static void clear(){
+        nextLaneId = 1;
+    }
+
     public int compareTo(CheckoutLane o) {
 
         if(this.isInUse() && o.isInUse()){

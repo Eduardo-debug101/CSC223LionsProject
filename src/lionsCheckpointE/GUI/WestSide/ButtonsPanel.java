@@ -1,5 +1,10 @@
 package lionsCheckpointE.GUI.WestSide;
 
+import lionsCheckpointE.CheckoutLane;
+import lionsCheckpointE.Customer;
+import lionsCheckpointE.GUI.StoreGUI;
+import lionsCheckpointE.Simulator;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,47 +12,47 @@ import java.awt.*;
 //https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/layout/BoxLayoutDemoProject/src/layout/BoxLayoutDemo.java
 public class ButtonsPanel extends JPanel {
     public ButtonsPanel() {
-        this.setBackground(new Color(200, 200, 200, 150));
+        this.setBackground(new Color(255, 255, 255, 100));
         //BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         GridLayout layout = new GridLayout(0, 1);
         this.setLayout(layout);
 
-        JTextField minArrivalField = new JTextField(1);
+        JTextField minArrivalField = new JTextField("3");
         minArrivalField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("minArrival"));
         this.add(minArrivalField);
 
-        JTextField maxArrivalField = new JTextField(1);
+        JTextField maxArrivalField = new JTextField("5");
         maxArrivalField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("minArrival"));
         this.add(maxArrivalField);
 
-        JTextField minServiceField = new JTextField(1);
+        JTextField minServiceField = new JTextField("1");
         minServiceField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("minService"));
         this.add(minServiceField);
 
-        JTextField maxServiceField = new JTextField(1);
+        JTextField maxServiceField = new JTextField("8");
         maxServiceField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("maxService"));
         this.add(maxServiceField);
 
-        JTextField numCustomersField = new JTextField(1);
+        JTextField numCustomersField = new JTextField("20");
         numCustomersField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("numCustomers"));
         this.add(numCustomersField);
 
-        JTextField selfSlowField = new JTextField(1);
+        JTextField selfSlowField = new JTextField("1");
         selfSlowField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("selfSlow"));
         this.add(selfSlowField);
 
-        JTextField fullQueuesAmtField = new JTextField(1);
+        JTextField fullQueuesAmtField = new JTextField("4");
         fullQueuesAmtField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("fullQueuesAmt"));
         this.add(fullQueuesAmtField);
 
-        JTextField selfQueuesAmtField = new JTextField(1);
+        JTextField selfQueuesAmtField = new JTextField("3");
         selfQueuesAmtField.setAlignmentX((Component.CENTER_ALIGNMENT));
         this.add(new JLabel("selfQueuesAmt"));
         this.add(selfQueuesAmtField);
@@ -79,21 +84,23 @@ public class ButtonsPanel extends JPanel {
 
             // Displays the menu again to clear the console
             //this.setupConsoleSection();
+            CheckoutLane.clear();
+            Customer.clear();
+            this.startSim(Integer.parseInt(minArrivalField.getText()), Integer.parseInt(maxArrivalField.getText()), Integer.parseInt(minServiceField.getText()), Integer.parseInt(maxServiceField.getText()), Integer.parseInt(numCustomersField.getText()), Integer.parseInt(selfSlowField.getText()), Integer.parseInt(fullQueuesAmtField.getText()), Integer.parseInt(selfQueuesAmtField.getText()));
         });
         startButton.setText("Start");
         startButton.setBackground(Color.WHITE);
         startButton.setFocusable(false);
         startButton.setAlignmentX((Component.CENTER_ALIGNMENT));
-        startButton.setBorder(BorderFactory.createBevelBorder(1));
+        startButton.setBorder(BorderFactory.createBevelBorder(2));
 
         this.add(startButton);
 
 
     }
 
-//    private static void addAButton(String text, Container container) {
-//        JButton button = new JButton(text);
-//        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        container.add(button);
-//    }
+    protected void startSim(int minArrival, int maxArrival, int minService, int maxService, int numCustomers, int selfSlow, int fullQueuesAmt, int selfQueuesAmt) {
+        Simulator sim = new Simulator(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow, fullQueuesAmt, selfQueuesAmt);
+        sim.start();
+    }
 }

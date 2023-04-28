@@ -39,6 +39,10 @@ public class Customer {
 		finishTime = l;
 	}
 
+	public static void clear(){
+		nextNum = 1;
+	}
+
 	public void calcWait(int leaveFirst) {
 		int waitTime = Math.abs(leaveFirst - arrivalTime);
 		setWaitTime(waitTime);

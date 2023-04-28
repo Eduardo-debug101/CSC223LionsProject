@@ -15,12 +15,13 @@ import java.awt.*;
 
 public class StoreGUI extends JFrame {
 
-    BackgroundPanel2 imagePanel = new BackgroundPanel2(new ImageIcon(getClass().getResource("futuretextbox.jpg")).getImage());
-    CenterConsolePanel consolePanel = new CenterConsolePanel(this.getWidth(), this.getHeight());
+    BackgroundPanel2 imagePanel = new BackgroundPanel2(new ImageIcon(getClass().getResource("bg4.png")).getImage());
+    CenterConsolePanel consolePanel = new CenterConsolePanel();
 
     public StoreGUI() {
 
         // Border layout - https://www.youtube.com/watch?v=PD6pd6AMoOI
+        //this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("logo.png")));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setTitle("Lion's Java Market");
@@ -32,17 +33,10 @@ public class StoreGUI extends JFrame {
         this.add(new BannerPanel(), BorderLayout.NORTH);
         this.add(new WestControlsPanel(), BorderLayout.WEST);
         this.add(consolePanel, BorderLayout.CENTER);
-        this.add(new PlaceholderPanel(), BorderLayout.EAST);
+        //this.add(new PlaceholderPanel(), BorderLayout.EAST);
         this.add(new BottomPanel(), BorderLayout.SOUTH);
 
-//        this.add(consolePanel);
-
-        //this.setLocationRelativeTo(null);
         this.pack();
-
-    }
-
-    protected void redrawConsole() {
-        this.consolePanel = new CenterConsolePanel(this.getWidth(), this.getHeight());
+        this.setLocationRelativeTo(null);
     }
 }
