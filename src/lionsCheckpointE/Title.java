@@ -30,6 +30,9 @@ public class Title extends JPanel {
     private JTextField tf_numOfFullQueues;
     private JLabel lb_selfQueues;
     private JTextField tf_numOfSelfQueues;
+    public JMenuBar mb_upper;
+    
+    
     
     
     public static JScrollPane scroll = new JScrollPane (tb_Area);
@@ -51,6 +54,10 @@ public class Title extends JPanel {
 	
 
     public Title() {
+    	JMenu helpMenu = new JMenu ("Help");
+        JMenuItem aboutItem = new JMenuItem ("About");
+        helpMenu.add (aboutItem);
+    	
         //construct components
         jcomp1 = new JLabel ("Enter minimum arrival time between customers:");
         jcomp2 = new JLabel ("Enter maximum arrival time between customers:");
@@ -73,6 +80,9 @@ public class Title extends JPanel {
         tf_numOfFullQueues = new JTextField (5);
         lb_selfQueues = new JLabel ("self Queues: ");
         tf_numOfSelfQueues = new JTextField (5);
+        mb_upper = new JMenuBar();
+        mb_upper.add (helpMenu);
+        
         
         
         scroll = new JScrollPane(tb_Area);
@@ -108,22 +118,9 @@ public class Title extends JPanel {
         add (lb_selfQueues);
         add (tf_numOfSelfQueues);
         add (bt_reload);
-
-        //set component bounds (only needed by Absolute Positioning)
-        /*
-        jcomp1.setBounds (115, 30, 460, 25);
-        jcomp2.setBounds (115, 60, 490, 25);
-        jcomp3.setBounds (115, 90, 475, 25);
-        jcomp4.setBounds (115, 120, 470, 25);
-        minArrival.setBounds (555, 30, 100, 25);
-        maxArrival.setBounds (555, 60, 100, 25);
-        minService.setBounds (555, 90, 100, 25);
-        maxService.setBounds (555, 120, 100, 25);
-        tb_Area.setBounds (30, 235, 685, 240);
-        scroll.setBounds (30, 235, 685, 240);
-        sb.setValue( sb.getMaximum() );
-        jcomp10.setBounds (30, 205, 100, 25);
-        */
+        add (mb_upper);
+        
+        
         
         jcomp1.setBounds (15, 30, 345, 25);
         jcomp2.setBounds (15, 55, 345, 25);
@@ -148,6 +145,7 @@ public class Title extends JPanel {
         tf_numOfFullQueues.setBounds (620, 60, 100, 25);
         lb_selfQueues.setBounds (510, 95, 110, 25);
         tf_numOfSelfQueues.setBounds (620, 95, 100, 25);
+        mb_upper.setBounds (0, 0, 765, 25);
         
         scroll.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
         
@@ -210,6 +208,16 @@ public class Title extends JPanel {
         		  tb_Area.setText(TEXT);
         	  }
         });
+        
+        aboutItem.addActionListener(new ActionListener() {
+      	  
+      	  @Override
+      	  public void actionPerformed(ActionEvent e) {
+      		Credits f = new Credits();
+    	    f.setVisible(true);
+    	    f.Credits();
+      	  }
+      });
         
         bt_Clear.addActionListener(new ActionListener() {
         	  
