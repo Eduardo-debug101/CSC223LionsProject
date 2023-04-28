@@ -1,8 +1,9 @@
 package lionsCheckpointE;
 
-import lionsCheckpointE.GUI.StoreGUI;
+//import lionsCheckpointE.GUI.StoreGUI;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class StoreDriver {
 	static Scanner scan = new Scanner(System.in);
@@ -50,6 +51,28 @@ public class StoreDriver {
 //				fullQueuesAmt, selfQueuesAmt);
 //		sim.start();
 
-        StoreGUI gui = new StoreGUI();
+        //StoreGUI gui = new StoreGUI();
+		
+		Title f = new Title();
+	    f.setVisible(true);
+	    f.Title();
+	    
+	    f.checkUpdate();
+	    
+	    /*
+	    while (true) {
+	    	
+	    	try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    	
+	    	System.out.println("-----");
+		    //f.checkUpdate();
+	    }
+	    */
 	}
 }
+
+

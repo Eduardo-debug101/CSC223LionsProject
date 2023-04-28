@@ -24,9 +24,12 @@ public class Simulator {
 	private static int timeLanesAreFree = 0;
 	// **************************
 
+	public static String TEXT = "";
+	
 	public Simulator() {
 
 	}
+	
 
 	public Simulator(int a, int b, int c, int d, int n, int selfSlow, int fullQueuesAmt, int selfLanesAmt) {
 		arrivalMinTime = a;
@@ -86,10 +89,10 @@ public class Simulator {
 		while (customersServedAndLeft != numCustomers) {
 
 			timer++;
-			System.out.println("Time: " + timer);
+			TEXT = TEXT + "\nTime: " + timer;
 
 			if (timer == 0) {
-				System.out.println("\tStart");
+				TEXT = TEXT + "\n\tStart";
 			}
 
 			// ************************** START Adding Customers to queues/lanes section
@@ -167,7 +170,7 @@ public class Simulator {
 			}
 		}
 
-		System.out.println("\n\n\nBeginning of Stats:\n");
+		TEXT = TEXT + "\n\n\n\nBeginning of Stats:\n";
 		printStats(queuedCustsForStats);
 	}
 
@@ -315,55 +318,55 @@ public class Simulator {
 
 		if (!customersWaitingInQueue.isEmpty()) {
 			for (String s : customersWaitingInQueue) {
-				System.out.println(s);
+				TEXT = TEXT + "\n"+s;
 			}
 		}
 	}
 
 	private void handleSelfQueueOutput(LinkedQueue self) {
 		if (self.empty()) {
-			System.out.println("\tSelf-Queue: free");
+			TEXT = TEXT + "\n\tSelf-Queue: free";
 		} else {
-			System.out.println("\tSelf-Queue: " + self.size() + " Customer(s) waiting in line");
+			TEXT = TEXT + "\n\tSelf-Queue: " + self.size() + " Customer(s) waiting in line";
 		}
 	}
 
 	private void handleLaneOutput(CheckoutLane lane, int laneNum, int time) {
 		if (lane.isInUse()) {
 			if (lane.getCheckoutCustomer().getFinishTime() == time) {
-				System.out.println(
-						"\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves");
+				TEXT = TEXT + "\n"+
+						"\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " leaves";
 			} else {
-				System.out.println(
-						"\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout");
+				TEXT = TEXT + "\n"+
+						"\tLane " + laneNum + ": Customer #" + lane.getCheckoutCustomer().getCustId() + " in checkout";
 			}
 		} else {
-			System.out.println("\tLane " + laneNum + ": free");
+			TEXT = TEXT + "\n\tLane " + laneNum + ": free";
 		}
 	}
 
 	private void handleQueueOutput(LinkedQueue queue, int queueNum, int time,
 			ArrayList<String> customersWaitingInQueue) {
 		if (queue.empty())
-			System.out.println("\tCheckout " + queueNum + ": free");
+			TEXT = TEXT + "\n\tCheckout " + queueNum + ": free";
 		else {
 			for (int i = 0; i < queue.size(); i++) {
 				Customer cc = queue.indexOf(i);
 				if (cc != null) {
 					if (cc == queue.peek()) {
 						if (cc.getArrivalTime() == time)
-							System.out.println(
-									"\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service");
+							TEXT = TEXT + "\n"+
+									"\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service";
 
 						if (cc.getFinishTime() == time)
-							System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " leaves");
+							TEXT = TEXT + "\n\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " leaves";
 						if (cc.getArrivalTime() != time && cc.getFinishTime() != time)
-							System.out.println("\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " (cont)");
+							TEXT = TEXT + "\n\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " (cont)";
 
 					} else {
 						if (cc.getArrivalTime() + cc.getWaitTime() == time && i == 1)
-							System.out.println(
-									"\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service");
+							TEXT = TEXT + "\n"+
+									"\tCheckout " + queueNum + ": Customer #" + cc.getCustId() + " begins service";
 						else if (cc.getArrivalTime() == time)
 							customersWaitingInQueue.add("\tCustomer " + cc.getCustId()
 									+ " arrives and goes into Checkout " + queueNum + " queue");
@@ -376,10 +379,10 @@ public class Simulator {
 	private void printStats(ArrayList<Customer> customers) {
 
 		String dashedLines = String.format("%0" + 63 + "d", 0).replace("0", "-");
-		System.out.println(dashedLines);
+		TEXT = TEXT + "\n"+dashedLines;
 		System.out.format("%1s%6s%9s%10s%9s%5s%5s%1s", "| ", "Cust # ", "| Arrival Time ", "| Service Time ", "| LOC ",
 				"| Dep ", "| Notes ", "|");
-		System.out.println("\n" + dashedLines);
+		TEXT = TEXT + "\n\n" + dashedLines;
 
 		double selfAverage = 0;
 		double average = 0;
@@ -390,11 +393,17 @@ public class Simulator {
 			cust.setCustomerNotes();
 
 			String lineDivider = "|";
+			TEXT = TEXT + "\n"+ String.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s", lineDivider, cust.getCustId(), lineDivider,
+					cust.getArrivalTime(), lineDivider, cust.getServiceTime(), lineDivider,
+					cust.getAssignedQueueLetter(), lineDivider, cust.getFinishTime(), lineDivider,
+					cust.getCustomerNotes());
+			/*
 			System.out.format("%1s%3s%6s%9s%6s%9s%9s%3s%3s%3s%3s%3s", lineDivider, cust.getCustId(), lineDivider,
 					cust.getArrivalTime(), lineDivider, cust.getServiceTime(), lineDivider,
 					cust.getAssignedQueueLetter(), lineDivider, cust.getFinishTime(), lineDivider,
 					cust.getCustomerNotes());
-			System.out.println("\n" + dashedLines);
+					*/
+			TEXT = TEXT + "\n\n" + dashedLines;
 
 			if (cust.getCoinFlip() == 0) {
 				selfAverage += cust.getWaitTime();
@@ -407,26 +416,26 @@ public class Simulator {
 
 		DecimalFormat f = new DecimalFormat("0.00");
 
-		System.out.println();
+		TEXT = TEXT + "\n";
 
-		System.out.println("Average wait for FULL queue: " + f.format(average / numCustomers) + " min");
-		System.out.println("Average wait for self-checkout: " + f.format(selfAverage / numOfSelfCheckOuters) + " min");
-		System.out.println("Total time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min");
-		System.out.println("Total time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min");
-		System.out.println("Satisfied customers: " + satisfiedCusts);
-		System.out.println("Dissatisfied customers: " + dissatisfiedCusts);
+		TEXT = TEXT + "\nAverage wait for FULL queue: " + f.format(average / numCustomers) + " min";
+		TEXT = TEXT + "\nAverage wait for self-checkout: " + f.format(selfAverage / numOfSelfCheckOuters) + " min";
+		TEXT = TEXT + "\nTotal time checkouts were not in use: " + (timeQueuesAreFree / 10) + " min";
+		TEXT = TEXT + "\nTotal time self-check lanes were not in use: " + (timeLanesAreFree / 10) + " min";
+		TEXT = TEXT + "\nSatisfied customers: " + satisfiedCusts;
+		TEXT = TEXT + "\nDissatisfied customers: " + dissatisfiedCusts;
 
-		System.out.println();
+		TEXT = TEXT + "\n";
 
 		// Calculating "percentage" of time that self-checkout lane is occupied.
 		double laneUsage = (timeQueuesAreFree / 10) / timer;
 		// Recommendations logic for self-checkout
 		if ((selfAverage / numOfSelfCheckOuters) > 5 && laneUsage < 0.5) {
-			System.out.println("Suggest adding self-checkout lanes.");
+			TEXT = TEXT + "\nSuggest adding self-checkout lanes.";
 		} else if ((selfAverage / numOfSelfCheckOuters) < 2 && laneUsage > 0.8) {
-			System.out.println("Suggest removing self-checkout lanes.");
+			TEXT = TEXT + "\nSuggest removing self-checkout lanes.";
 		} else {
-			System.out.println("No suggestion for self-checkout lanes.");
+			TEXT = TEXT + "\nNo suggestion for self-checkout lanes.";
 		}
 	}
 
@@ -476,5 +485,9 @@ public class Simulator {
 
 	public void setSelfSlowTime(int selfSlowTime) {
 		this.selfSlowTime = selfSlowTime;
+	}
+	
+	public String allSeeingEye() {
+		return TEXT;
 	}
 }
