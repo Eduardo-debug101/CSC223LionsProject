@@ -125,10 +125,10 @@ public class Title extends JPanel {
         jcomp10.setBounds (30, 205, 100, 25);
         */
         
-        jcomp1.setBounds (15, 30, 390, 25);
-        jcomp2.setBounds (15, 55, 445, 25);
-        jcomp3.setBounds (15, 80, 420, 25);
-        jcomp4.setBounds (15, 105, 420, 25);
+        jcomp1.setBounds (15, 30, 345, 25);
+        jcomp2.setBounds (15, 55, 345, 25);
+        jcomp3.setBounds (15, 80, 345, 25);
+        jcomp4.setBounds (15, 105, 345, 25);
         minArrival.setBounds (360, 30, 100, 25);
         maxArrival.setBounds (360, 55, 100, 25);
         minService.setBounds (360, 80, 100, 25);
@@ -140,13 +140,13 @@ public class Title extends JPanel {
         
         bt_Start.setBounds (555, 165, 100, 25);
         bt_Clear.setBounds (115, 170, 100, 25);
-        lb_NumOfCusts.setBounds (15, 130, 375, 25);
+        lb_NumOfCusts.setBounds (15, 130, 345, 25);
         tf_numCustomers.setBounds (360, 130, 100, 25);
-        lb_selfSlow.setBounds (510, 30, 130, 25);
+        lb_selfSlow.setBounds (510, 30, 110, 25);
         tf_selfSlow.setBounds (620, 30, 100, 25);
-        lb_fullQueues.setBounds (510, 60, 160, 25);
+        lb_fullQueues.setBounds (510, 60, 110, 25);
         tf_numOfFullQueues.setBounds (620, 60, 100, 25);
-        lb_selfQueues.setBounds (510, 95, 160, 25);
+        lb_selfQueues.setBounds (510, 95, 110, 25);
         tf_numOfSelfQueues.setBounds (620, 95, 100, 25);
         
         scroll.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
