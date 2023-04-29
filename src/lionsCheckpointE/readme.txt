@@ -3,13 +3,14 @@ This project simulates customers at the checkout counters in the world-famous Ja
 The goal is to maximize the profit while minimizing the customer wait time in line to keep the customers happy.
 Arrival interval and service time will be determined by a random number of minutes within a given range.
 Users also have the option to set a slower service speed for self checkout.
-In checkpoint D, the market now has the option to add more full queues and self-checkout lanes. 
+The market has the option to add more full queues and self-checkout lanes. 
+In the latest checkpoint, the market's data is now represented in a GUI instead of the Java console. 
 
 
 Usage:
 The program is executed using an IDE like Eclipse. To run the program in Eclipse, follow these steps:
 
-Go to File -> Import -> Archive File -> Browse -> lionsCheckpointD.jar -> Finish
+Go to File -> Import -> Archive File -> Browse -> lionsCheckpointE.jar -> Finish
 
 
 Required input:
@@ -44,53 +45,125 @@ Here is some sample data for a simulation run:
 Enter minimum arrival time between customers: 
 1
 Enter maximum arrival time between customers: 
-5
+10
 Enter minimum service time: 
 1
 Enter maximum service time: 
-20
-Number of customers to serve: 
 10
+Number of customers: 
+30
 Percentage of slowing for self checkouts (ex. 10 = 10%): 
 10
 Number of full queues to use: 
-4
+5
 Number of self-checkout lanes to use: 
-1
+2
 
 Beginning of Stats:
 
 ---------------------------------------------------------------
 | Cust # | Arrival Time | Service Time    | LOC | Dep | Notes |
----------------------------------------------------------------
-|  1     |        5     |        1        |  S  |  6  | Goes to S @ 5; leaves @ 6; WAIT: 0
----------------------------------------------------------------
-|  2     |       10     |        7        |  S  | 17  | Goes to S @ 10; leaves @ 17; WAIT: 0
----------------------------------------------------------------
-|  3     |       14     |        8        |  S  | 25  | Goes to S @ 14; leaves @ 25; WAIT: 0
----------------------------------------------------------------
-|  4     |       19     |        5        |  S  | 30  | Goes to S @ 19; leaves @ 30; WAIT: 0
----------------------------------------------------------------
-|  5     |       23     |       11        |  S  | 45  | Goes to S @ 23; Service starts @ 34; leaves @ 45; WAIT: 5
----------------------------------------------------------------
-|  6     |       24     |       15        |  S  | 74  | Goes to S @ 24; Service starts @ 39; leaves @ 74; WAIT: 16
----------------------------------------------------------------
-|  7     |       29     |       19        |  S  |121  | Goes to S @ 29; Service starts @ 48; leaves @ 121; WAIT: 30
----------------------------------------------------------------
-|  8     |       34     |       14        |  S  |181  | Goes to S @ 34; Service starts @ 48; leaves @ 181; WAIT: 48
----------------------------------------------------------------
-|  9     |       37     |       17        |  1  | 54  | Goes to 1 @ 37; leaves @ 54; WAIT: 0
----------------------------------------------------------------
-| 10     |       40     |        1        |  S  |241  | Goes to S @ 40; Service starts @ 41; leaves @ 241; WAIT: 62
----------------------------------------------------------------
-Average wait for FULL queue: 0.00 min
-Average wait for self-checkout: 16.10 min
-Total time checkouts were not in use: 95 min
-Total time self-check lanes were not in use: 0 min
-Satisfied customers: 5
-Dissatisfied customers: 5
-Suggest adding self-checkout lanes.
 
+---------------------------------------------------------------
+|  1     |        1     |        3        |  S  |  4  | Goes to S @ 1; leaves @ 4; WAIT: 0
+
+---------------------------------------------------------------
+|  2     |        6     |        3        |  S  |  9  | Goes to S @ 6; leaves @ 9; WAIT: 0
+
+---------------------------------------------------------------
+|  3     |        8     |       10        |  1  | 18  | Goes to 1 @ 8; leaves @ 18; WAIT: 0
+
+---------------------------------------------------------------
+|  4     |       18     |        5        |  2  | 23  | Goes to 2 @ 18; leaves @ 23; WAIT: 0
+
+---------------------------------------------------------------
+|  5     |       23     |       10        |  S  | 33  | Goes to S @ 23; leaves @ 33; WAIT: 0
+
+---------------------------------------------------------------
+|  6     |       29     |       10        |  1  | 39  | Goes to 1 @ 29; leaves @ 39; WAIT: 0
+
+---------------------------------------------------------------
+|  7     |       30     |        6        |  2  | 36  | Goes to 2 @ 30; leaves @ 36; WAIT: 0
+
+---------------------------------------------------------------
+|  8     |       40     |        7        |  S  | 47  | Goes to S @ 40; leaves @ 47; WAIT: 0
+
+---------------------------------------------------------------
+|  9     |       41     |        1        |  S  | 42  | Goes to S @ 41; leaves @ 42; WAIT: 0
+
+---------------------------------------------------------------
+| 10     |       46     |        1        |  S  | 47  | Goes to S @ 46; leaves @ 47; WAIT: 0
+
+---------------------------------------------------------------
+| 11     |       54     |        9        |  1  | 63  | Goes to 1 @ 54; leaves @ 63; WAIT: 0
+
+---------------------------------------------------------------
+| 12     |       59     |        3        |  2  | 62  | Goes to 2 @ 59; leaves @ 62; WAIT: 0
+
+---------------------------------------------------------------
+| 13     |       61     |        7        |  S  | 68  | Goes to S @ 61; leaves @ 68; WAIT: 0
+
+---------------------------------------------------------------
+| 14     |       70     |        9        |  S  | 79  | Goes to S @ 70; leaves @ 79; WAIT: 0
+
+---------------------------------------------------------------
+| 15     |       78     |        6        |  S  | 84  | Goes to S @ 78; leaves @ 84; WAIT: 0
+
+---------------------------------------------------------------
+| 16     |       79     |        6        |  S  | 86  | Goes to S @ 79; leaves @ 86; WAIT: 0
+
+---------------------------------------------------------------
+| 17     |       81     |        1        |  S  | 86  | Goes to S @ 81; leaves @ 86; WAIT: 0
+
+---------------------------------------------------------------
+| 18     |       88     |        8        |  S  | 96  | Goes to S @ 88; leaves @ 96; WAIT: 0
+
+---------------------------------------------------------------
+| 19     |       92     |        7        |  1  | 99  | Goes to 1 @ 92; leaves @ 99; WAIT: 0
+
+---------------------------------------------------------------
+| 20     |      102     |        4        |  S  |106  | Goes to S @ 102; leaves @ 106; WAIT: 0
+
+---------------------------------------------------------------
+| 21     |      109     |        6        |  S  |115  | Goes to S @ 109; leaves @ 115; WAIT: 0
+
+---------------------------------------------------------------
+| 22     |      115     |        4        |  S  |119  | Goes to S @ 115; leaves @ 119; WAIT: 0
+
+---------------------------------------------------------------
+| 23     |      119     |       10        |  1  |129  | Goes to 1 @ 119; leaves @ 129; WAIT: 0
+
+---------------------------------------------------------------
+| 24     |      120     |        8        |  2  |128  | Goes to 2 @ 120; leaves @ 128; WAIT: 0
+
+---------------------------------------------------------------
+| 25     |      124     |        6        |  S  |130  | Goes to S @ 124; leaves @ 130; WAIT: 0
+
+---------------------------------------------------------------
+| 26     |      131     |        7        |  S  |138  | Goes to S @ 131; leaves @ 138; WAIT: 0
+
+---------------------------------------------------------------
+| 27     |      137     |        5        |  1  |142  | Goes to 1 @ 137; leaves @ 142; WAIT: 0
+
+---------------------------------------------------------------
+| 28     |      145     |        6        |  1  |151  | Goes to 1 @ 145; leaves @ 151; WAIT: 0
+
+---------------------------------------------------------------
+| 29     |      155     |        6        |  S  |161  | Goes to S @ 155; leaves @ 161; WAIT: 0
+
+---------------------------------------------------------------
+| 30     |      161     |        9        |  1  |170  | Goes to 1 @ 161; leaves @ 170; WAIT: 0
+
+---------------------------------------------------------------
+
+Average wait for FULL queue: 0.00 min
+Average wait for self-checkout: 0.00 min
+Total time checkouts were not in use: 75 min
+Total time self-check lanes were not in use: 22 min
+Satisfied customers: 30
+Dissatisfied customers: 0
+
+No suggestion for self-checkout lanes.
 
 Required classes:
 Customer - Contains information about the customers.
