@@ -1,26 +1,31 @@
 package lionsCheckpointE.GUI;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
-public class BackgroundPanel extends JPanel {
-	
-	Image image;
+//https://tips4java.wordpress.com/2008/10/12/background-panel/
+public class BackgroundPanel extends JPanel
+{
+    private Image background;
 
-	BackgroundPanel() {
-		image = new ImageIcon(getClass().getResource("future.jpg")).getImage();
-		this.setPreferredSize(new Dimension(1200, 720));
-	}
+    public BackgroundPanel(Image background)
+    {
+        this.background = background;
+        setLayout( new BorderLayout() );
+    }
 
-	public void paint(Graphics g) {
-		Graphics2D g2D = (Graphics2D) g;
-		super.paintComponent(g);
-		g2D.drawImage(image, 0, 0, null);
-	}
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+
+        //g.drawImage(background, 0, 0, null); // image full size
+        g.drawImage(background, 0, 0, getWidth(), getHeight(), null); // image scaled
+    }
+
+    @Override
+    public Dimension getPreferredSize()
+    {
+        return new Dimension(background.getWidth(this), background.getHeight(this));
+    }
 }
-
-

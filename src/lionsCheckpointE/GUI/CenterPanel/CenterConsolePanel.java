@@ -14,7 +14,6 @@ public class CenterConsolePanel extends JPanel {
     public CenterConsolePanel() {
         this.setPreferredSize(new Dimension(150, 100));
         this.setLayout(new BorderLayout());
-        //this.setBounds(249, 0, (frameWidth - 250), frameHeight);
         this.setOpaque(false);
 
         textArea = new JTextArea(24, 80);
@@ -31,7 +30,6 @@ public class CenterConsolePanel extends JPanel {
         }));
 
         JScrollPane scroll = new JScrollPane(textArea);
-        //scroll.setBounds(0, 0, 935, 685);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         scroll.setOpaque(false);

@@ -25,4 +25,3 @@ The team will use GitHub for code sharing and collaboration. Additionally, Disco
 
 Conclusion:
 By following the structure outlined in this document, Team Lions will be able to collaborate and deliver a high-quality project effectively. If you have any questions, please contact the Project Manager through Discord.
-

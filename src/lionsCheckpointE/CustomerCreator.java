@@ -36,11 +36,6 @@ public class CustomerCreator {
         return current;
     }
 
-//    public void calcWait(Customer c, int leaveFirst, int arrivalSecond) {
-//    	int waitTime = Math.abs(leaveFirst - arrivalSecond);
-//    	c.setWaitTime(waitTime);
-//    }
-
     public Customer getCurrent() {
         return current;
     }

@@ -13,7 +13,6 @@ import java.awt.*;
 public class ButtonsPanel extends JPanel {
     public ButtonsPanel() {
         this.setBackground(new Color(5, 5, 5, 150));
-        //BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         GridLayout layout = new GridLayout(0, 1);
         this.setLayout(layout);
 
@@ -73,34 +72,11 @@ public class ButtonsPanel extends JPanel {
         this.add(selfQueuesAmt);
         this.add(selfQueuesAmtField);
 
-        //        Object[] fields = {"minArrival:", minArrivalField, "maxArrival:", maxArrivalField, "minService:",
-//                minServiceField, "maxService:", maxServiceField, "numCustomers:", numCustomersField, "selfSlow:",
-//                selfSlowField, "fullQueuesAmt:", fullQueuesAmtField, "selfQueuesAmt:", selfQueuesAmtField};
         JLabel dashes = new JLabel("_____________________");
         dashes.setForeground(Color.WHITE);
         this.add(dashes);
         JButton startButton = new JButton();
         startButton.addActionListener(e -> {
-//            int option = JOptionPane.showConfirmDialog(null, fields, "Enter values for variables:",
-//                    JOptionPane.OK_CANCEL_OPTION);
-//            if (option == JOptionPane.OK_OPTION) {
-//                int minArrival = Integer.parseInt(minArrivalField.getText());
-//                int maxArrival = Integer.parseInt(maxArrivalField.getText());
-//                int minService = Integer.parseInt(minServiceField.getText());
-//                int maxService = Integer.parseInt(maxServiceField.getText());
-//                int numCustomers = Integer.parseInt(numCustomersField.getText());
-//                int selfSlow = Integer.parseInt(selfSlowField.getText());
-//                int fullQueuesAmt = Integer.parseInt(fullQueuesAmtField.getText());
-//                int selfQueuesAmt = Integer.parseInt(selfQueuesAmtField.getText());
-//                this.startSim(minArrival, maxArrival, minService, maxService, numCustomers, selfSlow, fullQueuesAmt,
-//                        selfQueuesAmt);
-//            } else {
-//                JOptionPane.showMessageDialog(null, "Simulation was cancelled.", "Information",
-//                        JOptionPane.INFORMATION_MESSAGE);
-//            }
-
-            // Displays the menu again to clear the console
-            //this.setupConsoleSection();
             this.startSim(Integer.parseInt(minArrivalField.getText()), Integer.parseInt(maxArrivalField.getText()), Integer.parseInt(minServiceField.getText()), Integer.parseInt(maxServiceField.getText()), Integer.parseInt(numCustomersField.getText()), Integer.parseInt(selfSlowField.getText()), Integer.parseInt(fullQueuesAmtField.getText()), Integer.parseInt(selfQueuesAmtField.getText()));
         });
         startButton.setText("Start");

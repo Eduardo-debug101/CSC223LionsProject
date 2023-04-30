@@ -24,8 +24,6 @@ public class Customer {
 		nextNum++;
 		arrivalTime = a;
 		serviceTime = s;
-		// waitTime = arrivalTime + serviceTime;
-		// leaveTime = (waitTime - arrivalTime) + serviceTime;
 		coinFlip = ThreadLocalRandom.current().nextInt(0, 1 + 1); // 0 = SELF 1 = FULL
 		selfSlowTime = selfSlow;
 	}
@@ -141,15 +139,4 @@ public class Customer {
 	public void setCoinFlip(int coinFlip) {
 		this.coinFlip = coinFlip;
 	}
-
-	// public ArrayList getAllInfo() {
-	// ArrayList x = new ArrayList<>(Arrays.asList(
-	// Integer.toString(arrivalTime),
-	// Integer.toString(serviceTime),
-	// Integer.toString(waitTime),
-	// Integer.toString(finishTime),
-	// Integer.toString(custId)
-	// ));
-	// return x;
-	// }
 }
