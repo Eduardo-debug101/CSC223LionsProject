@@ -12,56 +12,73 @@ import java.awt.*;
 //https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/uiswing/examples/layout/BoxLayoutDemoProject/src/layout/BoxLayoutDemo.java
 public class ButtonsPanel extends JPanel {
     public ButtonsPanel() {
-        this.setBackground(new Color(255, 255, 255, 100));
+        this.setBackground(new Color(5, 5, 5, 150));
         //BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         GridLayout layout = new GridLayout(0, 1);
         this.setLayout(layout);
 
         JTextField minArrivalField = new JTextField("3");
         minArrivalField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("minArrival"));
+        JLabel minArrival = new JLabel("Min Arrival");
+        minArrival.setForeground(Color.WHITE);
+        this.add(minArrival);
         this.add(minArrivalField);
 
         JTextField maxArrivalField = new JTextField("5");
         maxArrivalField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("minArrival"));
+        JLabel maxArrival = new JLabel("Max Arrival");
+        maxArrival.setForeground(Color.WHITE);
+        this.add(maxArrival);
         this.add(maxArrivalField);
 
         JTextField minServiceField = new JTextField("1");
         minServiceField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("minService"));
+        JLabel minService = new JLabel("Min Service");
+        minService.setForeground(Color.WHITE);
+        this.add(minService);
         this.add(minServiceField);
 
         JTextField maxServiceField = new JTextField("8");
         maxServiceField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("maxService"));
+        JLabel maxService = new JLabel("Max Service");
+        maxService.setForeground(Color.WHITE);
+        this.add(maxService);
         this.add(maxServiceField);
 
         JTextField numCustomersField = new JTextField("20");
         numCustomersField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("numCustomers"));
+        JLabel numCustomers = new JLabel("Num Customers");
+        numCustomers.setForeground(Color.WHITE);
+        this.add(numCustomers);
         this.add(numCustomersField);
 
         JTextField selfSlowField = new JTextField("1");
         selfSlowField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("selfSlow"));
+        JLabel selfSlow = new JLabel("Self Slow Amt");
+        selfSlow.setForeground(Color.WHITE);
+        this.add(selfSlow);
         this.add(selfSlowField);
 
         JTextField fullQueuesAmtField = new JTextField("4");
         fullQueuesAmtField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("fullQueuesAmt"));
+        JLabel fullQueuesAmt = new JLabel("Full Queues Amt");
+        fullQueuesAmt.setForeground(Color.WHITE);
+        this.add(fullQueuesAmt);
         this.add(fullQueuesAmtField);
 
         JTextField selfQueuesAmtField = new JTextField("3");
         selfQueuesAmtField.setAlignmentX((Component.CENTER_ALIGNMENT));
-        this.add(new JLabel("selfQueuesAmt"));
+        JLabel selfQueuesAmt = new JLabel("Self Queues Amt");
+        selfQueuesAmt.setForeground(Color.WHITE);
+        this.add(selfQueuesAmt);
         this.add(selfQueuesAmtField);
 
         //        Object[] fields = {"minArrival:", minArrivalField, "maxArrival:", maxArrivalField, "minService:",
 //                minServiceField, "maxService:", maxServiceField, "numCustomers:", numCustomersField, "selfSlow:",
 //                selfSlowField, "fullQueuesAmt:", fullQueuesAmtField, "selfQueuesAmt:", selfQueuesAmtField};
-
-        this.add(new JLabel("___________________________________"));
+        JLabel dashes = new JLabel("_____________________");
+        dashes.setForeground(Color.WHITE);
+        this.add(dashes);
         JButton startButton = new JButton();
         startButton.addActionListener(e -> {
 //            int option = JOptionPane.showConfirmDialog(null, fields, "Enter values for variables:",
@@ -84,8 +101,6 @@ public class ButtonsPanel extends JPanel {
 
             // Displays the menu again to clear the console
             //this.setupConsoleSection();
-            CheckoutLane.clear();
-            Customer.clear();
             this.startSim(Integer.parseInt(minArrivalField.getText()), Integer.parseInt(maxArrivalField.getText()), Integer.parseInt(minServiceField.getText()), Integer.parseInt(maxServiceField.getText()), Integer.parseInt(numCustomersField.getText()), Integer.parseInt(selfSlowField.getText()), Integer.parseInt(fullQueuesAmtField.getText()), Integer.parseInt(selfQueuesAmtField.getText()));
         });
         startButton.setText("Start");

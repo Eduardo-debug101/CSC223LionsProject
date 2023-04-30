@@ -8,7 +8,6 @@ import java.awt.*;
 public class WestControlsPanel extends JPanel{
 
     public WestControlsPanel() {
-        this.setBackground(Color.GREEN);
         this.setPreferredSize(new Dimension(150, 100));
         this.setLayout(new BorderLayout());
 

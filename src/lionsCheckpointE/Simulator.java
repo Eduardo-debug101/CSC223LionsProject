@@ -42,6 +42,8 @@ public class Simulator {
         customersServedAndLeft = 0;
         timeQueuesAreFree = 0;
         timeLanesAreFree = 0;
+		CheckoutLane.clear();
+		Customer.clear();
 	}
 
 	public String toString() {
